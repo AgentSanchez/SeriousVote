@@ -98,6 +98,7 @@ public class SeriousVote
     {
         Vote vote = event.getVote();
         getLogger().info("getUsername() voted");
+        //This is the change I am committing
     }
 
 }
