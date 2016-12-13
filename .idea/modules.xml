@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/seriousvote.iml" filepath="$PROJECT_DIR$/.idea/modules/seriousvote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" filepath="$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" group="seriousvote" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" filepath="$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" group="seriousvote" />
+    </modules>
+  </component>
+</project>
