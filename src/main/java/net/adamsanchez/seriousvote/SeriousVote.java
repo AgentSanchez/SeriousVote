@@ -98,7 +98,7 @@ public class SeriousVote
     {
         Vote vote = event.getVote();
         getLogger().info("getUsername() voted");
-
+        getLogger().info(":D Hello From Mac OSx");
     }
 
 }
