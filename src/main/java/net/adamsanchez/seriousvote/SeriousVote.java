@@ -64,7 +64,7 @@ public class SeriousVote
         seriousVotePlugin = this;
         game = Sponge.getGame();
 
-
+        //TODO:Load Configurations
         CommandSpec vote = CommandSpec.builder()
                 .description(Text.of("Checks to see if it's running"))
                 .permission("nope.nope.nope")
@@ -72,7 +72,8 @@ public class SeriousVote
                 .build();
 
         Sponge.getCommandManager().register(this, vote, "vote");
-
+        //TODO:Add Reload Command
+        //TODO:Add Give player Vote Command (For debug)
         getLogger().info("Serious Vote Has Loaded\n\n\n\n");
 
     }
@@ -97,10 +98,13 @@ public class SeriousVote
     public void onVote(VotifierEvent event)
     {
         Vote vote = event.getVote();
+        rewardVote(vote.getUsername());
+        getLogger().info("SERIOUSVOTE Vote Registered - " + vote.getUsername() +" voted");
+    }
 
-        getLogger().info(vote.getUsername() +"voted");
-        game.getCommandManager().process(game.getServer().getConsole(), "say Hello!! " + vote.getUsername() + " Just voted");
-
+    public boolean rewardVote(String username){
+        game.getCommandManager().process(game.getServer().getConsole(), "say Hello!! " + username + " Just voted");
+        return true;
     }
 
 }
