@@ -97,8 +97,10 @@ public class SeriousVote
     public void onVote(VotifierEvent event)
     {
         Vote vote = event.getVote();
-        getLogger().info("getUsername() voted");
-        //This is the change I am committing
+
+        getLogger().info(vote.getUsername() +"voted");
+        game.getCommandManager().process(game.getServer().getConsole(), "say Hello!! " + vote.getUsername() + " Just voted");
+
     }
 
 }
