@@ -9,35 +9,31 @@ import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.ConfigurationOptions;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
-import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.asset.Asset;
+import org.spongepowered.api.asset.AssetManager;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.cause.NamedCause;
+import org.spongepowered.api.event.filter.cause.Named;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
+import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.service.economy.EconomyService;
-import org.spongepowered.api.service.economy.account.UniqueAccount;
 import org.spongepowered.api.text.Text;
-
-import org.spongepowered.api.text.channel.MessageChannel;
-import org.spongepowered.api.text.format.TextColors;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -52,19 +48,22 @@ import java.util.List;
 @Plugin(id = "seriousvote", name = "Serious Vote", version = "1", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
 public class SeriousVote
 {
-    protected SeriousVote()
-    {
-        ;
+
+    @Inject private Game game;
+    private Game getGame(){
+        return this.game;
     }
 
-    public static Game game;
-    public static EconomyService economyService;
+    @Inject private PluginContainer plugin;
+    private PluginContainer getPlugin(){
+        return this.plugin;
+    }
 
+    public static EconomyService economyService;
     private static SeriousVote seriousVotePlugin;
 
-    @Inject
-    private Logger logger;
 
+    @Inject Logger logger;
     public Logger getLogger()
     {
         return logger;
@@ -77,11 +76,50 @@ public class SeriousVote
 
     @Inject
     @DefaultConfig(sharedRoot = false)
-    private ConfigurationLoader<CommentedConfigurationNode> configManager;
+    private ConfigurationLoader<CommentedConfigurationNode> loader;
 
     @Inject
-    @ConfigDir(sharedRoot = false)
+    @DefaultConfig(sharedRoot = false)
     private Path privateConfigDir;
+
+    private CommentedConfigurationNode rootNode;
+    //Load Configurations
+
+    @Listener
+    public void onInitilization(GamePreInitializationEvent event){
+        getLogger().info("Trying To setup Config Loader");
+
+        Asset asset = plugin.getAsset("seriousvote.conf").orElse(null);
+
+        if (Files.notExists(defaultConfig)) {
+            if (asset != null) {
+                try {
+                    getLogger().info("Copying Default Config");
+                    getLogger().info(asset.readString());
+                    getLogger().info(defaultConfig.toString());
+                    asset.copyToFile(defaultConfig);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    getLogger().error("Could not unpack the default config from the jar! Maybe your Minecraft server doesn't have write permissions?");
+                    return;
+                }
+            } else {
+                getLogger().error("Could not find the default config file in the jar! Did you open the jar and delete it?");
+                return;
+            }
+        }
+
+        try {
+            rootNode = loader.load();
+            getLogger().info("Yay Serious Vote configs correctly loaded");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        getLogger().info(rootNode.getNode("Hello").getString());
+    }
+
 
 
     @Listener
@@ -89,51 +127,9 @@ public class SeriousVote
     {
         getLogger().info("Serious Vote loading...");
         seriousVotePlugin = this;
-        game = Sponge.getGame();
-
-        //Load Configurations
-        ConfigurationLoader<CommentedConfigurationNode> loader =
-                HoconConfigurationLoader.builder().setPath(defaultConfig).build();
-        ConfigurationNode rootNode = loader.createEmptyNode(ConfigurationOptions.defaults());
-
-        try {
-            rootNode = loader.load();
-        } catch(IOException e) {
-            getLogger().warn("THERE WAS AN ERROR WITH THE SERIOUS VOTE CONFIGURATION FILE");
-        }
-
-        ConfigurationNode defaultNode;
-        defaultNode = loader.createEmptyNode();
-        if (rootNode.getChildrenList().size() == 0){
-            getLogger().info("No configuration found... Attempting to load Default Configurations...");
-            URL jarConfigFile = this.getClass().getResource("defaultConfig.conf");
-            ConfigurationLoader<CommentedConfigurationNode> defaultLoader =
-                    HoconConfigurationLoader.builder().setURL(jarConfigFile).build();
+        game = this.game;
 
 
-            try {
-                defaultNode = defaultLoader.load();
-
-                if(defaultNode.getChildrenList().size() == 0) {
-                    try {
-                        loader.save(defaultNode);
-                        getLogger().info("Default Configurations Loaded");
-                        rootNode = defaultNode;
-                    } catch (IOException e) {
-                        getLogger().warn("THERE WAS AN ERROR TRYING TO SAVE THE DEFAULT CONFIGURATIONS");
-                    }
-                }
-                else
-                {
-                    getLogger().warn("No configurations could be loaded for Serious Vote, we will now shut down.");
-                }
-
-            } catch(IOException e) {
-                getLogger().warn("THERE WAS AN ERROR WITH THE SERIOUS VOTE DEFAULT CONFIGURATION FILE");
-            }
-
-
-        }
 
 
 
@@ -156,7 +152,24 @@ public class SeriousVote
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
             src.sendMessage(Text.of("Hello World"));
+
+            src.sendMessage(Text.of(rootNode.toString()));
+            getLogger().info(rootNode.toString());
+            getLogger().info(rootNode.getNode("commands").toString());
+            getLogger().info(rootNode.getNode("commands",  "2").getString());
+            getLogger().info("Number of Commands:" + rootNode.getNode("commands").getChildrenList().size());
+
+
+
+            List<? extends CommentedConfigurationNode> nodeList = rootNode.getNode("commands").getChildrenList();
+
+            for (CommentedConfigurationNode commandNode : nodeList) {
+                game.getCommandManager().process(game.getServer().getConsole(), commandNode.getString());
+            }
+
             return CommandResult.success();
+
+
 
         }
     }
@@ -176,11 +189,11 @@ public class SeriousVote
     }
 
     public boolean rewardVote(String username){
-        List<String> commandList = new ArrayList<String>();
+       getLogger().info(rootNode.getNode("commands", "1").getString());
+        List<? extends CommentedConfigurationNode> nodeList = rootNode.getChildrenList();
 
-
-        for (String command : commandList) {
-            game.getCommandManager().process(game.getServer().getConsole(), command);
+        for (CommentedConfigurationNode commandNode : nodeList) {
+            game.getCommandManager().process(game.getServer().getConsole(), commandNode.getString());
         }
 
 
