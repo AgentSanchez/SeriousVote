@@ -6,12 +6,12 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 
 import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.ConfigurationOptions;
+
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
-import org.spongepowered.api.asset.AssetManager;
+
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -20,7 +20,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.filter.cause.Named;
+
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
@@ -32,15 +32,14 @@ import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.text.Text;
 
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 
-import java.util.ArrayList;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by adam_ on 12/08/16.
@@ -117,7 +116,8 @@ public class SeriousVote
             return;
         }
 
-        getLogger().info(rootNode.getNode("Hello").getString());
+        getLogger().info(rootNode.getNode("config").getNode("server-ip").getString());
+        getLogger().info(rootNode.getNode("config").getNode("commands").getChildrenList().get(1).toString());
     }
 
 
@@ -151,28 +151,26 @@ public class SeriousVote
 
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
-            src.sendMessage(Text.of("Hello World"));
-
-            src.sendMessage(Text.of(rootNode.toString()));
-            getLogger().info(rootNode.toString());
-            getLogger().info(rootNode.getNode("commands").toString());
-            getLogger().info(rootNode.getNode("commands",  "2").getString());
-            getLogger().info("Number of Commands:" + rootNode.getNode("commands").getChildrenList().size());
-
-
-
-            List<? extends CommentedConfigurationNode> nodeList = rootNode.getNode("commands").getChildrenList();
-
-            for (CommentedConfigurationNode commandNode : nodeList) {
-                game.getCommandManager().process(game.getServer().getConsole(), commandNode.getString());
-            }
-
+            getVoteSites(rootNode).forEach(site->src.sendMessage(Text.of(site)));
             return CommandResult.success();
 
 
 
         }
     }
+
+
+
+    public List<String> getCommands(ConfigurationNode node) {
+        return node.getNode("config","commands").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
+    public List<String> getVoteSites(ConfigurationNode node) {
+        return node.getNode("config","vote-sites").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
 
     @Listener
     public void onPostInit(GamePostInitializationEvent event)
@@ -185,18 +183,18 @@ public class SeriousVote
     {
         Vote vote = event.getVote();
         rewardVote(vote.getUsername());
-        getLogger().info("SERIOUSVOTE Vote Registered - " + vote.getUsername() +" voted");
+        getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ vote.getUsername());
     }
 
     public boolean rewardVote(String username){
-       getLogger().info(rootNode.getNode("commands", "1").getString());
-        List<? extends CommentedConfigurationNode> nodeList = rootNode.getChildrenList();
-
-        for (CommentedConfigurationNode commandNode : nodeList) {
-            game.getCommandManager().process(game.getServer().getConsole(), commandNode.getString());
+        //Execute Commands
+        for (String command : getCommands(rootNode)) {
+            game.getCommandManager().process(game.getServer().getConsole(), command.replace("$player$",username));
         }
 
+        //Execute Roulette
 
+        //Log Vote Somehow
 
         return true;
     }
