@@ -210,6 +210,7 @@ public class SeriousVote
 
     private Text getPublicMessage(ConfigurationNode node, String username){
         return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username));
+
     }
 
 
@@ -250,6 +251,7 @@ public class SeriousVote
         Vote vote = event.getVote();
         rewardVote(vote.getUsername());
         getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ vote.getUsername());
+        broadCastMessage(getPublicMessage(rootNode,vote.getUsername()));
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -270,6 +272,7 @@ public class SeriousVote
     }
 
     public boolean broadCastMessage(Text message){
+        if (message.toPlain().isEmpty()) return false;
         game.getServer().getBroadcastChannel().send(message);
         return true;
     }
