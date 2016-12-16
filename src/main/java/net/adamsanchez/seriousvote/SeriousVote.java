@@ -90,6 +90,7 @@ public class SeriousVote
 
     @Listener
     public void onInitilization(GamePreInitializationEvent event){
+        getLogger().info("Serious Vote loading...");
         getLogger().info("Trying To setup Config Loader");
 
         Asset asset = plugin.getAsset("seriousvote.conf").orElse(null);
@@ -120,8 +121,6 @@ public class SeriousVote
             return;
         }
 
-        getLogger().info(rootNode.getNode("config").getNode("server-ip").getString());
-        getLogger().info(rootNode.getNode("config").getNode("commands").getChildrenList().get(1).toString());
     }
 
 
@@ -129,11 +128,27 @@ public class SeriousVote
     @Listener
     public void onServerStart(GameInitializationEvent event)
     {
-        getLogger().info("Serious Vote loading...");
         seriousVotePlugin = this;
 
+        registerCommands();
 
 
+        getLogger().info("Serious Vote Has Loaded\n\n\n\n");
+
+    }
+
+    @Listener
+    public void onPostInit(GamePostInitializationEvent event)
+    {
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////COMMAND MANAGER//////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    private void registerCommands(){
+        //////////////////////COMMAND BUILDERS///////////////////////////////////////////////
         CommandSpec reload = CommandSpec.builder()
                 .description(Text.of("Reload your configs for seriousvote"))
                 .permission("seriousvote.commands.adamin.reload")
@@ -144,20 +159,19 @@ public class SeriousVote
                 .permission("seriousvote.commands.vote")
                 .executor(new SVoteVote())
                 .build();
-
-        Sponge.getCommandManager().register(this, vote, "vote");
-        //TODO:Add Reload Command
         //TODO:Add Give player Vote Command (For debug)
-        getLogger().info("Serious Vote Has Loaded\n\n\n\n");
-
+        //////////////////////////COMMAND REGISTER////////////////////////////////////////////
+        Sponge.getCommandManager().register(this, vote, "vote");
+        Sponge.getCommandManager().register(this,vote,"seriousvotereload");
     }
 
-    public class SVoteReload implements CommandExecutor {
+    //////////////////////////////COMMAND EXECUTOR CLASSES/////////////////////////////////////
+        public class SVoteReload implements CommandExecutor {
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
             reloadConfigs();
             return CommandResult.success();
-        };
+        }
     }
 
     public class SVoteVote implements CommandExecutor {
@@ -179,24 +193,33 @@ public class SeriousVote
     }
 
 
-
-    public List<String> getCommands(ConfigurationNode node) {
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////CONFIGURATION METHODS//////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    private List<String> getCommands(ConfigurationNode node) {
         return node.getNode("config","commands").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-    public List<String> getVoteSites(ConfigurationNode node) {
+    private List<String> getVoteSites(ConfigurationNode node) {
         return node.getNode("config","vote-sites").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-
-    @Listener
-    public void onPostInit(GamePostInitializationEvent event)
-    {
-
+    public CommentedConfigurationNode reloadConfigs(){
+        try {
+            return loader.load();
+        } catch (IOException e) {
+            getLogger().error("There was an error while reloading your configs");
+            getLogger().error(e.toString());
+        }
+        return HoconConfigurationLoader.builder().build().createEmptyNode();
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////LISTENERS///////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
     @Listener
     public void onVote(VotifierEvent event)
     {
@@ -204,6 +227,10 @@ public class SeriousVote
         rewardVote(vote.getUsername());
         getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ vote.getUsername());
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////ACTION METHODS///////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
 
     public boolean rewardVote(String username){
         //Execute Commands
@@ -218,14 +245,6 @@ public class SeriousVote
         return true;
     }
 
-    public CommentedConfigurationNode reloadConfigs(){
-        try {
-            return loader.load();
-        } catch (IOException e) {
-            getLogger().error("There was an error while reloading your configs");
-            getLogger().error(e.toString());
-        }
-        return HoconConfigurationLoader.builder().build().createEmptyNode();
-    }
+
 
 }
