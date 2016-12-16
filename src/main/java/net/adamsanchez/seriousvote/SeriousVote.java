@@ -208,8 +208,8 @@ public class SeriousVote
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-    private Text getPublicMessage(ConfigurationNode node){
-        return TextSerializers.FORMATTING_CODE.deserialize(node.getNode("config", "broadcast-message").getString());
+    private Text getPublicMessage(ConfigurationNode node, String username){
+        return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username));
     }
 
 
