@@ -259,7 +259,7 @@ public class SeriousVote
     public boolean rewardVote(String username){
         //Execute Commands
         for (String command : getCommands(rootNode)) {
-            game.getCommandManager().process(game.getServer().getConsole(), command.replace("{player}",username));
+            game.getCommandManager().process(game.getServer().getConsole(), parseVariables(command,username));
         }
 
         //Execute Roulette
