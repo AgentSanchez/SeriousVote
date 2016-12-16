@@ -225,7 +225,7 @@ public class SeriousVote
     }
 
     public Text convertLink(String link){
-        Text textLink = TextSerializers.FORMATTING_CODE.deserialize("&4HelloWorld");
+        Text textLink = TextSerializers.FORMATTING_CODE.deserialize(link);
         try {
             return textLink.toBuilder().onClick(TextActions.openUrl(new URL(textLink.toPlain()))).build();
         } catch (MalformedURLException e) {
