@@ -174,7 +174,7 @@ public class SeriousVote
         public class SVoteReload implements CommandExecutor {
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
-            reloadConfigs();
+            rootNode = reloadConfigs();
             return CommandResult.success();
         }
     }
