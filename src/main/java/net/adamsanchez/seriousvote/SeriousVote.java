@@ -32,10 +32,13 @@ import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.text.Text;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.spongepowered.api.text.action.TextActions;
 
 
 import java.util.List;
@@ -136,7 +139,7 @@ public class SeriousVote
 
         CommandSpec vote = CommandSpec.builder()
                 .description(Text.of("Checks to see if it's running"))
-                .permission("nope.nope.nope")
+                .permission("seriousvote.commands.vote")
                 .executor(new SVote())
                 .build();
 
@@ -151,7 +154,13 @@ public class SeriousVote
 
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
-            getVoteSites(rootNode).forEach(site->src.sendMessage(Text.of(site)));
+            getVoteSites(rootNode).forEach(site -> {
+                try {
+                    src.sendMessage(Text.of(site).toBuilder().onClick(TextActions.openUrl(new URL(site))).build());
+                } catch (MalformedURLException e) {
+                    getLogger().error(e.toString());
+                }
+            });
             return CommandResult.success();
 
 
