@@ -7,6 +7,7 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
+import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
@@ -47,10 +48,10 @@ import java.util.stream.Collectors;
 /**
  * Created by adam_ on 12/08/16.
  */
+@SuppressWarnings("unused")
 @Plugin(id = "seriousvote", name = "Serious Vote", version = "1", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
 public class SeriousVote
 {
-
     @Inject private Game game;
     private Game getGame(){
         return this.game;
@@ -130,17 +131,18 @@ public class SeriousVote
     {
         getLogger().info("Serious Vote loading...");
         seriousVotePlugin = this;
-        game = this.game;
 
 
 
-
-
-
+        CommandSpec reload = CommandSpec.builder()
+                .description(Text.of("Reload your configs for seriousvote"))
+                .permission("seriousvote.commands.adamin.reload")
+                .executor(new SVoteReload())
+                .build();
         CommandSpec vote = CommandSpec.builder()
                 .description(Text.of("Checks to see if it's running"))
                 .permission("seriousvote.commands.vote")
-                .executor(new SVote())
+                .executor(new SVoteVote())
                 .build();
 
         Sponge.getCommandManager().register(this, vote, "vote");
@@ -150,7 +152,15 @@ public class SeriousVote
 
     }
 
-    public class SVote implements CommandExecutor {
+    public class SVoteReload implements CommandExecutor {
+        public CommandResult execute(CommandSource src, CommandContext args) throws
+                CommandException {
+            reloadConfigs();
+            return CommandResult.success();
+        };
+    }
+
+    public class SVoteVote implements CommandExecutor {
 
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
@@ -198,7 +208,7 @@ public class SeriousVote
     public boolean rewardVote(String username){
         //Execute Commands
         for (String command : getCommands(rootNode)) {
-            game.getCommandManager().process(game.getServer().getConsole(), command.replace("$player$",username));
+            game.getCommandManager().process(game.getServer().getConsole(), command.replace("{player}",username));
         }
 
         //Execute Roulette
@@ -206,6 +216,16 @@ public class SeriousVote
         //Log Vote Somehow
 
         return true;
+    }
+
+    public CommentedConfigurationNode reloadConfigs(){
+        try {
+            return loader.load();
+        } catch (IOException e) {
+            getLogger().error("There was an error while reloading your configs");
+            getLogger().error(e.toString());
+        }
+        return HoconConfigurationLoader.builder().build().createEmptyNode();
     }
 
 }
