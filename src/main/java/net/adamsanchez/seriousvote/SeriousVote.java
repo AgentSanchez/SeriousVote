@@ -209,7 +209,7 @@ public class SeriousVote
     }
 
     private Text getPublicMessage(ConfigurationNode node){
-        return TextSerializers.FORMATTING_CODE.deserialize(node.getNode("config", "broadcast message").getString());
+        return TextSerializers.FORMATTING_CODE.deserialize(node.getNode("config", "broadcast-message").getString());
     }
 
 
@@ -232,6 +232,10 @@ public class SeriousVote
             getLogger().error(e.toString());
         }
         return Text.of("Malformed URL - Inform Administrator");
+    }
+
+    private String parseVariables(String string, String username){
+        return string.replace("{player}",username);
     }
 
 
