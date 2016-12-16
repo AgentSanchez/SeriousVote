@@ -167,7 +167,7 @@ public class SeriousVote
         //TODO:Add Give player Vote Command (For debug)
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
         Sponge.getCommandManager().register(this, vote, "vote");
-        Sponge.getCommandManager().register(this,vote,"seriousvotereload");
+        Sponge.getCommandManager().register(this, reload,"seriousvotereload");
     }
 
     //////////////////////////////COMMAND EXECUTOR CLASSES/////////////////////////////////////
