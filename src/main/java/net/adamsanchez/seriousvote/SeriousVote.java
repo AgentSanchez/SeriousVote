@@ -42,6 +42,7 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.text.action.HoverAction;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.channel.MessageChannel;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
@@ -182,12 +183,9 @@ public class SeriousVote
 
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
+            src.sendMessage(Text.of("Thank You! Below are the places you can vote!").toBuilder().color(TextColors.GOLD).build());
             getVoteSites(rootNode).forEach(site -> {
-                try {
-                    src.sendMessage(Text.of(site).toBuilder().onClick(TextActions.openUrl(new URL(site))).build());
-                } catch (MalformedURLException e) {
-                    getLogger().error(e.toString());
-                }
+                src.sendMessage(convertLink(site));
             });
             return CommandResult.success();
 
