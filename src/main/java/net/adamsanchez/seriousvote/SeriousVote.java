@@ -39,7 +39,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.spongepowered.api.text.action.HoverAction;
 import org.spongepowered.api.text.action.TextActions;
+import org.spongepowered.api.text.channel.MessageChannel;
+import org.spongepowered.api.text.serializer.TextSerializer;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 
 import java.util.List;
@@ -206,6 +210,11 @@ public class SeriousVote
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
+    private Text getPublicMessage(ConfigurationNode node){
+        return TextSerializers.FORMATTING_CODE.deserialize(node.getNode("config", "broadcast message").getString());
+    }
+
+
     public CommentedConfigurationNode reloadConfigs(){
         try {
             return loader.load();
@@ -215,6 +224,19 @@ public class SeriousVote
         }
         return HoconConfigurationLoader.builder().build().createEmptyNode();
     }
+
+    public Text convertLink(String link){
+        Text textLink = TextSerializers.FORMATTING_CODE.deserialize("&4HelloWorld");
+        try {
+            return textLink.toBuilder().onClick(TextActions.openUrl(new URL(textLink.toPlain()))).build();
+        } catch (MalformedURLException e) {
+            getLogger().error("Malformed URL");
+            getLogger().error(e.toString());
+        }
+        return Text.of("Malformed URL - Inform Administrator");
+    }
+
+
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -242,6 +264,11 @@ public class SeriousVote
 
         //Log Vote Somehow
 
+        return true;
+    }
+
+    public boolean broadCastMessage(Text message){
+        game.getServer().getBroadcastChannel().send(message);
         return true;
     }
 
