@@ -51,6 +51,8 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.random;
+
 /**
  * Created by adam_ on 12/08/16.
  */
@@ -193,9 +195,31 @@ public class SeriousVote
             //If it returns a node can I extract a map from that node for it's key/values
             //Can I store the name as the key for the Name ... Player won blank
 
-            rootNode.getNode("config","Rewards").getChildrenMap().forEach( (k,v)-> getLogger().info(k.toString()));
+            rootNode.getNode("config","Rewards").getChildrenMap()
+                    .forEach( (k,v)-> getLogger().info(k.toString()));
+            //This should log more than one, now..If so The names can be used in another array to get all the nodes.
+            /*
+
+                for all items in array
+                    get from root node > Add to a double value map in form of Name > Percentage, Command, Sort the map by percentage.
+                    The array is loaded into memory and can be used in the future without the expense of loading from config again
+                           reload command must reload this into the seperate map, the node based structure is not practical for this application
+
+                Run method getRandomReward()
+                   method runs through map and gets all the first values of keys
+                   runs some sort of random using java.math.random() to gather a number from 0 -1 ie: 0.25 0.87
+                   It then picks a value in the map that is closest to that value.
+                   It does this operations the number of times defined in the config file
+                   ie: RandomRewards();
+
+
+
+             */
+
+
             rootNode.getNode("config","Rewards").getChildrenList().stream()
                     .map(ConfigurationNode::getString).collect(Collectors.toList());
+
 
 
             return CommandResult.success();
@@ -216,7 +240,7 @@ public class SeriousVote
         }
     }
 
-
+3
     ///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////CONFIGURATION METHODS//////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -239,6 +263,12 @@ public class SeriousVote
     private Text getPublicMessage(ConfigurationNode node, String username){
         return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username));
 
+    }
+    private int getRewardsNumber(ConfigurationNode node){
+        int number = node.getNode("config", "random-rewards-number").getInt();
+        if(number < 0 ){
+            return (int)random();
+        }
     }
 
     public CommentedConfigurationNode reloadConfigs(){
