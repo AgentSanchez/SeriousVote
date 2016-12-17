@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'SeriousVote'
-version '1.8.2-SNAPSHOT'
+version '1.8.3-BETA'
 description 'Seriously We Have TO VOTE'
 
 

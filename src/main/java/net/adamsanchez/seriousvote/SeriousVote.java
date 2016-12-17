@@ -8,6 +8,7 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 import ninja.leaping.configurate.ConfigurationNode;
 
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
+import org.omg.CORBA.COMM_FAILURE;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
@@ -164,10 +165,16 @@ public class SeriousVote
                 .permission("seriousvote.commands.vote")
                 .executor(new SVoteVote())
                 .build();
+        CommandSpec debug = CommandSpec.builder()
+                .description(Text.of("DEBUG ONLY"))
+                .permission("seriousvote.commands.admin.debug.debug")
+                .executor(new SDebug())
+                .build();
         //TODO:Add Give player Vote Command (For debug)
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
         Sponge.getCommandManager().register(this, vote, "vote");
         Sponge.getCommandManager().register(this, reload,"seriousvotereload");
+        Sponge.getCommandManager().register(this, debug, "debug", "seriousdebug" );
     }
 
     //////////////////////////////COMMAND EXECUTOR CLASSES/////////////////////////////////////
@@ -178,9 +185,24 @@ public class SeriousVote
             return CommandResult.success();
         }
     }
+    //TODO Fix this Method
+    public class SDebug implements CommandExecutor {
+        public CommandResult execute(CommandSource src, CommandContext args) throws
+                CommandException {
+            //This retrieves the word Reward, is it combining all the sub nodes into 1? Hoe many entries does the sub node have
+            //If it returns a node can I extract a map from that node for it's key/values
+            //Can I store the name as the key for the Name ... Player won blank
+
+            rootNode.getNode("config","Rewards").getChildrenMap().forEach( (k,v)-> getLogger().info(k.toString()));
+            rootNode.getNode("config","Rewards").getChildrenList().stream()
+                    .map(ConfigurationNode::getString).collect(Collectors.toList());
+
+
+            return CommandResult.success();
+        }
+    }
 
     public class SVoteVote implements CommandExecutor {
-
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
             src.sendMessage(Text.of("Thank You! Below are the places you can vote!").toBuilder().color(TextColors.GOLD).build());
@@ -203,6 +225,12 @@ public class SeriousVote
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
+    //load in a map
+    private List<String> getRandomCommands(ConfigurationNode node) {
+           getLogger().info(node.getNode("config","Rewards").getChildrenList().get(1).getKey().toString());
+
+        return null;
+    }
     private List<String> getVoteSites(ConfigurationNode node) {
         return node.getNode("config","vote-sites").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
@@ -212,7 +240,6 @@ public class SeriousVote
         return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username));
 
     }
-
 
     public CommentedConfigurationNode reloadConfigs(){
         try {
