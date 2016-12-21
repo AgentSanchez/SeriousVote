@@ -263,9 +263,7 @@ public class SeriousVote
     }
 
     public void updateLoot(List<String> lootTable){
-        for(String ix : lootTable){
-            getLogger().info(ix);
-        }
+
         String[] inputLootTable = lootTable.stream().toArray(String[]::new);
         lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
         chanceMap = new ArrayList<Integer>();
