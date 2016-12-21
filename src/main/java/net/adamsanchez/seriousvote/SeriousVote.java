@@ -376,7 +376,8 @@ public class SeriousVote
         List<Map<String,String>> commandList = lootMap.get(reward);
         Map<String, String> commandMap = commandList.get(ThreadLocalRandom.current().nextInt(0, commandList.size()));
         Map.Entry runCommand = Iterables.get(commandMap.entrySet(),0);
-        currentRewards += runCommand.getValue().toString() + ", ";
+        //Get "Name of reward"
+        currentRewards += runCommand.getKey().toString() + ", ";
         return parseVariables(runCommand.getKey().toString(), username);
 
     }
