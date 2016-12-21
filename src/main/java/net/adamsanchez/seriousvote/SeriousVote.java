@@ -395,7 +395,7 @@ public class SeriousVote
         return string.replace("{player}",username);
     }
     private String parseVariables(String string, String username, String currentRewards){
-        return string.replace("{player}",username).replace("{rewards}", currentRewards);
+        return string.replace("{player}",username).replace("{rewards}", currentRewards.substring(0,currentRewards.length() -2));
     }
 
 
