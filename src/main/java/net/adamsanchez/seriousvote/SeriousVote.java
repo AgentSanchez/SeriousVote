@@ -133,13 +133,7 @@ public class SeriousVote
 
 
 
-        try {
-            rootNode = loader.load();
-            getLogger().info("Yay Serious Vote configs correctly loaded");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
+        reloadConfigs();
 
     }
 
@@ -195,7 +189,7 @@ public class SeriousVote
         public class SVoteReload implements CommandExecutor {
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
-            rootNode = reloadConfigs();
+            reloadConfigs();
             return CommandResult.success();
         }
     }
@@ -232,7 +226,7 @@ public class SeriousVote
     }
 
     private List<String> getRandomCommands(ConfigurationNode node) {
-           return node.getNode("config","Rewards","reward").getChildrenList().stream()
+           return node.getNode("config","Rewards","random").getChildrenList().stream()
                    .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
     private List<String> getVoteSites(ConfigurationNode node) {
@@ -252,22 +246,29 @@ public class SeriousVote
         return number;
     }
 
-    public CommentedConfigurationNode reloadConfigs(){
+    public void reloadConfigs(){
         try {
-            return loader.load();
+            rootNode = loader.load();
         } catch (IOException e) {
             getLogger().error("There was an error while reloading your configs");
             getLogger().error(e.toString());
         }
 
-        updateLoot((String[]) getRandomCommands(rootNode).toArray());
+        updateLoot(getRandomCommands(rootNode));
 
-        return HoconConfigurationLoader.builder().build().createEmptyNode();
+        for(String ix : getRandomCommands(rootNode)){
+            getLogger().info(ix);
+        }
+
     }
 
-    public void updateLoot(String[] inputLootTable){
+    public void updateLoot(List<String> lootTable){
+        for(String ix : lootTable){
+            getLogger().info(ix);
+        }
+        String[] inputLootTable = lootTable.stream().toArray(String[]::new);
         lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
-
+        chanceMap = new ArrayList<Integer>();
         //count to get the correct size of the lootMap
         for (int i = 0; i < inputLootTable.length; i+=3)
         {
@@ -285,21 +286,28 @@ public class SeriousVote
         }
 
         buildChanceMap();
+        if (lootMap.size() == 0) {
+            getLogger().error("The lootMap Hasn't been loaded Check your config for errors!");
+            return;
+        }
+        getLogger().info("Rewards for seriousVote Have been loaded successfully");
 
 
     }
 
     void buildChanceMap() {
+
         if (lootMap.size() == 0) {
             getLogger().error("The lootMap Hasn't been loaded Check your config for errors!");
             return;
         } else {
-            chanceMap = new ArrayList<Integer>();
+            getLogger().info("There are currently " + lootMap.size() + " Loot Tables");
             for (int i = 0; i < lootMap.size(); i++) {
                 Map.Entry currentSet = Iterables.get(lootMap.entrySet(), i);
                 Integer currentKey = Integer.parseInt(currentSet.getKey().toString());
+                getLogger().info("Gathering Table " + i + " of " + currentKey);
 
-                for (int ix = 0; i < currentKey.intValue(); i++) {
+                for (int ix = 0; ix < currentKey.intValue(); ix++) {
                     chanceMap.add(currentKey.intValue());
                 }
 
@@ -319,6 +327,7 @@ public class SeriousVote
         getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ vote.getUsername());
         //Reset Name List
         currentRewards = "";
+        getLogger().info(chanceMap.size() + "");
         //Get Random Rewards
         List<String> rewardsList = new LinkedList<String>();
         for(int i = 0; i < getRewardsNumber(rootNode); i++)
@@ -360,10 +369,15 @@ public class SeriousVote
 
     public String chooseReward(String username)
     {
-        Integer reward = chanceMap.get(ThreadLocalRandom.current().nextInt(0, chanceMap.size() + 1));
+        //get an integer
+        for(Integer ix:chanceMap){
+            getLogger().info(ix.toString());
+        }
+        Integer reward = chanceMap.get(ThreadLocalRandom.current().nextInt(0, chanceMap.size()));
+        getLogger().info("Chose Reward Number " + reward.toString());
         List<Map<String,String>> commandList = lootMap.get(reward);
-        Map<String, String> commandMap = commandList.get(ThreadLocalRandom.current().nextInt(0, commandList.size() + 1));
-        Map.Entry runCommand = Iterables.get(commandMap.entrySet(),1);
+        Map<String, String> commandMap = commandList.get(ThreadLocalRandom.current().nextInt(0, commandList.size()));
+        Map.Entry runCommand = Iterables.get(commandMap.entrySet(),0);
         currentRewards += runCommand.getValue().toString() + ", ";
         return parseVariables(runCommand.getKey().toString(), username);
 
