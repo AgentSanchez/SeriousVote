@@ -241,7 +241,7 @@ public class SeriousVote
     private int getRewardsNumber(ConfigurationNode node){
         int number = node.getNode("config", "random-rewards-number").getInt();
         if(number < 0 ){
-            return 1;
+            return ThreadLocalRandom.current().nextInt(node.getNode("config", "rewards-min").getInt(),node.getNode("config", "rewards-max").getInt());
         }
         return number;
     }
