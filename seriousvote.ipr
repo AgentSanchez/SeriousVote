@@ -67,12 +67,12 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/SeriousVote.iml" filepath="$PROJECT_DIR$/.idea/modules/SeriousVote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/seriousvote.iml" filepath="$PROJECT_DIR$/.idea/modules/seriousvote.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" filepath="$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" group="seriousvote" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" filepath="$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" group="seriousvote" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="SvnBranchConfigurationManager">

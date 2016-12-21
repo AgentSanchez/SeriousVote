@@ -1,5 +1,7 @@
 package net.adamsanchez.seriousvote;
 
+
+import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
@@ -48,7 +50,8 @@ import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import static java.lang.Math.random;
@@ -92,9 +95,14 @@ public class SeriousVote
     @Inject
     @DefaultConfig(sharedRoot = false)
     private Path privateConfigDir;
-
     private CommentedConfigurationNode rootNode;
-    //Load Configurations
+
+
+    ///////////////////////////////////////////////////////
+    LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
+    List<Integer> chanceMap;
+
+
 
     @Listener
     public void onInitilization(GamePreInitializationEvent event){
@@ -240,7 +248,7 @@ public class SeriousVote
         }
     }
 
-3
+
     ///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////CONFIGURATION METHODS//////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -269,6 +277,7 @@ public class SeriousVote
         if(number < 0 ){
             return (int)random();
         }
+        return 0;
     }
 
     public CommentedConfigurationNode reloadConfigs(){
@@ -332,6 +341,65 @@ public class SeriousVote
         if (message.toPlain().isEmpty()) return false;
         game.getServer().getBroadcastChannel().send(message);
         return true;
+    }
+
+    public void updateLoot(){
+        String[] inputLootTable = new String[0];
+         lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
+
+         //count to get the correct size of the lootMap
+         for (int i = 0; i < inputLootTable.length; i+=3)
+         {
+             //get the current integer add it to the table, Since it is a Map duplicates will be removed
+            lootMap.put(Integer.parseInt(inputLootTable[i]), new ArrayList<Map<String,String>>());
+         }
+
+        for (int i = 0; i < inputLootTable.length; i+=3)
+        {
+            //add in all the commands
+            List lootList = lootMap.get(Integer.parseInt(inputLootTable[i]));
+            Map<String,String>  lootEntry = new LinkedHashMap<String,String>();
+            lootEntry.put(inputLootTable[i+1],inputLootTable[i+2]);
+            lootList.add(lootEntry);
+        }
+
+        buildChanceMap();
+
+
+    }
+
+    public void chooseReward()
+    {
+        Integer reward = chanceMap.get(ThreadLocalRandom.current().nextInt(0, chanceMap.size() + 1));
+        List<Map<String,String>> commandList = lootMap.get(reward);
+        Map<String, String> commandMap = commandList.get(ThreadLocalRandom.current().nextInt(0, commandList.size() + 1));
+        Map.Entry runCommand = Iterables.get(commandMap.entrySet(),1);
+        runCommand.getKey().toString();
+    }
+
+    void buildChanceMap()
+    {
+        if(lootMap.size() == 0){
+            getLogger().error("The lootMap Hasn't been loaded Check your config for errors!");
+            return;
+        }
+
+        else
+        {
+            chanceMap = new ArrayList<Integer>();
+            for(int i = 0; i < lootMap.size(); i++){
+                Map.Entry currentSet = Iterables.get(lootMap.entrySet(), i);
+                Integer currentKey = Integer.parseInt(currentSet.getKey().toString());
+
+                for(int ix = 0; i < currentKey.intValue(); i++){
+                    chanceMap.add(currentKey.intValue());
+                }
+
+            }
+        }
+
+
+
     }
 
 
