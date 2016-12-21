@@ -285,11 +285,12 @@ public class SeriousVote
             lootList.add(lootEntry);
         }
 
-        buildChanceMap();
+
         if (lootMap.size() == 0) {
             getLogger().error("The lootMap Hasn't been loaded Check your config for errors!");
             return;
         }
+        buildChanceMap();
         getLogger().info("Rewards for seriousVote Have been loaded successfully");
 
 
@@ -305,7 +306,7 @@ public class SeriousVote
             for (int i = 0; i < lootMap.size(); i++) {
                 Map.Entry currentSet = Iterables.get(lootMap.entrySet(), i);
                 Integer currentKey = Integer.parseInt(currentSet.getKey().toString());
-                getLogger().info("Gathering Table " + i + " of " + currentKey);
+                getLogger().info("Gathering Table " + i + " of type" + currentKey);
 
                 for (int ix = 0; ix < currentKey.intValue(); ix++) {
                     chanceMap.add(currentKey.intValue());
@@ -314,6 +315,7 @@ public class SeriousVote
             }
         }
     }
+
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -369,12 +371,8 @@ public class SeriousVote
 
     public String chooseReward(String username)
     {
-        //get an integer
-        for(Integer ix:chanceMap){
-            getLogger().info(ix.toString());
-        }
         Integer reward = chanceMap.get(ThreadLocalRandom.current().nextInt(0, chanceMap.size()));
-        getLogger().info("Chose Reward Number " + reward.toString());
+        getLogger().info("Chose Reward from Table" + reward.toString());
         List<Map<String,String>> commandList = lootMap.get(reward);
         Map<String, String> commandMap = commandList.get(ThreadLocalRandom.current().nextInt(0, commandList.size()));
         Map.Entry runCommand = Iterables.get(commandMap.entrySet(),0);
@@ -398,7 +396,7 @@ public class SeriousVote
         return string.replace("{player}",username);
     }
     private String parseVariables(String string, String username, String currentRewards){
-        return string.replace("{player}",username).replace("{Rewards}", currentRewards);
+        return string.replace("{player}",username).replace("{rewards}", currentRewards);
     }
 
 
