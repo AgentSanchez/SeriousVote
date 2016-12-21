@@ -378,7 +378,7 @@ public class SeriousVote
         Map.Entry runCommand = Iterables.get(commandMap.entrySet(),0);
         //Get "Name of reward"
         currentRewards += runCommand.getKey().toString() + " & ";
-        return parseVariables(runCommand.getKey().toString(), username);
+        return parseVariables(runCommand.getValue().toString(), username);
 
     }
 
