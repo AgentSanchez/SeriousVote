@@ -54,6 +54,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.incrementExact;
 import static java.lang.Math.random;
 
 /**
@@ -101,6 +102,7 @@ public class SeriousVote
     ///////////////////////////////////////////////////////
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
     List<Integer> chanceMap;
+    String currentRewards;
 
 
 
@@ -128,6 +130,8 @@ public class SeriousVote
                 return;
             }
         }
+
+
 
         try {
             rootNode = loader.load();
@@ -199,36 +203,6 @@ public class SeriousVote
     public class SDebug implements CommandExecutor {
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
-            //This retrieves the word Reward, is it combining all the sub nodes into 1? Hoe many entries does the sub node have
-            //If it returns a node can I extract a map from that node for it's key/values
-            //Can I store the name as the key for the Name ... Player won blank
-
-            rootNode.getNode("config","Rewards").getChildrenMap()
-                    .forEach( (k,v)-> getLogger().info(k.toString()));
-            //This should log more than one, now..If so The names can be used in another array to get all the nodes.
-            /*
-
-                for all items in array
-                    get from root node > Add to a double value map in form of Name > Percentage, Command, Sort the map by percentage.
-                    The array is loaded into memory and can be used in the future without the expense of loading from config again
-                           reload command must reload this into the seperate map, the node based structure is not practical for this application
-
-                Run method getRandomReward()
-                   method runs through map and gets all the first values of keys
-                   runs some sort of random using java.math.random() to gather a number from 0 -1 ie: 0.25 0.87
-                   It then picks a value in the map that is closest to that value.
-                   It does this operations the number of times defined in the config file
-                   ie: RandomRewards();
-
-
-
-             */
-
-
-            rootNode.getNode("config","Rewards").getChildrenList().stream()
-                    .map(ConfigurationNode::getString).collect(Collectors.toList());
-
-
 
             return CommandResult.success();
         }
@@ -252,16 +226,14 @@ public class SeriousVote
     ///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////CONFIGURATION METHODS//////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
-    private List<String> getCommands(ConfigurationNode node) {
-        return node.getNode("config","commands").getChildrenList().stream()
+    private List<String> getSetCommands(ConfigurationNode node) {
+        return node.getNode("config","Rewards","set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-    //load in a map
     private List<String> getRandomCommands(ConfigurationNode node) {
-           getLogger().info(node.getNode("config","Rewards").getChildrenList().get(1).getKey().toString());
-
-        return null;
+           return node.getNode("config","Rewards","reward").getChildrenList().stream()
+                   .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
     private List<String> getVoteSites(ConfigurationNode node) {
         return node.getNode("config","vote-sites").getChildrenList().stream()
@@ -269,15 +241,15 @@ public class SeriousVote
     }
 
     private Text getPublicMessage(ConfigurationNode node, String username){
-        return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username));
+        return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username, currentRewards));
 
     }
     private int getRewardsNumber(ConfigurationNode node){
         int number = node.getNode("config", "random-rewards-number").getInt();
         if(number < 0 ){
-            return (int)random();
+            return 1;
         }
-        return 0;
+        return number;
     }
 
     public CommentedConfigurationNode reloadConfigs(){
@@ -287,7 +259,114 @@ public class SeriousVote
             getLogger().error("There was an error while reloading your configs");
             getLogger().error(e.toString());
         }
+
+        updateLoot((String[]) getRandomCommands(rootNode).toArray());
+
         return HoconConfigurationLoader.builder().build().createEmptyNode();
+    }
+
+    public void updateLoot(String[] inputLootTable){
+        lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
+
+        //count to get the correct size of the lootMap
+        for (int i = 0; i < inputLootTable.length; i+=3)
+        {
+            //get the current integer add it to the table, Since it is a Map duplicates will be removed
+            lootMap.put(Integer.parseInt(inputLootTable[i]), new ArrayList<Map<String,String>>());
+        }
+
+        for (int i = 0; i < inputLootTable.length; i+=3)
+        {
+            //add in all the commands
+            List lootList = lootMap.get(Integer.parseInt(inputLootTable[i]));
+            Map<String,String>  lootEntry = new LinkedHashMap<String,String>();
+            lootEntry.put(inputLootTable[i+1],inputLootTable[i+2]);
+            lootList.add(lootEntry);
+        }
+
+        buildChanceMap();
+
+
+    }
+
+    void buildChanceMap() {
+        if (lootMap.size() == 0) {
+            getLogger().error("The lootMap Hasn't been loaded Check your config for errors!");
+            return;
+        } else {
+            chanceMap = new ArrayList<Integer>();
+            for (int i = 0; i < lootMap.size(); i++) {
+                Map.Entry currentSet = Iterables.get(lootMap.entrySet(), i);
+                Integer currentKey = Integer.parseInt(currentSet.getKey().toString());
+
+                for (int ix = 0; i < currentKey.intValue(); i++) {
+                    chanceMap.add(currentKey.intValue());
+                }
+
+            }
+        }
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////LISTENERS///////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    @Listener
+    public void onVote(VotifierEvent event)
+    {
+        Vote vote = event.getVote();
+
+        getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ vote.getUsername());
+        //Reset Name List
+        currentRewards = "";
+        //Get Random Rewards
+        List<String> rewardsList = new LinkedList<String>();
+        for(int i = 0; i < getRewardsNumber(rootNode); i++)
+        {
+            rewardsList.add(chooseReward(vote.getUsername()));
+        }
+        //Get Set Rewards
+        for(String setCommand: getSetCommands(rootNode)){
+            rewardsList.add(parseVariables(setCommand, vote.getUsername()));
+        }
+
+
+
+        broadCastMessage(getPublicMessage(rootNode,vote.getUsername()));
+        rewardVote(vote.getUsername(), rewardsList);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////ACTION METHODS///////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    public boolean rewardVote(String username, List<String> rewardList){
+        //Execute Commands
+        for (String command : rewardList)
+        {
+            game.getCommandManager().process(game.getServer().getConsole(), command);
+        }
+
+        return true;
+    }
+
+    public boolean broadCastMessage(Text message){
+        if (message.toPlain().isEmpty()) return false;
+        game.getServer().getBroadcastChannel().send(message);
+        return true;
+    }
+
+
+
+    public String chooseReward(String username)
+    {
+        Integer reward = chanceMap.get(ThreadLocalRandom.current().nextInt(0, chanceMap.size() + 1));
+        List<Map<String,String>> commandList = lootMap.get(reward);
+        Map<String, String> commandMap = commandList.get(ThreadLocalRandom.current().nextInt(0, commandList.size() + 1));
+        Map.Entry runCommand = Iterables.get(commandMap.entrySet(),1);
+        currentRewards += runCommand.getValue().toString() + ", ";
+        return parseVariables(runCommand.getKey().toString(), username);
+
     }
 
     public Text convertLink(String link){
@@ -304,102 +383,8 @@ public class SeriousVote
     private String parseVariables(String string, String username){
         return string.replace("{player}",username);
     }
-
-
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////LISTENERS///////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    @Listener
-    public void onVote(VotifierEvent event)
-    {
-        Vote vote = event.getVote();
-        rewardVote(vote.getUsername());
-        getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ vote.getUsername());
-        broadCastMessage(getPublicMessage(rootNode,vote.getUsername()));
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////ACTION METHODS///////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////
-
-    public boolean rewardVote(String username){
-        //Execute Commands
-        for (String command : getCommands(rootNode)) {
-            game.getCommandManager().process(game.getServer().getConsole(), parseVariables(command,username));
-        }
-
-        //Execute Roulette
-
-        //Log Vote Somehow
-
-        return true;
-    }
-
-    public boolean broadCastMessage(Text message){
-        if (message.toPlain().isEmpty()) return false;
-        game.getServer().getBroadcastChannel().send(message);
-        return true;
-    }
-
-    public void updateLoot(){
-        String[] inputLootTable = new String[0];
-         lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
-
-         //count to get the correct size of the lootMap
-         for (int i = 0; i < inputLootTable.length; i+=3)
-         {
-             //get the current integer add it to the table, Since it is a Map duplicates will be removed
-            lootMap.put(Integer.parseInt(inputLootTable[i]), new ArrayList<Map<String,String>>());
-         }
-
-        for (int i = 0; i < inputLootTable.length; i+=3)
-        {
-            //add in all the commands
-            List lootList = lootMap.get(Integer.parseInt(inputLootTable[i]));
-            Map<String,String>  lootEntry = new LinkedHashMap<String,String>();
-            lootEntry.put(inputLootTable[i+1],inputLootTable[i+2]);
-            lootList.add(lootEntry);
-        }
-
-        buildChanceMap();
-
-
-    }
-
-    public void chooseReward()
-    {
-        Integer reward = chanceMap.get(ThreadLocalRandom.current().nextInt(0, chanceMap.size() + 1));
-        List<Map<String,String>> commandList = lootMap.get(reward);
-        Map<String, String> commandMap = commandList.get(ThreadLocalRandom.current().nextInt(0, commandList.size() + 1));
-        Map.Entry runCommand = Iterables.get(commandMap.entrySet(),1);
-        runCommand.getKey().toString();
-    }
-
-    void buildChanceMap()
-    {
-        if(lootMap.size() == 0){
-            getLogger().error("The lootMap Hasn't been loaded Check your config for errors!");
-            return;
-        }
-
-        else
-        {
-            chanceMap = new ArrayList<Integer>();
-            for(int i = 0; i < lootMap.size(); i++){
-                Map.Entry currentSet = Iterables.get(lootMap.entrySet(), i);
-                Integer currentKey = Integer.parseInt(currentSet.getKey().toString());
-
-                for(int ix = 0; i < currentKey.intValue(); i++){
-                    chanceMap.add(currentKey.intValue());
-                }
-
-            }
-        }
-
-
-
+    private String parseVariables(String string, String username, String currentRewards){
+        return string.replace("{player}",username).replace("{Rewards}", currentRewards);
     }
 
 
