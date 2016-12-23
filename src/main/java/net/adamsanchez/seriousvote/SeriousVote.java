@@ -235,6 +235,9 @@ public class SeriousVote
     }
 
     private Text getPublicMessage(ConfigurationNode node, String username){
+        if (currentRewards.equals("")){
+            return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username));
+        }
         return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username, currentRewards));
 
     }
