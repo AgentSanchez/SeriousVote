@@ -103,6 +103,7 @@ public class SeriousVote
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
     List<Integer> chanceMap;
     String currentRewards;
+    boolean hasLoot = false;
 
 
 
@@ -243,11 +244,14 @@ public class SeriousVote
     }
     private int getRewardsNumber(ConfigurationNode node){
         int number = node.getNode("config", "random-rewards-number").getInt();
-        if(number < 0 ){
+        if(number < 0 && lootMap.size()==0){
             return ThreadLocalRandom.current().nextInt(node.getNode("config", "rewards-min").getInt(),node.getNode("config", "rewards-max").getInt());
+        } else if(number < 0) {
+            return 0;
         }
         return number;
     }
+
 
     public void reloadConfigs(){
         try {
@@ -289,9 +293,10 @@ public class SeriousVote
 
         if (lootMap.size() == 0) {
             getLogger().error("The lootMap Hasn't been loaded Check your config for errors!");
+            hasLoot = false;
             return;
         }
-        buildChanceMap();
+        hasLoot = true;
         getLogger().info("Rewards for seriousVote Have been loaded successfully");
 
 
@@ -330,12 +335,13 @@ public class SeriousVote
         getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ vote.getUsername());
         //Reset Name List
         currentRewards = "";
-        getLogger().info(chanceMap.size() + "");
-        //Get Random Rewards
         List<String> rewardsList = new LinkedList<String>();
-        for(int i = 0; i < getRewardsNumber(rootNode); i++)
-        {
-            rewardsList.add(chooseReward(vote.getUsername()));
+        //Get Random Rewards
+        if(!(lootMap.size() == 0 || chanceMap.size()==0)) {
+
+            for (int i = 0; i < getRewardsNumber(rootNode); i++) {
+                rewardsList.add(chooseReward(vote.getUsername()));
+            }
         }
         //Get Set Rewards
         for(String setCommand: getSetCommands(rootNode)){
@@ -354,6 +360,7 @@ public class SeriousVote
 
     public boolean rewardVote(String username, List<String> rewardList){
         //Execute Commands
+
         for (String command : rewardList)
         {
             game.getCommandManager().process(game.getServer().getConsole(), command);
@@ -372,6 +379,7 @@ public class SeriousVote
 
     public String chooseReward(String username)
     {
+
         Integer reward = chanceMap.get(ThreadLocalRandom.current().nextInt(0, chanceMap.size()));
         getLogger().info("Chose Reward from Table" + reward.toString());
         List<Map<String,String>> commandList = lootMap.get(reward);
@@ -382,6 +390,7 @@ public class SeriousVote
         return parseVariables(runCommand.getValue().toString(), username);
 
     }
+
 
     public Text convertLink(String link){
         Text textLink = TextSerializers.FORMATTING_CODE.deserialize(link);
