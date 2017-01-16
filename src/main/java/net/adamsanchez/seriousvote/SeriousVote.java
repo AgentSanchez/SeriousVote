@@ -256,6 +256,7 @@ public class SeriousVote
 
 
     public void reloadConfigs(){
+
         try {
             rootNode = loader.load();
         } catch (IOException e) {
@@ -263,6 +264,7 @@ public class SeriousVote
             getLogger().error(e.toString());
         }
 
+        randomRewardsNumber = getRewardsNumber(rootNode);
         updateLoot(getRandomCommands(rootNode));
 
         for(String ix : getRandomCommands(rootNode)){
