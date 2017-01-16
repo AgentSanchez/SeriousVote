@@ -101,9 +101,11 @@ public class SeriousVote
 
     ///////////////////////////////////////////////////////
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
+    int randomRewardsNumber;
     List<Integer> chanceMap;
     String currentRewards;
     boolean hasLoot = false;
+
 
 
 
@@ -339,7 +341,6 @@ public class SeriousVote
         getLogger().info("Current LootMap Size is.....");
         //Get Random Rewards
         if(!(lootMap.size() == 0 || chanceMap.size()==0)) {
-            getLogger().info(lootMap.size() + "" + chanceMap.size());
             for (int i = 0; i < getRewardsNumber(rootNode); i++) {
                 rewardsList.add(chooseReward(vote.getUsername()));
             }
@@ -382,8 +383,10 @@ public class SeriousVote
         return true;
     }
 
+    public void gatherRandomRewards(){
 
-
+    }
+    //Chooses 1 random reward
     public String chooseReward(String username)
     {
 
