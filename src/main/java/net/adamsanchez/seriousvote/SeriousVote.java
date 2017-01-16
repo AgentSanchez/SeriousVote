@@ -359,7 +359,7 @@ public class SeriousVote
 
         if (isOnline(vote.getUsername())) {
             broadCastMessage(publicMessage, vote.getUsername());
-            rewardVote(vote.getUsername(), rewardsList);
+            giveReward(vote.getUsername(), rewardsList);
         }
         else
         {
@@ -368,13 +368,10 @@ public class SeriousVote
         }
     }
 
-
-
-
     ///////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////ACTION METHODS///////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
-    public boolean rewardVote(String username, List<String> rewardList){
+    public boolean giveReward(String username, List<String> rewardList){
         //Execute Commands
 
         for (String command : rewardList)
@@ -383,6 +380,10 @@ public class SeriousVote
         }
 
         return true;
+    }
+
+    public boolean giveVote(String username){
+        return true
     }
     public boolean broadCastMessage(String message, String username){
         if (message.isEmpty()) return false;
