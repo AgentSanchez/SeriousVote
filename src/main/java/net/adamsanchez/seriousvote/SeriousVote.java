@@ -28,6 +28,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
@@ -35,7 +36,7 @@ import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.text.Text;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -50,6 +51,7 @@ import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -88,6 +90,7 @@ public class SeriousVote
     @Inject
     @DefaultConfig(sharedRoot = false)
     private Path defaultConfig;
+    private Path offlineVotes;
 
     @Inject
     @DefaultConfig(sharedRoot = false)
@@ -101,6 +104,7 @@ public class SeriousVote
 
     ///////////////////////////////////////////////////////
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
+    HashMap<UUID,Integer> storedVotes = new HashMap<UUID,Integer>();
     int randomRewardsNumber;
     List<String> setCommands;
     List<Integer> chanceMap;
@@ -116,15 +120,22 @@ public class SeriousVote
         getLogger().info("Serious Vote loading...");
         getLogger().info("Trying To setup Config Loader");
 
-        Asset asset = plugin.getAsset("seriousvote.conf").orElse(null);
+        Asset configAsset = plugin.getAsset("seriousvote.conf").orElse(null);
+        Asset offlineVoteAsset = plugin.getAsset("offlinevotes.dat").orElse(null);
+
+        offlineVotes = Paths.get(privateConfigDir.toString(),"", "offlinevotes.dat");
+
+
+
+
 
         if (Files.notExists(defaultConfig)) {
-            if (asset != null) {
+            if (configAsset != null) {
                 try {
                     getLogger().info("Copying Default Config");
-                    getLogger().info(asset.readString());
+                    getLogger().info(configAsset.readString());
                     getLogger().info(defaultConfig.toString());
-                    asset.copyToFile(defaultConfig);
+                    configAsset.copyToFile(defaultConfig);
                 } catch (IOException e) {
                     e.printStackTrace();
                     getLogger().error("Could not unpack the default config from the jar! Maybe your Minecraft server doesn't have write permissions?");
@@ -135,6 +146,17 @@ public class SeriousVote
                 return;
             }
         }
+
+        if (Files.notExists(offlineVotes)){
+            try {
+                configAsset.copyToFile(offlineVotes);
+            } catch (IOException e) {
+                getLogger().error("Could Not Initialize the offlinevotes file! What did you do with it");
+                getLogger().error(e.toString());
+            }
+        }
+
+
 
 
 
@@ -339,35 +361,19 @@ public class SeriousVote
     public void onVote(VotifierEvent event)
     {
         Vote vote = event.getVote();
-
-        getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ vote.getUsername());
-        //Reset Name List
-        currentRewards = "";
-        List<String> rewardsList = new LinkedList<String>();
-        getLogger().info("Current LootMap Size is.....");
-        //Get Random Rewards
-        if(!(lootMap.size() == 0 || chanceMap.size()==0)) {
-            for (int i = 0; i < randomRewardsNumber; i++) {
-                rewardsList.add(chooseReward(vote.getUsername()));
-            }
-        }
-        //Get Set Rewards
-        for(String setCommand: setCommands){
-            rewardsList.add(parseVariables(setCommand, vote.getUsername()));
+        String username = vote.getUsername();
+        getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ username);
+        giveVote(username);
+        if(isOnline(username)){
+            broadCastMessage(publicMessage, username);
         }
 
-
-        if (isOnline(vote.getUsername())) {
-            broadCastMessage(publicMessage, vote.getUsername());
-            giveReward(vote.getUsername(), rewardsList);
-        }
-        else
-        {
-            //Write to File
-
-        }
     }
 
+    @Listener
+    public void onPlayerJoin(ClientConnectionEvent.Join event){
+
+    }
     ///////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////ACTION METHODS///////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -383,7 +389,36 @@ public class SeriousVote
     }
 
     public boolean giveVote(String username){
-        return true
+        currentRewards = "";
+        List<String> rewardsList = new LinkedList<String>();
+
+        if(!(lootMap.size() == 0 || chanceMap.size()==0)) {
+            for (int i = 0; i < randomRewardsNumber; i++) {
+                rewardsList.add(chooseReward(username));
+            }
+        }
+        //Get Set Rewards
+        for(String setCommand: setCommands){
+            rewardsList.add(parseVariables(setCommand, username));
+        }
+
+
+        if (isOnline(username)) {
+            giveReward(username, rewardsList);
+        }
+        else
+        {
+            //Write to File
+
+        }
+
+        return true;
+    }
+    //Adds a reward(command) to the queue which is scheduled along with the main thread.
+    //Bypass for Async NuVotifier
+    public boolean queueReward(){
+
+        return true;
     }
     public boolean broadCastMessage(String message, String username){
         if (message.isEmpty()) return false;
@@ -432,6 +467,24 @@ public class SeriousVote
     private boolean isOnline(String username){
         if(getGame().getServer().getPlayer(username).isPresent()) return true;
         return false;
+    }
+
+    private boolean saveOffline() throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream(offlineVotes.toFile());
+        ObjectOutputStream objectOutputStream= new ObjectOutputStream(fileOutputStream);
+
+        objectOutputStream.writeObject(storedVotes);
+        objectOutputStream.close();
+        return true;
+    }
+
+    private boolean loadOffline() throws IOException, ClassNotFoundException {
+        FileInputStream fileInputStream  = new FileInputStream(offlineVotes.toFile());
+        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+        storedVotes = (HashMap) objectInputStream.readObject();
+        objectInputStream.close();
+
     }
 
 
