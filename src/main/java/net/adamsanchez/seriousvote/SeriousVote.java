@@ -105,6 +105,7 @@ public class SeriousVote
     List<String> setCommands;
     List<Integer> chanceMap;
     String currentRewards;
+    Text publicMessage;
     boolean hasLoot = false;
 
 
