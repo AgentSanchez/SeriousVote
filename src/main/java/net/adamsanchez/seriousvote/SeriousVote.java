@@ -20,9 +20,11 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.DefaultConfig;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
@@ -192,41 +194,51 @@ public class SeriousVote
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     private void registerCommands(){
+
         //////////////////////COMMAND BUILDERS///////////////////////////////////////////////
         CommandSpec reload = CommandSpec.builder()
                 .description(Text.of("Reload your configs for seriousvote"))
-                .permission("seriousvote.commands.adamin.reload")
+                .permission("seriousvote.commands.admin.reload")
                 .executor(new SVoteReload())
                 .build();
         CommandSpec vote = CommandSpec.builder()
                 .description(Text.of("Checks to see if it's running"))
                 .permission("seriousvote.commands.vote")
+                .arguments(GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))))
                 .executor(new SVoteVote())
                 .build();
-        CommandSpec debug = CommandSpec.builder()
-                .description(Text.of("DEBUG ONLY"))
-                .permission("seriousvote.commands.admin.debug.debug")
-                .executor(new SDebug())
+
+        CommandSpec giveVote = CommandSpec.builder()
+                .description(Text.of("For admins to give a player a vote"))
+                .permission("seriousvote.commands.admin.give")
+                .executor(new SVoteGiveVote())
                 .build();
         //TODO:Add Give player Vote Command (For debug)
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
-        Sponge.getCommandManager().register(this, vote, "vote");
-        Sponge.getCommandManager().register(this, reload,"seriousvotereload");
-        Sponge.getCommandManager().register(this, debug, "debug", "seriousdebug" );
+        Sponge.getCommandManager().register(this, vote, "vote","seriousvote:reload");
+        Sponge.getCommandManager().register(this, reload,"svreload","seriousvote:reload","seriousvotereload");
+        Sponge.getCommandManager().register(this, giveVote, "givevote", "seriousvote:givevote" );
     }
 
     //////////////////////////////COMMAND EXECUTOR CLASSES/////////////////////////////////////
-        public class SVoteReload implements CommandExecutor {
+    public class SVoteReload implements CommandExecutor {
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
             reloadConfigs();
             return CommandResult.success();
         }
     }
-    //TODO Fix this Method
-    public class SDebug implements CommandExecutor {
-        public CommandResult execute(CommandSource src, CommandContext args) throws
-                CommandException {
+
+    public class SVoteGiveVote implements CommandExecutor {
+        @Override
+        public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+
+            Player player = args.<Player>getOne("player").get();
+
+            player.sendMessage(Text.of("An administrator has awarded you a vote!"));
+            src.sendMessage(Text.of("You have successfully given " + player.getName() + " a vote"));
+
+            giveVote(player.getName());
 
             return CommandResult.success();
         }
