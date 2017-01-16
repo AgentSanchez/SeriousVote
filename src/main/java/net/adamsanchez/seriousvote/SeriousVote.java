@@ -412,7 +412,7 @@ public class SeriousVote
                 giveVote(username);
             }
 
-            storedVotes.put(playerID, new Integer(0));
+            storedVotes.remove(playerID);
             try {
                 saveOffline();
             } catch (IOException e) {
@@ -459,7 +459,11 @@ public class SeriousVote
                 playerID = userStorage.get().get(username).get().getUniqueId();
 
                 //Write to File
-                storedVotes.put(playerID , storedVotes.get(playerID).intValue()+1);
+                if(storedVotes.containsKey(playerID)) {
+                    storedVotes.put(playerID, storedVotes.get(playerID).intValue() + 1);
+                } else {
+                    storedVotes.put(playerID, new Integer(1));
+                }
                 try {
                     saveOffline();
                 } catch (IOException e) {
@@ -515,7 +519,10 @@ public class SeriousVote
         return string.replace("{player}",username);
     }
     private String parseVariables(String string, String username, String currentRewards){
-        if (currentRewards=="") return parseVariables(string, username);
+        if (currentRewards==null){
+            return parseVariables(string, username);
+        }
+        getLogger().info("Player " + username + " voted and recieved " + currentRewards);
         return string.replace("{player}",username).replace("{rewards}", currentRewards.substring(0,currentRewards.length() -2));
     }
 
