@@ -267,6 +267,7 @@ public class SeriousVote
 
         randomRewardsNumber = getRewardsNumber(rootNode);
         updateLoot(getRandomCommands(rootNode));
+        this.setCommands = getSetCommands(rootNode);
 
         for(String ix : getRandomCommands(rootNode)){
             getLogger().info(ix);
