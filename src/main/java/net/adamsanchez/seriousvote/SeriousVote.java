@@ -66,7 +66,7 @@ import static java.lang.Math.random;
  * Created by adam_ on 12/08/16.
  */
 @SuppressWarnings("unused")
-@Plugin(id = "seriousvote", name = "Serious Vote", version = "1", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
+@Plugin(id = "seriousvote", name = "Serious Vote", version = "2.5-BETA", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
 public class SeriousVote
 {
     @Inject private Game game;
@@ -204,20 +204,20 @@ public class SeriousVote
         CommandSpec vote = CommandSpec.builder()
                 .description(Text.of("Checks to see if it's running"))
                 .permission("seriousvote.commands.vote")
-                .arguments(GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))))
                 .executor(new SVoteVote())
                 .build();
 
         CommandSpec giveVote = CommandSpec.builder()
                 .description(Text.of("For admins to give a player a vote"))
                 .permission("seriousvote.commands.admin.give")
+                .arguments(GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))))
                 .executor(new SVoteGiveVote())
                 .build();
-        //TODO:Add Give player Vote Command (For debug)
+
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
-        Sponge.getCommandManager().register(this, vote, "vote","seriousvote:reload");
-        Sponge.getCommandManager().register(this, reload,"svreload","seriousvote:reload","seriousvotereload");
-        Sponge.getCommandManager().register(this, giveVote, "givevote", "seriousvote:givevote" );
+        Sponge.getCommandManager().register(this, vote, "vote");
+        Sponge.getCommandManager().register(this, reload,"svreload","seriousvotereload");
+        Sponge.getCommandManager().register(this, giveVote, "givevote" );
     }
 
     //////////////////////////////COMMAND EXECUTOR CLASSES/////////////////////////////////////
