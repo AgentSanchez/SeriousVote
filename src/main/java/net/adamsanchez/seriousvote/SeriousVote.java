@@ -275,7 +275,8 @@ public class SeriousVote
         randomRewardsNumber = getRewardsNumber(rootNode);
 
         updateLoot(getRandomCommands(rootNode));
-        this.setCommands = getSetCommands(rootNode);
+        buildChanceMap();
+        setCommands = getSetCommands(rootNode);
         getLogger().debug("Here's your commands");
         for(String ix : getRandomCommands(rootNode)){
             getLogger().debug(ix);
@@ -305,16 +306,7 @@ public class SeriousVote
         return node.getNode("config","vote-sites").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
-    /*
-    //This Method Has been replaced
-    private Text getPublicMessage(ConfigurationNode node, String username){
-        if (currentRewards.equals("")){
-            return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username));
-        }
-        return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username, currentRewards));
 
-    }
-    */
     //Returns the string value from the Config for the public message. This must be deserialized
     private String getPublicMessage(ConfigurationNode node){
         return node.getNode("config","broadcast-message").getString();
@@ -353,8 +345,7 @@ public class SeriousVote
         if (lootMap.size() == 0) {
             getLogger().error("The lootMap Hasn't been loaded Check your config for errors!");
             hasLoot = false;
-            return;
-        }
+            return;        }
         hasLoot = true;
         getLogger().info("Rewards for seriousVote Have been loaded successfully");
 
@@ -362,7 +353,7 @@ public class SeriousVote
     }
     void buildChanceMap() {
 
-        if (lootMap.size() == 0) {
+        if (!hasLoot) {
             getLogger().error("The lootMap Hasn't been loaded Check your config for errors!");
             return;
         } else {
@@ -436,8 +427,9 @@ public class SeriousVote
         currentRewards = "";
         List<String> rewardsList = new LinkedList<String>();
 
-        if(!(chanceMap.size()==0)) {
+        if(hasLoot) {
             for (int i = 0; i < randomRewardsNumber; i++) {
+                getLogger().info("Choosing a random reward.");
                 rewardsList.add(chooseReward(username));
             }
         }
