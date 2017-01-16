@@ -164,7 +164,7 @@ public class SeriousVote
 
 
 
-
+        currentRewards = "";
 
         reloadConfigs();
 
@@ -519,7 +519,7 @@ public class SeriousVote
         return string.replace("{player}",username);
     }
     private String parseVariables(String string, String username, String currentRewards){
-        if (currentRewards==null){
+        if (currentRewards==null || currentRewards == ""){
             return parseVariables(string, username);
         }
         getLogger().info("Player " + username + " voted and recieved " + currentRewards);
