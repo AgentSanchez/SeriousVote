@@ -233,7 +233,7 @@ public class SeriousVote
             getLogger().error("There was an error while reloading your configs");
             getLogger().error(e.toString());
         }
-        publicMessage = getPublicMessage(rootNode)
+        publicMessage = getPublicMessage(rootNode);
         randomRewardsNumber = getRewardsNumber(rootNode);
         updateLoot(getRandomCommands(rootNode));
         this.setCommands = getSetCommands(rootNode);
