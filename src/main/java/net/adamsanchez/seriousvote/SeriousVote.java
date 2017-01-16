@@ -350,7 +350,7 @@ public class SeriousVote
             }
         }
         //Get Set Rewards
-        for(String setCommand: getSetCommands(rootNode)){
+        for(String setCommand: setCommands){
             rewardsList.add(parseVariables(setCommand, vote.getUsername()));
         }
 
