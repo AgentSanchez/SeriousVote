@@ -105,7 +105,7 @@ public class SeriousVote
     List<String> setCommands;
     List<Integer> chanceMap;
     String currentRewards;
-    Text publicMessage;
+    String publicMessage;
     boolean hasLoot = false;
 
 
@@ -225,11 +225,28 @@ public class SeriousVote
     ///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////CONFIGURATION METHODS//////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
+    public void reloadConfigs(){
+
+        try {
+            rootNode = loader.load();
+        } catch (IOException e) {
+            getLogger().error("There was an error while reloading your configs");
+            getLogger().error(e.toString());
+        }
+        publicMessage = getPublicMessage(rootNode)
+        randomRewardsNumber = getRewardsNumber(rootNode);
+        updateLoot(getRandomCommands(rootNode));
+        this.setCommands = getSetCommands(rootNode);
+
+        for(String ix : getRandomCommands(rootNode)){
+            getLogger().info(ix);
+        }
+
+    }
     private List<String> getSetCommands(ConfigurationNode node) {
         return node.getNode("config","Rewards","set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
-
     private List<String> getRandomCommands(ConfigurationNode node) {
            return node.getNode("config","Rewards","random").getChildrenList().stream()
                    .map(ConfigurationNode::getString).collect(Collectors.toList());
@@ -238,13 +255,19 @@ public class SeriousVote
         return node.getNode("config","vote-sites").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
-
+    /*
+    //This Method Has been replaced
     private Text getPublicMessage(ConfigurationNode node, String username){
         if (currentRewards.equals("")){
             return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username));
         }
         return TextSerializers.FORMATTING_CODE.deserialize(parseVariables(node.getNode("config", "broadcast-message").getString(), username, currentRewards));
 
+    }
+    */
+    //Returns the string value from the Config for the public message. This must be deserialized
+    private String getPublicMessage(ConfigurationNode node){
+        return node.getNode("config","broadcast-message").getString();
     }
     private int getRewardsNumber(ConfigurationNode node){
         int number = node.getNode("config", "random-rewards-number").getInt();
@@ -255,27 +278,6 @@ public class SeriousVote
         }
         return number;
     }
-
-
-    public void reloadConfigs(){
-
-        try {
-            rootNode = loader.load();
-        } catch (IOException e) {
-            getLogger().error("There was an error while reloading your configs");
-            getLogger().error(e.toString());
-        }
-
-        randomRewardsNumber = getRewardsNumber(rootNode);
-        updateLoot(getRandomCommands(rootNode));
-        this.setCommands = getSetCommands(rootNode);
-
-        for(String ix : getRandomCommands(rootNode)){
-            getLogger().info(ix);
-        }
-
-    }
-
     public void updateLoot(List<String> lootTable){
 
         String[] inputLootTable = lootTable.stream().toArray(String[]::new);
@@ -308,7 +310,6 @@ public class SeriousVote
 
 
     }
-
     void buildChanceMap() {
 
         if (lootMap.size() == 0) {
@@ -357,7 +358,7 @@ public class SeriousVote
 
 
         if (isOnline(vote.getUsername())) {
-            broadCastMessage(getPublicMessage(rootNode, vote.getUsername()));
+            broadCastMessage(publicMessage, vote.getUsername());
             rewardVote(vote.getUsername(), rewardsList);
         }
         else
@@ -367,10 +368,12 @@ public class SeriousVote
         }
     }
 
+
+
+
     ///////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////ACTION METHODS///////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
-
     public boolean rewardVote(String username, List<String> rewardList){
         //Execute Commands
 
@@ -381,19 +384,17 @@ public class SeriousVote
 
         return true;
     }
-
-    public boolean broadCastMessage(Text message){
-        if (message.toPlain().isEmpty()) return false;
-        game.getServer().getBroadcastChannel().send(message);
+    public boolean broadCastMessage(String message, String username){
+        if (message.isEmpty()) return false;
+        game.getServer().getBroadcastChannel().send(
+                TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username, currentRewards)));
         return true;
     }
-
     public void gatherRandomRewards(){
 
     }
     //Chooses 1 random reward
-    public String chooseReward(String username)
-    {
+    public String chooseReward(String username) {
 
         Integer reward = chanceMap.get(ThreadLocalRandom.current().nextInt(0, chanceMap.size()));
         getLogger().info("Chose Reward from Table" + reward.toString());
@@ -405,8 +406,6 @@ public class SeriousVote
         return parseVariables(runCommand.getValue().toString(), username);
 
     }
-
-
     public Text convertLink(String link){
         Text textLink = TextSerializers.FORMATTING_CODE.deserialize(link);
         try {
@@ -417,18 +416,17 @@ public class SeriousVote
         }
         return Text.of("Malformed URL - Inform Administrator");
     }
-
     private String parseVariables(String string, String username){
         return string.replace("{player}",username);
     }
     private String parseVariables(String string, String username, String currentRewards){
+        if (currentRewards=="") return parseVariables(string, username);
         return string.replace("{player}",username).replace("{rewards}", currentRewards.substring(0,currentRewards.length() -2));
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////Utilities/////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
-
     //returns weather a player is online
     private boolean isOnline(String username){
         if(getGame().getServer().getPlayer(username).isPresent()) return true;
