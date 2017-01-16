@@ -350,9 +350,15 @@ public class SeriousVote
         }
 
 
+        if (isOnline(vote.getUsername())) {
+            broadCastMessage(getPublicMessage(rootNode, vote.getUsername()));
+            rewardVote(vote.getUsername(), rewardsList);
+        }
+        else
+        {
+            //Write to File
 
-        broadCastMessage(getPublicMessage(rootNode,vote.getUsername()));
-        rewardVote(vote.getUsername(), rewardsList);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
