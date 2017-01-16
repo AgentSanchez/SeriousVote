@@ -34,6 +34,7 @@ import org.spongepowered.api.plugin.Plugin;
 
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.service.economy.EconomyService;
+import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 
 import java.io.*;
@@ -111,12 +112,14 @@ public class SeriousVote
     String currentRewards;
     String publicMessage;
     boolean hasLoot = false;
-
+    Optional<UserStorageService> userStorage;
 
 
 
     @Listener
     public void onInitilization(GamePreInitializationEvent event){
+        userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
+
         getLogger().info("Serious Vote loading...");
         getLogger().info("Trying To setup Config Loader");
 
@@ -248,20 +251,34 @@ public class SeriousVote
     ////////////////////////////////CONFIGURATION METHODS//////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
     public void reloadConfigs(){
-
+        //try loading from file
         try {
             rootNode = loader.load();
         } catch (IOException e) {
             getLogger().error("There was an error while reloading your configs");
             getLogger().error(e.toString());
         }
+
+        //update variables and other instantiations
         publicMessage = getPublicMessage(rootNode);
         randomRewardsNumber = getRewardsNumber(rootNode);
+
         updateLoot(getRandomCommands(rootNode));
         this.setCommands = getSetCommands(rootNode);
-
+        getLogger().debug("Here's your commands");
         for(String ix : getRandomCommands(rootNode)){
-            getLogger().info(ix);
+            getLogger().debug(ix);
+        }
+
+
+        //Load Offline votes
+        getLogger().info("Trying to load offline player votes from ... " + offlineVotes.toString());
+        try {
+            loadOffline();
+        } catch (IOException e) {
+            getLogger().error("ahahahahaha We Couldn't load up the stored offline player votes",e);
+        } catch (ClassNotFoundException e) {
+            getLogger().error("Well crap that is noooot a hash map! GO slap the dev!");
         }
 
     }
@@ -372,7 +389,23 @@ public class SeriousVote
 
     @Listener
     public void onPlayerJoin(ClientConnectionEvent.Join event){
+        UUID playerID = event.getTargetEntity().getUniqueId();
+        String username = event.getTargetEntity().getName();
 
+        if(storedVotes.containsKey(playerID)){
+            broadCastMessage(publicMessage, username);
+
+            for(int ix = 0; ix < storedVotes.get(playerID).intValue(); ix ++){
+                giveVote(username);
+            }
+
+            storedVotes.put(playerID, new Integer(0));
+            try {
+                saveOffline();
+            } catch (IOException e) {
+                getLogger().error("Error while saving offline votes file", e);
+            }
+        }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////ACTION METHODS///////////////////////////////////////////////
@@ -408,7 +441,15 @@ public class SeriousVote
         }
         else
         {
+
+            UUID playerID = userStorage.get().get(username).get().getUniqueId();
             //Write to File
+            storedVotes.put(playerID , storedVotes.get(playerID).intValue()+1);
+            try {
+                saveOffline();
+            } catch (IOException e) {
+                getLogger().error("Woah did that just happen? I couldn't save that offline player's vote!", e);
+            }
 
         }
 
@@ -469,20 +510,20 @@ public class SeriousVote
         return false;
     }
 
-    private boolean saveOffline() throws IOException {
+    private void saveOffline() throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(offlineVotes.toFile());
         ObjectOutputStream objectOutputStream= new ObjectOutputStream(fileOutputStream);
 
         objectOutputStream.writeObject(storedVotes);
         objectOutputStream.close();
-        return true;
+
     }
 
-    private boolean loadOffline() throws IOException, ClassNotFoundException {
+    private void loadOffline() throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream  = new FileInputStream(offlineVotes.toFile());
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-        storedVotes = (HashMap) objectInputStream.readObject();
+        storedVotes = (HashMap<UUID, Integer>) objectInputStream.readObject();
         objectInputStream.close();
 
     }
