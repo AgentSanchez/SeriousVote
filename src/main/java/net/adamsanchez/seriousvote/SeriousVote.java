@@ -343,7 +343,7 @@ public class SeriousVote
         getLogger().info("Current LootMap Size is.....");
         //Get Random Rewards
         if(!(lootMap.size() == 0 || chanceMap.size()==0)) {
-            for (int i = 0; i < getRewardsNumber(rootNode); i++) {
+            for (int i = 0; i < randomRewardsNumber; i++) {
                 rewardsList.add(chooseReward(vote.getUsername()));
             }
         }
