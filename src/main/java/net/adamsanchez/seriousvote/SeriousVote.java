@@ -1,6 +1,4 @@
 package net.adamsanchez.seriousvote;
-
-
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.vexsoftware.votifier.model.Vote;
@@ -438,7 +436,7 @@ public class SeriousVote
         currentRewards = "";
         List<String> rewardsList = new LinkedList<String>();
 
-        if(!(lootMap.size() == 0 || chanceMap.size()==0)) {
+        if(!(chanceMap.size()==0)) {
             for (int i = 0; i < randomRewardsNumber; i++) {
                 rewardsList.add(chooseReward(username));
             }
