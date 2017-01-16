@@ -336,9 +336,10 @@ public class SeriousVote
         //Reset Name List
         currentRewards = "";
         List<String> rewardsList = new LinkedList<String>();
+        getLogger().info("Current LootMap Size is.....");
         //Get Random Rewards
         if(!(lootMap.size() == 0 || chanceMap.size()==0)) {
-
+            getLogger().info(lootMap.size() + "" + chanceMap.size());
             for (int i = 0; i < getRewardsNumber(rootNode); i++) {
                 rewardsList.add(chooseReward(vote.getUsername()));
             }
@@ -410,6 +411,15 @@ public class SeriousVote
         return string.replace("{player}",username).replace("{rewards}", currentRewards.substring(0,currentRewards.length() -2));
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////Utilities/////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    //returns weather a player is online
+    private boolean isOnline(String username){
+        if(getGame().getServer().getPlayer(username).isPresent()) return true;
+        return false;
+    }
 
 
 }
