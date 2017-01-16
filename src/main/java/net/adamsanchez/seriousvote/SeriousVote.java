@@ -120,7 +120,7 @@ public class SeriousVote
 
 
     @Listener
-    public void onInitilization(GamePreInitializationEvent event){
+    public void onInitialization(GamePreInitializationEvent event){
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
 
         getLogger().info("Serious Vote loading...");
@@ -155,7 +155,7 @@ public class SeriousVote
 
         if (Files.notExists(offlineVotes)){
             try {
-                configAsset.copyToFile(offlineVotes);
+                offlineVoteAsset.copyToFile(offlineVotes);
             } catch (IOException e) {
                 getLogger().error("Could Not Initialize the offlinevotes file! What did you do with it");
                 getLogger().error(e.toString());
@@ -454,15 +454,20 @@ public class SeriousVote
         }
         else
         {
+            UUID playerID;
+            if(userStorage.get().get(username).isPresent()){
+                playerID = userStorage.get().get(username).get().getUniqueId();
 
-            UUID playerID = userStorage.get().get(username).get().getUniqueId();
-            //Write to File
-            storedVotes.put(playerID , storedVotes.get(playerID).intValue()+1);
-            try {
-                saveOffline();
-            } catch (IOException e) {
-                getLogger().error("Woah did that just happen? I couldn't save that offline player's vote!", e);
+                //Write to File
+                storedVotes.put(playerID , storedVotes.get(playerID).intValue()+1);
+                try {
+                    saveOffline();
+                } catch (IOException e) {
+                    getLogger().error("Woah did that just happen? I couldn't save that offline player's vote!", e);
+                }
             }
+
+
 
         }
 
