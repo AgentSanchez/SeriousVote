@@ -102,6 +102,7 @@ public class SeriousVote
     ///////////////////////////////////////////////////////
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
     int randomRewardsNumber;
+    List<String> setCommands;
     List<Integer> chanceMap;
     String currentRewards;
     boolean hasLoot = false;
