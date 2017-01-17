@@ -117,6 +117,7 @@ public class SeriousVote
     String currentRewards;
     String publicMessage;
     boolean hasLoot = false;
+    boolean isNoRandom = false;
     Optional<UserStorageService> userStorage;
 
 
@@ -327,11 +328,33 @@ public class SeriousVote
     }
     private int getRewardsNumber(ConfigurationNode node){
         int number = node.getNode("config", "random-rewards-number").getInt();
-        if(number < 0){
-            return ThreadLocalRandom.current().nextInt(node.getNode("config", "rewards-min").getInt(),node.getNode("config", "rewards-max").getInt());
+        isNoRandom = number == 0? true:false;
+        if(number < 0 && hasLoot) {
+            //Inclusive
+            int nextInt;
+            int min = node.getNode("config", "rewards-min").getInt();
+            if (!(min < 1)) {
+                min -= 1;
+            }
+            //Exclusive
+            int max = node.getNode("config", "rewards-max").getInt() + 1;
+
+            if (max > min){
+                nextInt =  ThreadLocalRandom.current().nextInt(min,max);
+            } else {
+                nextInt = 0;
+                getLogger().warn("There seems to be an error in your min/max setting in your configs.");
+            }
+
+            getLogger().info("Giving out " + nextInt + " random rewards.");
+            return nextInt;
+        } else if(number < 0){
+            return 0;
         }
+
         return number;
     }
+
     public void updateLoot(List<String> lootTable){
 
         String[] inputLootTable = lootTable.stream().toArray(String[]::new);
@@ -522,7 +545,7 @@ public class SeriousVote
     }
     private String parseVariables(String string, String username, String currentRewards){
         if (currentRewards==null || currentRewards == ""){
-            return parseVariables(string, username);
+            return string.replace("{player}",username).replace("{rewards}", currentRewards.substring(0,currentRewards.length() -2))
         }
         getLogger().info("Player " + username + " voted and recieved " + currentRewards);
         return string.replace("{player}",username).replace("{rewards}", currentRewards.substring(0,currentRewards.length() -2));
