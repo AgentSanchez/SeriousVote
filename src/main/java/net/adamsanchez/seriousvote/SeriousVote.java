@@ -1,4 +1,6 @@
 package net.adamsanchez.seriousvote;
+
+
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.vexsoftware.votifier.model.Vote;
@@ -7,8 +9,6 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-import org.omg.CORBA.COMM_FAILURE;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
@@ -21,20 +21,24 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.config.DefaultConfig;
+
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.event.Listener;
+
 
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.event.Listener;
+
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
+import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.config.DefaultConfig;
+
 import org.spongepowered.api.plugin.PluginContainer;
-import org.spongepowered.api.service.economy.EconomyService;
+
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 
@@ -45,11 +49,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import org.spongepowered.api.text.action.HoverAction;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 
@@ -58,8 +60,6 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import static java.lang.Math.incrementExact;
-import static java.lang.Math.random;
 
 /**
  * Created by adam_ on 12/08/16.
@@ -78,7 +78,6 @@ public class SeriousVote
         return this.plugin;
     }
 
-    public static EconomyService economyService;
     private static SeriousVote seriousVotePlugin;
 
 
@@ -540,6 +539,7 @@ public class SeriousVote
         objectInputStream.close();
 
     }
+
 
 
 }
