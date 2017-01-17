@@ -103,7 +103,10 @@ public class SeriousVote
     private CommentedConfigurationNode rootNode;
 
 
+
+
     ///////////////////////////////////////////////////////
+    private LinkedList<String> commandQueue = new LinkedList<String>();
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
     HashMap<UUID,Integer> storedVotes = new HashMap<UUID,Integer>();
     int randomRewardsNumber;
@@ -530,7 +533,6 @@ public class SeriousVote
         objectOutputStream.close();
 
     }
-
     private void loadOffline() throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream  = new FileInputStream(offlineVotes.toFile());
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
