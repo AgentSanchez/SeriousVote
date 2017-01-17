@@ -39,6 +39,8 @@ import org.spongepowered.api.config.DefaultConfig;
 
 import org.spongepowered.api.plugin.PluginContainer;
 
+import org.spongepowered.api.scheduler.Scheduler;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 
@@ -58,6 +60,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -102,8 +105,7 @@ public class SeriousVote
     private Path privateConfigDir;
     private CommentedConfigurationNode rootNode;
 
-
-
+    ///////////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////////
     private LinkedList<String> commandQueue = new LinkedList<String>();
@@ -168,6 +170,14 @@ public class SeriousVote
 
         reloadConfigs();
 
+        //Begin Command Executor
+        Scheduler scheduler = Sponge.getScheduler();
+        Task.Builder taskBuilder = scheduler.createTaskBuilder();
+        Task task = taskBuilder.execute(() -> giveReward())
+                .delay(100, TimeUnit.MILLISECONDS)
+                .name("SeriousVote-CommandRewardExecutor")
+                .submit(plugin);
+
     }
 
 
@@ -181,6 +191,8 @@ public class SeriousVote
 
 
         getLogger().info("Serious Vote Has Loaded\n\n\n\n");
+
+
 
     }
 
@@ -383,7 +395,7 @@ public class SeriousVote
         String username = vote.getUsername();
         getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ username);
         giveVote(username);
-        if(isOnline(username)){
+        if(isOnline(username)) {
             broadCastMessage(publicMessage, username);
         }
 
@@ -412,12 +424,12 @@ public class SeriousVote
     ///////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////ACTION METHODS///////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
-    public boolean giveReward(String username, List<String> rewardList){
+    public boolean giveReward(){
         //Execute Commands
 
-        for (String command : rewardList)
+        for (int ix = 0; ix < commandQueue.size(); ix ++)
         {
-            game.getCommandManager().process(game.getServer().getConsole(), command);
+            game.getCommandManager().process(game.getServer().getConsole(), commandQueue.poll());
         }
 
         return true;
@@ -425,22 +437,22 @@ public class SeriousVote
 
     public boolean giveVote(String username){
         currentRewards = "";
-        List<String> rewardsList = new LinkedList<String>();
+
 
         if(hasLoot) {
             for (int i = 0; i < randomRewardsNumber; i++) {
                 getLogger().info("Choosing a random reward.");
-                rewardsList.add(chooseReward(username));
+                commandQueue.add(chooseReward(username));
             }
         }
         //Get Set Rewards
         for(String setCommand: setCommands){
-            rewardsList.add(parseVariables(setCommand, username));
+            commandQueue.add(parseVariables(setCommand, username));
         }
 
 
         if (isOnline(username)) {
-            giveReward(username, rewardsList);
+            giveReward();
         }
         else
         {
