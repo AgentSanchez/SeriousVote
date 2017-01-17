@@ -68,7 +68,7 @@ import java.util.stream.Collectors;
  * Created by adam_ on 12/08/16.
  */
 @SuppressWarnings("unused")
-@Plugin(id = "seriousvote", name = "Serious Vote", version = "2.7", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
+@Plugin(id = "seriousvote", name = "Serious Vote", version = "2.8", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
 public class SeriousVote
 {
     @Inject private Game game;
@@ -544,10 +544,12 @@ public class SeriousVote
         return string.replace("{player}",username);
     }
     private String parseVariables(String string, String username, String currentRewards){
-        if (currentRewards==null || currentRewards == ""){
-            return string.replace("{player}",username).replace("{rewards}", currentRewards.substring(0,currentRewards.length() -2))
+        if (isNoRandom){
+            return parseVariables(string,username);
+        } else if(currentRewards == "") {
+            return string.replace("{player}",username).replace("{rewards}", "No Random Rewards");
         }
-        getLogger().info("Player " + username + " voted and recieved " + currentRewards);
+        getLogger().info("Player " + username + " voted and received " + currentRewards);
         return string.replace("{player}",username).replace("{rewards}", currentRewards.substring(0,currentRewards.length() -2));
     }
 
