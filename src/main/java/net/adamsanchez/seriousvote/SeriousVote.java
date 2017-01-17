@@ -174,7 +174,7 @@ public class SeriousVote
         Scheduler scheduler = Sponge.getScheduler();
         Task.Builder taskBuilder = scheduler.createTaskBuilder();
         Task task = taskBuilder.execute(() -> giveReward())
-                .delay(100, TimeUnit.MILLISECONDS)
+                .delay(500, TimeUnit.MILLISECONDS)
                 .name("SeriousVote-CommandRewardExecutor")
                 .submit(plugin);
 
