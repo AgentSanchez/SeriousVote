@@ -68,7 +68,7 @@ import java.util.stream.Collectors;
  * Created by adam_ on 12/08/16.
  */
 @SuppressWarnings("unused")
-@Plugin(id = "seriousvote", name = "Serious Vote", version = "2.8", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
+@Plugin(id = "seriousvote", name = "Serious Vote", version = "2.9", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
 public class SeriousVote
 {
     @Inject private Game game;
@@ -112,6 +112,9 @@ public class SeriousVote
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
     HashMap<UUID,Integer> storedVotes = new HashMap<UUID,Integer>();
     int randomRewardsNumber;
+    int rewardsMin;
+    int rewardsMax;
+    int randomRewardsGen;
     List<String> setCommands;
     List<Integer> chanceMap;
     String currentRewards;
@@ -327,20 +330,20 @@ public class SeriousVote
         return node.getNode("config","broadcast-message").getString();
     }
     private int getRewardsNumber(ConfigurationNode node){
-        int number = node.getNode("config", "random-rewards-number").getInt();
-        isNoRandom = number == 0? true:false;
-        if(number < 0 && hasLoot) {
-            //Inclusive
-            int nextInt;
-            int min = node.getNode("config", "rewards-min").getInt();
-            if (!(min < 1)) {
-                min -= 1;
-            }
-            //Exclusive
-            int max = node.getNode("config", "rewards-max").getInt() + 1;
+         int number = node.getNode("config", "random-rewards-number").getInt();
+         isNoRandom = number == 0? true:false;
+         rewardsMin = node.getNode("config", "rewards-min").getInt();
+         rewardsMax = node.getNode("config", "rewards-max").getInt() + 1;
+        return number;
+    }
 
-            if (max > min){
-                nextInt =  ThreadLocalRandom.current().nextInt(min,max);
+    public int generateRandomRewardNumber(){
+        int nextInt;
+        if(randomRewardsNumber < 0 && hasLoot) {
+            //Inclusive
+            if(rewardsMin < 0) rewardsMin = 0;
+            if (rewardsMax > rewardsMin){
+                nextInt =  ThreadLocalRandom.current().nextInt(rewardsMin,rewardsMax);
             } else {
                 nextInt = 0;
                 getLogger().warn("There seems to be an error in your min/max setting in your configs.");
@@ -348,11 +351,10 @@ public class SeriousVote
 
             getLogger().info("Giving out " + nextInt + " random rewards.");
             return nextInt;
-        } else if(number < 0){
+        } else if(randomRewardsNumber < 0){
             return 0;
         }
-
-        return number;
+        return 0;
     }
 
     public void updateLoot(List<String> lootTable){
@@ -460,10 +462,14 @@ public class SeriousVote
 
     public boolean giveVote(String username){
         currentRewards = "";
-
-
-        if(hasLoot) {
+        if(hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
             for (int i = 0; i < randomRewardsNumber; i++) {
+                getLogger().info("Choosing a random reward.");
+                commandQueue.add(chooseReward(username));
+            }
+        } else if(hasLoot && !isNoRandom){
+            randomRewardsGen = generateRandomRewardNumber();
+            for (int i = 0; i < randomRewardsGen; i++) {
                 getLogger().info("Choosing a random reward.");
                 commandQueue.add(chooseReward(username));
             }
