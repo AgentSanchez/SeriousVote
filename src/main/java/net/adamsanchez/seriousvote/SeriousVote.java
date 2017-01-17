@@ -65,7 +65,7 @@ import static java.lang.Math.random;
  * Created by adam_ on 12/08/16.
  */
 @SuppressWarnings("unused")
-@Plugin(id = "seriousvote", name = "Serious Vote", version = "2.5-BETA", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
+@Plugin(id = "seriousvote", name = "Serious Vote", version = "2.6", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
 public class SeriousVote
 {
     @Inject private Game game;
@@ -313,10 +313,8 @@ public class SeriousVote
     }
     private int getRewardsNumber(ConfigurationNode node){
         int number = node.getNode("config", "random-rewards-number").getInt();
-        if(number < 0 && lootMap.size()==0){
+        if(number < 0){
             return ThreadLocalRandom.current().nextInt(node.getNode("config", "rewards-min").getInt(),node.getNode("config", "rewards-max").getInt());
-        } else if(number < 0) {
-            return 0;
         }
         return number;
     }
