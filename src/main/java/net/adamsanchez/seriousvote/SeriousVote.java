@@ -110,6 +110,7 @@ public class SeriousVote
 
     ///////////////////////////////////////////////////////
     private LinkedList<String> commandQueue = new LinkedList<String>();
+    private LinkedList<String> executingQueue = new LinkedList<String>();
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
     HashMap<UUID,Integer> storedVotes = new HashMap<UUID,Integer>();
     int randomRewardsNumber;
@@ -180,7 +181,7 @@ public class SeriousVote
         Scheduler scheduler = Sponge.getScheduler();
         Task.Builder taskBuilder = scheduler.createTaskBuilder();
         Task task = taskBuilder.execute(() -> giveReward())
-                .delay(500, TimeUnit.MILLISECONDS)
+                .delay(1000, TimeUnit.MILLISECONDS)
                 .name("SeriousVote-CommandRewardExecutor")
                 .submit(plugin);
 
@@ -454,13 +455,16 @@ public class SeriousVote
     ///////////////////////////////////////////////////////////////////////////////////////////
     public boolean giveReward(){
         //Execute Commands
+        executingQueue = commandQueue;
+        commandQueue = new LinkedList<String>();
 
-        for (int ix = 0; ix < commandQueue.size(); ix ++)
+        for (int ix = 0; ix < executingQueue.size(); ix ++)
         {
-            game.getCommandManager().process(game.getServer().getConsole(), commandQueue.poll());
+            game.getCommandManager().process(game.getServer().getConsole(), executingQueue.poll());
         }
-
+        executingQueue = null;
         return true;
+
     }
 
     public boolean giveVote(String username){
