@@ -3,6 +3,7 @@ package net.adamsanchez.seriousvote;
 
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
+import com.sun.javafx.font.Metrics;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
@@ -125,6 +126,7 @@ public class SeriousVote
 
 
 
+
     @Listener
     public void onInitialization(GamePreInitializationEvent event){
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
@@ -185,7 +187,8 @@ public class SeriousVote
     }
 
 
-
+    @Inject
+    private Metrics metrics;
     @Listener
     public void onServerStart(GameInitializationEvent event)
     {
