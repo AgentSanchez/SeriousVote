@@ -1,9 +1,7 @@
 package net.adamsanchez.seriousvote;
 
-
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
-import com.sun.javafx.font.Metrics;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
@@ -63,6 +61,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import net.adamsanchez.seriousvote.Metrics.Metrics;
 
 
 /**
