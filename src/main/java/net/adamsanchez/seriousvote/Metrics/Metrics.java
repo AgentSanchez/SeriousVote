@@ -1,25 +1,25 @@
-package net.adamsanchez.seriousvote;
+package net.adamsanchez.seriousvote.Metrics;
 
-        import com.google.gson.JsonArray;
-        import com.google.gson.JsonObject;
-        import com.google.inject.Inject;
-        import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-        import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-        import org.apache.commons.lang3.Validate;
-        import org.slf4j.Logger;
-        import org.spongepowered.api.Sponge;
-        import org.spongepowered.api.config.ConfigDir;
-        import org.spongepowered.api.plugin.PluginContainer;
-        import org.spongepowered.api.scheduler.Scheduler;
-        import org.spongepowered.api.scheduler.Task;
+    import com.google.gson.JsonArray;
+    import com.google.gson.JsonObject;
+    import com.google.inject.Inject;
+    import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+    import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
+    import org.apache.commons.lang3.Validate;
+    import org.slf4j.Logger;
+    import org.spongepowered.api.Sponge;
+    import org.spongepowered.api.config.ConfigDir;
+    import org.spongepowered.api.plugin.PluginContainer;
+    import org.spongepowered.api.scheduler.Scheduler;
+    import org.spongepowered.api.scheduler.Task;
 
-        import javax.net.ssl.HttpsURLConnection;
-        import java.io.*;
-        import java.lang.reflect.InvocationTargetException;
-        import java.net.URL;
-        import java.nio.file.Path;
-        import java.util.*;
-        import java.util.zip.GZIPOutputStream;
+    import javax.net.ssl.HttpsURLConnection;
+    import java.io.*;
+    import java.lang.reflect.InvocationTargetException;
+    import java.net.URL;
+    import java.nio.file.Path;
+    import java.util.*;
+    import java.util.zip.GZIPOutputStream;
 
 /**
  * bStats collects some data for plugin authors.
@@ -64,7 +64,7 @@ public class Metrics {
     // The constructor is not meant to be called by the user himself.
     // The instance is created using Dependency Injection (https://docs.spongepowered.org/master/en/plugin/injection.html)
     @Inject
-    private Metrics(PluginContainer plugin, Logger logger, @ConfigDir(sharedRoot = true) Path configDir) {
+    private Metrics(PluginContainer plugin, Logger logger, @ConfigDir(sharedRoot = false) Path configDir) {
         if (created) {
             // We don't want more than one instance of this class
             throw new IllegalStateException("There's already an instance of this Metrics class!");
