@@ -190,7 +190,7 @@ public class Metrics {
     private JsonObject getServerData() {
         // Minecraft specific data
         int playerAmount = Sponge.getServer().getOnlinePlayers().size();
-        playerAmount = playerAmount > 200 ? 200 : playerAmount;
+        playerAmount = playerAmount > 1000 ? 1000 : playerAmount;
         int onlineMode = Sponge.getServer().getOnlineMode() ? 1 : 0;
         String minecraftVersion = Sponge.getGame().getPlatform().getMinecraftVersion().getName();
 

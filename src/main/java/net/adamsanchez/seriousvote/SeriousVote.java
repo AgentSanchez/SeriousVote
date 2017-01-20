@@ -84,6 +84,8 @@ public class SeriousVote
 
     private static SeriousVote seriousVotePlugin;
 
+    @Inject
+    private Metrics metrics;
 
     @Inject Logger logger;
     public Logger getLogger()
@@ -111,6 +113,8 @@ public class SeriousVote
     ///////////////////////////////////////////////////////
     private LinkedList<String> commandQueue = new LinkedList<String>();
     private LinkedList<String> executingQueue = new LinkedList<String>();
+
+
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
     HashMap<UUID,Integer> storedVotes = new HashMap<UUID,Integer>();
     int randomRewardsNumber;
@@ -164,8 +168,11 @@ public class SeriousVote
 
         if (Files.notExists(offlineVotes)){
             try {
-                offlineVoteAsset.copyToFile(offlineVotes);
+                loadOffline();
             } catch (IOException e) {
+                getLogger().error("Could Not Initialize the offlinevotes file! What did you do with it");
+                getLogger().error(e.toString());
+            } catch (ClassNotFoundException e) {
                 getLogger().error("Could Not Initialize the offlinevotes file! What did you do with it");
                 getLogger().error(e.toString());
             }
@@ -188,8 +195,7 @@ public class SeriousVote
     }
 
 
-    @Inject
-    private Metrics metrics;
+
     @Listener
     public void onServerStart(GameInitializationEvent event)
     {
@@ -199,7 +205,6 @@ public class SeriousVote
 
 
         getLogger().info("Serious Vote Has Loaded\n\n\n\n");
-
 
 
     }
