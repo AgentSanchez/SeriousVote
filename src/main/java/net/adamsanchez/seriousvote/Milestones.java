@@ -5,11 +5,11 @@ package net.adamsanchez.seriousvote;
  */
 public class Milestones {
 
-
-
     //query database for person
     //Check for last day of voting
     //check number of sequential votes
     //If more than or equal to the milestone give reward
+
+
 
 }

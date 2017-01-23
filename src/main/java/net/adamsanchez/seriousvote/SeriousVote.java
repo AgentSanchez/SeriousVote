@@ -87,8 +87,8 @@ public class SeriousVote
     @Inject
     private Metrics metrics;
 
-    @Inject Logger logger;
-    public Logger getLogger()
+    @Inject private static Logger logger;
+    public static Logger getLogger()
     {
         return logger;
     }
@@ -136,8 +136,8 @@ public class SeriousVote
     public void onInitialization(GamePreInitializationEvent event){
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
 
-        getLogger().info("Serious Vote loading...");
-        getLogger().info("Trying To setup Config Loader");
+        U.info("Serious Vote loading...");
+        U.info("Trying To setup Config Loader");
 
         Asset configAsset = plugin.getAsset("seriousvote.conf").orElse(null);
         Asset offlineVoteAsset = plugin.getAsset("offlinevotes.dat").orElse(null);
@@ -151,17 +151,17 @@ public class SeriousVote
         if (Files.notExists(defaultConfig)) {
             if (configAsset != null) {
                 try {
-                    getLogger().info("Copying Default Config");
-                    getLogger().info(configAsset.readString());
-                    getLogger().info(defaultConfig.toString());
+                    U.info("Copying Default Config");
+                    U.info(configAsset.readString());
+                    U.info(defaultConfig.toString());
                     configAsset.copyToFile(defaultConfig);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    getLogger().error("Could not unpack the default config from the jar! Maybe your Minecraft server doesn't have write permissions?");
+                    U.error("Could not unpack the default config from the jar! Maybe your Minecraft server doesn't have write permissions?");
                     return;
                 }
             } else {
-                getLogger().error("Could not find the default config file in the jar! Did you open the jar and delete it?");
+                U.error("Could not find the default config file in the jar! Did you open the jar and delete it?");
                 return;
             }
         }
@@ -170,8 +170,8 @@ public class SeriousVote
             try {
                 saveOffline();
             } catch (IOException e) {
-                getLogger().error("Could Not Initialize the offlinevotes file! What did you do with it");
-                //getLogger().error(e.toString());
+                U.error("Could Not Initialize the offlinevotes file! What did you do with it");
+                //U.error(e.toString());
             }
         }
 
@@ -201,7 +201,7 @@ public class SeriousVote
         registerCommands();
 
 
-        getLogger().info("Serious Vote Has Loaded\n\n\n\n");
+        U.info("Serious Vote Has Loaded\n\n\n\n");
 
 
     }
@@ -290,8 +290,8 @@ public class SeriousVote
         try {
             rootNode = loader.load();
         } catch (IOException e) {
-            getLogger().error("There was an error while reloading your configs");
-            getLogger().error(e.toString());
+            U.error("There was an error while reloading your configs");
+            U.error(e.toString());
         }
 
         //update variables and other instantiations
@@ -301,20 +301,20 @@ public class SeriousVote
         updateLoot(getRandomCommands(rootNode));
         buildChanceMap();
         setCommands = getSetCommands(rootNode);
-        getLogger().debug("Here's your commands");
+        U.debug("Here's your commands");
         for(String ix : getRandomCommands(rootNode)){
-            getLogger().debug(ix);
+            U.debug(ix);
         }
 
 
         //Load Offline votes
-        getLogger().info("Trying to load offline player votes from ... " + offlineVotes.toString());
+        U.info("Trying to load offline player votes from ... " + offlineVotes.toString());
         try {
             loadOffline();
         } catch (IOException e) {
-            getLogger().error("ahahahahaha We Couldn't load up the stored offline player votes",e);
+            U.error("ahahahahaha We Couldn't load up the stored offline player votes",e);
         } catch (ClassNotFoundException e) {
-            getLogger().error("Well crap that is noooot a hash map! GO slap the dev!");
+            U.error("Well crap that is noooot a hash map! GO slap the dev!");
         }
 
     }
@@ -352,10 +352,10 @@ public class SeriousVote
                 nextInt =  ThreadLocalRandom.current().nextInt(rewardsMin,rewardsMax);
             } else {
                 nextInt = 0;
-                getLogger().warn("There seems to be an error in your min/max setting in your configs.");
+                U.warn("There seems to be an error in your min/max setting in your configs.");
             }
 
-            getLogger().info("Giving out " + nextInt + " random rewards.");
+            U.info("Giving out " + nextInt + " random rewards.");
             return nextInt;
         } else if(randomRewardsNumber < 0){
             return 0;
@@ -386,25 +386,25 @@ public class SeriousVote
 
 
         if (lootMap.size() == 0) {
-            getLogger().error("The lootMap Hasn't been loaded Check your config for errors!");
+            U.error("The lootMap Hasn't been loaded Check your config for errors!");
             hasLoot = false;
             return;        }
         hasLoot = true;
-        getLogger().info("Rewards for seriousVote Have been loaded successfully");
+        U.info("Rewards for seriousVote Have been loaded successfully");
 
 
     }
     void buildChanceMap() {
 
         if (!hasLoot) {
-            getLogger().error("The lootMap Hasn't been loaded Check your config for errors!");
+            U.error("The lootMap Hasn't been loaded Check your config for errors!");
             return;
         } else {
-            getLogger().info("There are currently " + lootMap.size() + " Loot Tables");
+            U.info("There are currently " + lootMap.size() + " Loot Tables");
             for (int i = 0; i < lootMap.size(); i++) {
                 Map.Entry currentSet = Iterables.get(lootMap.entrySet(), i);
                 Integer currentKey = Integer.parseInt(currentSet.getKey().toString());
-                getLogger().info("Gathering Table " + i + " of type" + currentKey);
+                U.info("Gathering Table " + i + " of type" + currentKey);
 
                 for (int ix = 0; ix < currentKey.intValue(); ix++) {
                     chanceMap.add(currentKey.intValue());
@@ -424,7 +424,7 @@ public class SeriousVote
     {
         Vote vote = event.getVote();
         String username = vote.getUsername();
-        getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ username);
+        U.info("Vote Registered From " +vote.getServiceName() + " for "+ username);
         if(isOnline(username)) {
             broadCastMessage(publicMessage, username);
         }
@@ -448,7 +448,7 @@ public class SeriousVote
             try {
                 saveOffline();
             } catch (IOException e) {
-                getLogger().error("Error while saving offline votes file", e);
+                U.error("Error while saving offline votes file", e);
             }
         }
     }
@@ -485,19 +485,19 @@ public class SeriousVote
         ArrayList<String> commandQueue = new ArrayList<String>();
         if(hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
             for (int i = 0; i < randomRewardsNumber; i++) {
-                getLogger().info("Choosing a random reward.");
+                U.info("Choosing a random reward.");
                 commandQueue.add(chooseReward(username));
             }
         } else if(hasLoot && !isNoRandom){
             randomRewardsGen = generateRandomRewardNumber();
             for (int i = 0; i < randomRewardsGen; i++) {
-                getLogger().info("Choosing a random reward.");
+                U.info("Choosing a random reward.");
                 commandQueue.add(chooseReward(username));
             }
         }
         //Get Set Rewards
         for(String setCommand: setCommands){
-            commandQueue.add(parseVariables(setCommand, username));
+            commandQueue.add(parseVariables(setCommand, username, currentRewards));
         }
 
 
@@ -519,7 +519,7 @@ public class SeriousVote
                 try {
                     saveOffline();
                 } catch (IOException e) {
-                    getLogger().error("Woah did that just happen? I couldn't save that offline player's vote!", e);
+                    U.error("Woah did that just happen? I couldn't save that offline player's vote!", e);
                 }
             }
 
@@ -548,7 +548,7 @@ public class SeriousVote
     public String chooseReward(String username) {
 
         Integer reward = chanceMap.get(ThreadLocalRandom.current().nextInt(0, chanceMap.size()));
-        getLogger().info("Chose Reward from Table" + reward.toString());
+        U.info("Chose Reward from Table" + reward.toString());
         List<Map<String,String>> commandList = lootMap.get(reward);
         Map<String, String> commandMap = commandList.get(ThreadLocalRandom.current().nextInt(0, commandList.size()));
         Map.Entry runCommand = Iterables.get(commandMap.entrySet(),0);
@@ -562,8 +562,8 @@ public class SeriousVote
         try {
             return textLink.toBuilder().onClick(TextActions.openUrl(new URL(textLink.toPlain()))).build();
         } catch (MalformedURLException e) {
-            getLogger().error("Malformed URL");
-            getLogger().error(e.toString());
+            U.error("Malformed URL");
+            U.error(e.toString());
         }
         return Text.of("Malformed URL - Inform Administrator");
     }
@@ -576,7 +576,7 @@ public class SeriousVote
         } else if(currentRewards == "") {
             return string.replace("{player}",username).replace("{rewards}", "No Random Rewards");
         }
-        getLogger().info("Player " + username + " voted and received " + currentRewards);
+        U.info("Player " + username + " voted and received " + currentRewards);
         return string.replace("{player}",username).replace("{rewards}", currentRewards.substring(0,currentRewards.length() -2));
     }
 
