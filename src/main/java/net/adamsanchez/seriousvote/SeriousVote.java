@@ -168,13 +168,10 @@ public class SeriousVote
 
         if (Files.notExists(offlineVotes)){
             try {
-                loadOffline();
+                saveOffline();
             } catch (IOException e) {
                 getLogger().error("Could Not Initialize the offlinevotes file! What did you do with it");
-                getLogger().error(e.toString());
-            } catch (ClassNotFoundException e) {
-                getLogger().error("Could Not Initialize the offlinevotes file! What did you do with it");
-                getLogger().error(e.toString());
+                //getLogger().error(e.toString());
             }
         }
 
@@ -428,10 +425,10 @@ public class SeriousVote
         Vote vote = event.getVote();
         String username = vote.getUsername();
         getLogger().info("Vote Registered From " +vote.getServiceName() + " for "+ username);
-        giveVote(username);
         if(isOnline(username)) {
             broadCastMessage(publicMessage, username);
         }
+        giveVote(username);
 
     }
 
@@ -463,17 +460,29 @@ public class SeriousVote
         executingQueue = commandQueue;
         commandQueue = new LinkedList<String>();
 
-        for (int ix = 0; ix < executingQueue.size(); ix ++)
+        for (String command: executingQueue)
         {
-            game.getCommandManager().process(game.getServer().getConsole(), executingQueue.poll());
+            game.getCommandManager().process(game.getServer().getConsole(), command);
         }
         executingQueue = null;
+        return true;
+
+    }
+    public boolean giveReward(ArrayList<String> commands){
+        //Execute Commands
+
+        for (String command: commands)
+        {
+            game.getCommandManager().process(game.getServer().getConsole(), command);
+        }
+
         return true;
 
     }
 
     public boolean giveVote(String username){
         currentRewards = "";
+        ArrayList<String> commandQueue = new ArrayList<String>();
         if(hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
             for (int i = 0; i < randomRewardsNumber; i++) {
                 getLogger().info("Choosing a random reward.");
@@ -493,7 +502,7 @@ public class SeriousVote
 
 
         if (isOnline(username)) {
-            giveReward();
+            giveReward(commandQueue);
         }
         else
         {
