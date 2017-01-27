@@ -22,8 +22,16 @@ public class Database {
 
 
     public Database(){
-        playerTable = table_prefix + "players";
+
+        SeriousVote sv = SeriousVote.getInstance();
+        this.host = sv.databaseHostname;
+        this.port = sv.databasePort;
+        this.dbname = sv.databaseName;
+        this.table_prefix = sv.databasePrefix;
+        this.username = sv.databaseUsername;
+        this.password = sv.databasePassword;
         reconnect();
+        playerTable = table_prefix + "players";
     }
 
 

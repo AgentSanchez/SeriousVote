@@ -6,6 +6,7 @@ import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import ninja.leaping.configurate.ConfigurationNode;
 
 import org.slf4j.Logger;
@@ -109,6 +110,9 @@ public class SeriousVote
 
     ///////////////////////////////////////////////////////
     private Milestones milestones;
+    public List<String> monthlySet, yearlySet, weeklySet;
+    ///////////////////////////////////////////////////////
+    public String databaseName, databaseHostname,databasePort,databasePrefix,databaseUsername,databasePassword;
     ///////////////////////////////////////////////////////
     private LinkedList<String> commandQueue = new LinkedList<String>();
     private LinkedList<String> executingQueue = new LinkedList<String>();
@@ -333,10 +337,20 @@ public class SeriousVote
         }
 
         //Reload DB configuration
+        databaseHostname = getDatabaseHostname(rootNode);
+        databaseName = getDatabaseName(rootNode);
+        databasePassword = getDatabasePassword(rootNode);
+        databasePrefix = getDatabasePrefix(rootNode);
+        databaseUsername = getDatabaseUsername(rootNode);
+        databasePort = getDatabasePort(rootNode);
+
         if (milestones != null){
             milestones.reloadDB();
         }
-
+        /////////Load Up Milestones/////////
+        monthlySet = getMonthlySetCommands(rootNode);
+        yearlySet = getYearlySetCommands(rootNode);
+        weeklySet = getWeeklySetCommands(rootNode);
 
         return true;
     }
@@ -355,6 +369,36 @@ public class SeriousVote
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
     ///////////////////////////////////////////////////////////////////////////////////////////
+    private String getDatabaseName(ConfigurationNode node){
+        return node.getNode("config","database","name").getString();
+    }
+    private String getDatabaseHostname(ConfigurationNode node){
+        return node.getNode("config","database","hostname").getString();
+    }
+    private String getDatabasePort(ConfigurationNode node){
+        return node.getNode("config","database","port").getString();
+    }
+    private String getDatabasePrefix(ConfigurationNode node){
+        return node.getNode("config","database","prefix").getString();
+    }
+    private String getDatabaseUsername(ConfigurationNode node){
+        return node.getNode("config","database","username").getString();
+    }
+    private String getDatabasePassword(ConfigurationNode node){
+        return node.getNode("config","database","password").getString();
+    }
+
+
+
+
+
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
 
     private List<String> getSetCommands(ConfigurationNode node) {
         return node.getNode("config","Rewards","set").getChildrenList().stream()
@@ -510,7 +554,7 @@ public class SeriousVote
         return true;
 
     }
-    public boolean giveReward(ArrayList<String> commands){
+    public boolean giveReward(List<String> commands){
         //Execute Commands
 
         for (String command: commands)
@@ -611,10 +655,10 @@ public class SeriousVote
         }
         return Text.of("Malformed URL - Inform Administrator");
     }
-    private String parseVariables(String string, String username){
+    public String parseVariables(String string, String username){
         return string.replace("{player}",username);
     }
-    private String parseVariables(String string, String username, String currentRewards){
+    public String parseVariables(String string, String username, String currentRewards){
         if (isNoRandom){
             return parseVariables(string,username);
         } else if(currentRewards == "") {

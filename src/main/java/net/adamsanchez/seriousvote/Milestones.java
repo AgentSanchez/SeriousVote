@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote;
 
 
 import java.sql.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -12,6 +13,7 @@ public class Milestones {
     String msgYear = "{player} Has voted for a year straight!!! He's earned a prize!";
     String msgMonth = "{player} Has voted for a month straight!!! He's earned a prize!";
     String msgWeek = "{player} Has voted for a week straight!!! He's earned a prize!";
+    SeriousVote sv;
 
     //query database for person
     //Check for last day of voting
@@ -19,6 +21,7 @@ public class Milestones {
     //If more than or equal to the milestone give reward
     Database db;
     public Milestones(){
+        sv = SeriousVote.getInstance();
         db = new Database();
         db.createPlayerTable();
     }
@@ -42,20 +45,27 @@ public class Milestones {
     }
 
     public void checkForMilestones(PlayerRecord record, String playerName){
-
+        List<String> commandList = new List<String>;
         //yearly
-        if(record.getVoteSpree()%365 == 0){
-            //U.bcast(msgYear,playerName);
+        if(record.getVoteSpree() >= 365 && record.getVoteSpree()%365 == 0){
+
+            for(String command:sv.yearlySet) {
+                commandList.add(sv.parseVariables(command, playerName));
+            }
+            sv.giveReward(commandList);
 
         }
-        //monthly
-        else if(record.getVoteSpree()%30 == 0){
-            //U.bcast(msgMonth,playerName);
+        else if(record.getVoteSpree() >= 30 && record.getVoteSpree()%30 == 0){
+            for(String command:sv.monthlySet) {
+                commandList.add(sv.parseVariables(command, playerName));
+            }
+            sv.giveReward(commandList);
         }
-        //weekly
-        if(record.getVoteSpree()%7 == 0){
-            //U.bcast(msgWeek,playerName);
-
+        else if(record.getVoteSpree() >= 7 && record.getVoteSpree()%7 == 0){
+            for(String command:sv.weeklySet) {
+                commandList.add(sv.parseVariables(command, playerName));
+            }
+            sv.giveReward(commandList);
         }
 
 
