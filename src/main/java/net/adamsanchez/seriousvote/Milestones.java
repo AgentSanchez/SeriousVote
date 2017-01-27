@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote;
 
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,7 +46,7 @@ public class Milestones {
     }
 
     public void checkForMilestones(PlayerRecord record, String playerName){
-        List<String> commandList = new List<String>;
+        List<String> commandList = new ArrayList<String>();
         //yearly
         if(record.getVoteSpree() >= 365 && record.getVoteSpree()%365 == 0){
 

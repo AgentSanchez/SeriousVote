@@ -206,15 +206,13 @@ public class SeriousVote
     @Listener
     public void onServerStart(GameInitializationEvent event)
     {
-        milestones = new Milestones();
+
 
         seriousVotePlugin = this;
 
         registerCommands();
-
-
         getLogger().info("Serious Vote Has Loaded\n\n\n\n");
-
+        milestones = new Milestones();
 
 
     }
