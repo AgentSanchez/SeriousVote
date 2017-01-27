@@ -1,4 +1,4 @@
-This code is licensed under:
+This "software" is licensed under:
 ----------------------------------------------------------------------------------------------------------------------------------------
 GNU GENERAL PUBLIC LICENSE
 
