@@ -1,25 +1,27 @@
-package net.adamsanchez.seriousvote.Metrics;
+package net.adamsanchez.seriousvote;
 
-    import com.google.gson.JsonArray;
-    import com.google.gson.JsonObject;
-    import com.google.inject.Inject;
-    import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-    import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-    import org.apache.commons.lang3.Validate;
-    import org.slf4j.Logger;
-    import org.spongepowered.api.Sponge;
-    import org.spongepowered.api.config.ConfigDir;
-    import org.spongepowered.api.plugin.PluginContainer;
-    import org.spongepowered.api.scheduler.Scheduler;
-    import org.spongepowered.api.scheduler.Task;
 
-    import javax.net.ssl.HttpsURLConnection;
-    import java.io.*;
-    import java.lang.reflect.InvocationTargetException;
-    import java.net.URL;
-    import java.nio.file.Path;
-    import java.util.*;
-    import java.util.zip.GZIPOutputStream;
+            import com.google.gson.JsonArray;
+            import com.google.gson.JsonObject;
+            import com.google.gson.JsonPrimitive;
+            import com.google.inject.Inject;
+            import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+            import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
+            import org.apache.commons.lang3.Validate;
+            import org.slf4j.Logger;
+            import org.spongepowered.api.Sponge;
+            import org.spongepowered.api.config.ConfigDir;
+            import org.spongepowered.api.plugin.PluginContainer;
+            import org.spongepowered.api.scheduler.Scheduler;
+            import org.spongepowered.api.scheduler.Task;
+
+            import javax.net.ssl.HttpsURLConnection;
+            import java.io.*;
+            import java.lang.reflect.InvocationTargetException;
+            import java.net.URL;
+            import java.nio.file.Path;
+            import java.util.*;
+            import java.util.zip.GZIPOutputStream;
 
 /**
  * bStats collects some data for plugin authors.
@@ -64,7 +66,7 @@ public class Metrics {
     // The constructor is not meant to be called by the user himself.
     // The instance is created using Dependency Injection (https://docs.spongepowered.org/master/en/plugin/injection.html)
     @Inject
-    private Metrics(PluginContainer plugin, Logger logger, @ConfigDir(sharedRoot = false) Path configDir) {
+    private Metrics(PluginContainer plugin, Logger logger, @ConfigDir(sharedRoot = true) Path configDir) {
         if (created) {
             // We don't want more than one instance of this class
             throw new IllegalStateException("There's already an instance of this Metrics class!");
@@ -190,7 +192,7 @@ public class Metrics {
     private JsonObject getServerData() {
         // Minecraft specific data
         int playerAmount = Sponge.getServer().getOnlinePlayers().size();
-        playerAmount = playerAmount > 1000 ? 1000 : playerAmount;
+        playerAmount = playerAmount > 200 ? 200 : playerAmount;
         int onlineMode = Sponge.getServer().getOnlineMode() ? 1 : 0;
         String minecraftVersion = Sponge.getGame().getPlatform().getMinecraftVersion().getName();
 
@@ -611,6 +613,103 @@ public class Metrics {
                 }
                 allSkipped = false;
                 values.addProperty(entry.getKey(), entry.getValue());
+            }
+            if (allSkipped) {
+                // Null = skip the chart
+                return null;
+            }
+            data.add("values", values);
+            return data;
+        }
+
+    }
+
+    /**
+     * Represents a custom simple bar chart.
+     */
+    public static abstract class SimpleBarChart extends CustomChart {
+
+        /**
+         * Class constructor.
+         *
+         * @param chartId The id of the chart.
+         */
+        public SimpleBarChart(String chartId) {
+            super(chartId);
+        }
+
+        /**
+         * Gets the value of the chart.
+         *
+         * @param valueMap Just an empty map. The only reason it exists is to make your life easier.
+         *                 You don't have to create a map yourself!
+         * @return The value of the chart.
+         */
+        public abstract HashMap<String, Integer> getValues(HashMap<String, Integer> valueMap);
+
+        @Override
+        protected JsonObject getChartData() {
+            JsonObject data = new JsonObject();
+            JsonObject values = new JsonObject();
+            HashMap<String, Integer> map = getValues(new HashMap<String, Integer>());
+            if (map == null || map.isEmpty()) {
+                // Null = skip the chart
+                return null;
+            }
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                JsonArray categoryValues = new JsonArray();
+                categoryValues.add(new JsonPrimitive(entry.getValue()));
+                values.add(entry.getKey(), categoryValues);
+            }
+            data.add("values", values);
+            return data;
+        }
+
+    }
+
+    /**
+     * Represents a custom advanced bar chart.
+     */
+    public static abstract class AdvancedBarChart extends CustomChart {
+
+        /**
+         * Class constructor.
+         *
+         * @param chartId The id of the chart.
+         */
+        public AdvancedBarChart(String chartId) {
+            super(chartId);
+        }
+
+        /**
+         * Gets the value of the chart.
+         *
+         * @param valueMap Just an empty map. The only reason it exists is to make your life easier.
+         *                 You don't have to create a map yourself!
+         * @return The value of the chart.
+         */
+        public abstract HashMap<String, int[]> getValues(HashMap<String, int[]> valueMap);
+
+        @Override
+        protected JsonObject getChartData() {
+            JsonObject data = new JsonObject();
+            JsonObject values = new JsonObject();
+            HashMap<String, int[]> map = getValues(new HashMap<String, int[]>());
+            if (map == null || map.isEmpty()) {
+                // Null = skip the chart
+                return null;
+            }
+            boolean allSkipped = true;
+            for (Map.Entry<String, int[]> entry : map.entrySet()) {
+                if (entry.getValue().length == 0) {
+                    continue; // Skip this invalid
+                }
+                allSkipped = false;
+                JsonArray categoryValues = new JsonArray();
+                for (int categoryValue : entry.getValue()) {
+                    categoryValues.add(new JsonPrimitive(categoryValue));
+                }
+                values.add(entry.getKey(), categoryValues);
             }
             if (allSkipped) {
                 // Null = skip the chart

@@ -1,8 +1,8 @@
 [
     {
         "modid": "seriousvote",
-        "name": "Serious Vote",
-        "version": "2.9",
+        "name": "SeriousVote",
+        "version": "3.0",
         "description": "This plugin enables server admins to give players rewards for voting for their server.",
         "requiredMods": [
             "spongeapi@5.0.0",

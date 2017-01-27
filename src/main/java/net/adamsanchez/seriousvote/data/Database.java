@@ -1,13 +1,10 @@
-package net.adamsanchez.seriousvote.Data;
+package net.adamsanchez.seriousvote.data;
 
 import net.adamsanchez.seriousvote.U;
 
-import javax.xml.crypto.Data;
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.*;
 import java.sql.Date;
-import java.util.concurrent.Executor;
 
 /**
  * Created by adam_ on 01/22/17.
@@ -16,7 +13,8 @@ public class Database {
     private String host = "localhost";
     private String port = "3306";
     private String username = "root";
-    private String password = "password";
+    private String password = "anklebaldbedwhynook";
+    private String dbname = "SeriousVote";
     private String dbType = "mySQL";
     private Connection db;
     private String table_prefix = "SV";
@@ -55,7 +53,7 @@ public class Database {
         Connection connection = null;
         U.info("Attempting to connect to the database...");
         try {
-            connection = DriverManager.getConnection("jdbc:" + dbType + "://" + host + ":" + port + "/", username, password);
+            connection = DriverManager.getConnection("jdbc:" + dbType + "://" + host + ":" + port + "/" + dbname, username, password);
         } catch (SQLException e) {
             U.error("Failed to establish connection to the database");
         }
@@ -120,7 +118,7 @@ public class Database {
         } catch (SQLException e) {
             U.error("Trouble getting information from the database");
         } finally {
-            return new PlayerRecord(uuid, 0,0, new Date(new java.util.Date().getTime()));
+            return PlayerRecord.getBlankRecord(uuid);
 
         }
 

@@ -51,7 +51,6 @@ import java.nio.file.Path;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.text.action.TextActions;
-import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
@@ -62,16 +61,15 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import net.adamsanchez.seriousvote.Metrics.Metrics;
-
 
 /**
  * Created by adam_ on 12/08/16.
  */
 @SuppressWarnings("unused")
-@Plugin(id = "seriousvote", name = "Serious Vote", version = "2.9", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
+@Plugin(id = "seriousvote", name = "SeriousVote", version = "3.0", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
 public class SeriousVote
 {
+
     @Inject private Game game;
     private Game getGame(){
         return this.game;
@@ -81,13 +79,12 @@ public class SeriousVote
     private PluginContainer getPlugin(){
         return this.plugin;
     }
-
+    @Inject
+    private Metrics metrics;
     private static SeriousVote instance;
 
     private static SeriousVote seriousVotePlugin;
 
-    @Inject
-    private Metrics metrics;
 
     @Inject  Logger logger;
     public Logger getLogger()
@@ -129,7 +126,7 @@ public class SeriousVote
     String publicMessage;
     boolean hasLoot = false;
     boolean isNoRandom = false;
-    Optional<UserStorageService> userStorage;
+    private static Optional<UserStorageService> userStorage;
 
 
 
@@ -255,7 +252,11 @@ public class SeriousVote
     public class SVoteReload implements CommandExecutor {
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
-            reloadConfigs();
+            if (reloadConfigs()) {
+                src.sendMessage(Text.of("Reloaded successfully!"));
+            } else {
+                src.sendMessage(Text.of("Could not reload properly :( did you break your config?"));
+            }
             return CommandResult.success();
         }
     }
@@ -267,9 +268,11 @@ public class SeriousVote
             Player player = args.<Player>getOne("player").get();
 
             player.sendMessage(Text.of("An administrator has awarded you a vote!"));
-            src.sendMessage(Text.of("You have successfully given " + player.getName() + " a vote"));
-
             giveVote(player.getName());
+            currentRewards = "";
+            src.sendMessage(Text.of("You have successfully given " + player.getName() + " a vote"));
+            giveVote(player.getName());
+
 
             return CommandResult.success();
         }
@@ -293,13 +296,14 @@ public class SeriousVote
     ///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////CONFIGURATION METHODS//////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
-    public void reloadConfigs(){
+    public boolean reloadConfigs(){
         //try loading from file
         try {
             rootNode = loader.load();
         } catch (IOException e) {
             U.error("There was an error while reloading your configs");
             U.error(e.toString());
+            return false;
         }
 
         //update variables and other instantiations
@@ -324,7 +328,7 @@ public class SeriousVote
         } catch (ClassNotFoundException e) {
             U.error("Well crap that is noooot a hash map! GO slap the dev!");
         }
-
+        return true;
     }
     private List<String> getSetCommands(ConfigurationNode node) {
         return node.getNode("config","Rewards","set").getChildrenList().stream()
@@ -434,10 +438,13 @@ public class SeriousVote
         Vote vote = event.getVote();
         String username = vote.getUsername();
         U.info("Vote Registered From " +vote.getServiceName() + " for "+ username);
+
+        giveVote(username);
+
         if(isOnline(username)) {
             broadCastMessage(publicMessage, username);
         }
-        giveVote(username);
+
 
     }
 
@@ -466,7 +473,7 @@ public class SeriousVote
     ///////////////////////////////////////////////////////////////////////////////////////////
     public boolean giveReward(){
         //Execute Commands
-        executingQueue = commandQueue;
+        //executingQueue = commandQueue;
         commandQueue = new LinkedList<String>();
 
         for (String command: executingQueue)
@@ -516,6 +523,7 @@ public class SeriousVote
         else
         {
             UUID playerID;
+
             if(userStorage.get().get(username).isPresent()){
                 playerID = userStorage.get().get(username).get().getUniqueId();
 
@@ -618,6 +626,12 @@ public class SeriousVote
     public static SeriousVote getInstance(){
         return instance;
     }
+
+    public static Optional<UserStorageService> getUserStorage(){
+        return userStorage;
+    }
+
+
 
 
 
