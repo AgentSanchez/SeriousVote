@@ -91,7 +91,8 @@ public class Database {
     }
 
     public ResultSet genericSelectQuery(String table, String field, String value){
-        String initial = "SELECT FROM %s WHERE %s='%s'";
+        String initial = "SELECT * FROM %s WHERE %s='%s'";
+        U.info(String.format(initial,table,field,value));
         ResultSet results = genericQuery(String.format(initial,table,field,value));
         return  results;
     }
@@ -105,20 +106,17 @@ public class Database {
     public PlayerRecord getPlayer(UUID uuid){
         ResultSet results = genericSelectQuery(playerTable, "player", uuid.toString());
         try {
-            while(results.next()) {
+            if(results.first()){
+                U.info("" + results.getInt("voteSpree") + " " + results.getDate("lastVote"));
                 int sequentialVotes = results.getInt("voteSpree");
                 Date lastVote = results.getDate("lastVote");
                 int totalVote = results.getInt("totalVotes");
-                results.close();
                 return new PlayerRecord(uuid, totalVote,sequentialVotes,lastVote);
             }
         } catch (SQLException e) {
             U.error("Trouble getting information from the database");
-        } finally {
-            return PlayerRecord.getBlankRecord(uuid);
-
         }
-
+        return null;
     }
 
     public void updatePlayer(PlayerRecord player){
@@ -128,29 +126,32 @@ public class Database {
 
     public void playerUpdateQuery(String table, String uuid, int totalVotes, int voteSpree, Date lastVote){
         String initial = "REPLACE INTO %s(player, totalVotes, voteSpree, lastVote) VALUES(?,?,?,?)";
-        PreparedStatement statement = preparedStatement(String.format(initial,table));
-        try {
+        //PreparedStatement statement = db.prepareStatement(String.format(initial,table));
+
+        try(PreparedStatement statement = preparedStatement(String.format(initial,table))){
             statement.setString(1, uuid);
             statement.setInt(2, totalVotes);
+            U.info("Trying to update user!");
             statement.setInt(3, voteSpree);
             statement.setDate(4, lastVote);
+            statement.execute();
         } catch (SQLException e) {
             U.error("Error in trying to update player vote record!");
         }
     }
 
     public void createPlayerTable(){
-        String table = String.format("CREATE TABLE IF NOT EXISTS %s (" +
-                "player			STRING PRIMARY KEY" +
+        String table = String.format("CREATE TABLE IF NOT EXISTS %s(" +
+                "player			VarChar(36) PRIMARY KEY," +
                 "lastVote		DATE," +
                 "totalVotes		INT," +
-                "voteSpree		INT," +
+                "voteSpree		INT" +
                 ")", playerTable);
 
         try {
             statement().executeUpdate(table);
         } catch (SQLException e) {
-            U.error("Error Creating SQL TABLE-- CHECK YOUR DATA CONFIG");
+            U.error("Error Creating SQL TABLE-- CHECK YOUR DATA CONFIG", e);
         }
 
     }

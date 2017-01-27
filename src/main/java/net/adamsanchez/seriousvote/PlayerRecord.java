@@ -25,7 +25,7 @@ public class PlayerRecord {
     }
 
     public static PlayerRecord getBlankRecord(UUID player){
-        return new PlayerRecord(player, 0,0, new Date(new java.util.Date().getTime()));
+        return new PlayerRecord(player, 1,1, new Date(new java.util.Date().getTime()));
     }
 
     public UUID getUuid() {

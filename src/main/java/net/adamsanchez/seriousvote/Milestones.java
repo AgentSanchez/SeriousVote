@@ -45,16 +45,16 @@ public class Milestones {
 
         //yearly
         if(record.getVoteSpree()%365 == 0){
-            U.bcast(msgYear,playerName);
+            //U.bcast(msgYear,playerName);
 
         }
         //monthly
         else if(record.getVoteSpree()%30 == 0){
-            U.bcast(msgMonth,playerName);
+            //U.bcast(msgMonth,playerName);
         }
         //weekly
         if(record.getVoteSpree()%7 == 0){
-            U.bcast(msgWeek,playerName);
+            //U.bcast(msgWeek,playerName);
 
         }
 
@@ -69,12 +69,26 @@ public class Milestones {
             record.setLastVote(new Date(new java.util.Date().getTime()));
             record.setTotalVotes(1);
             record.setVoteSpree(1);
+            updateRecord(record);
         } else {
             // If it's been a day since the last vote, increase the vote spree and change the lastvote
+            U.info(new java.util.Date().getTime() + " - " + record.getLastVote().getTime() + " is > or < than " + 86400000 );
             if(new java.util.Date().getTime() - record.getLastVote().getTime() >= 86400000 ) {
+                //if it's been longer than a day then reset the voteSpree
+                if(new java.util.Date().getTime() - record.getLastVote().getTime() >= 172800000 ){
+                    record.setVoteSpree(1);
+                    record.setLastVote(new Date(new java.util.Date().getTime()));
+                    updateRecord(record);
+                    return;
+                }
+
+
+
                 U.info(new java.util.Date().getTime() + " - " + record.getLastVote().getTime() + " is > or < than " + 86400000 );
                 record.setVoteSpree(record.getVoteSpree() + 1);
                 record.setLastVote(new Date(new java.util.Date().getTime()));
+                updateRecord(record);
+                return;
             }
             record.setTotalVotes(record.getTotalVotes() + 1);
             //TODO make it tell the player how many days left till his next reward!

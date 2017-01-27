@@ -203,7 +203,7 @@ public class SeriousVote
     public void onServerStart(GameInitializationEvent event)
     {
         milestones = new Milestones();
-        milestones.addVote(U.getUUID("curscascis"));
+
         seriousVotePlugin = this;
 
         registerCommands();
@@ -275,7 +275,6 @@ public class SeriousVote
             giveVote(player.getName());
             currentRewards = "";
             src.sendMessage(Text.of("You have successfully given " + player.getName() + " a vote"));
-            giveVote(player.getName());
 
 
             return CommandResult.success();
@@ -530,6 +529,7 @@ public class SeriousVote
 
         if (isOnline(username)) {
             giveReward(commandQueue);
+            milestones.addVote(game.getServer().getPlayer(username).get().getUniqueId());
         }
         else
         {
