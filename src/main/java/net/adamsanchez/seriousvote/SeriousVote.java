@@ -206,15 +206,14 @@ public class SeriousVote
     @Listener
     public void onServerStart(GameInitializationEvent event)
     {
-
-
         seriousVotePlugin = this;
-
         registerCommands();
         getLogger().info("Serious Vote Has Loaded\n\n\n\n");
 
-        if(!(databaseHostname=="")){
+        if(!(databaseHostname=="" || databaseHostname == null)){
             milestones = new Milestones();
+        } else {
+            milestones = null;
         }
 
 
@@ -348,11 +347,13 @@ public class SeriousVote
 
         if (milestones != null){
             milestones.reloadDB();
+
         }
         /////////Load Up Milestones/////////
         monthlySet = getMonthlySetCommands(rootNode);
         yearlySet = getYearlySetCommands(rootNode);
         weeklySet = getWeeklySetCommands(rootNode);
+
 
         return true;
     }
