@@ -340,6 +340,22 @@ public class SeriousVote
 
         return true;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    private List<String> getWeeklySetCommands(ConfigurationNode node){
+        return node.getNode("config","milestones","weekly","set").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+    private List<String> getMonthlySetCommands(ConfigurationNode node){
+        return node.getNode("config","milestones","monthly","set").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+    private List<String> getYearlySetCommands(ConfigurationNode node){
+        return node.getNode("config","milestones","yearly","set").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
     private List<String> getSetCommands(ConfigurationNode node) {
         return node.getNode("config","Rewards","set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());

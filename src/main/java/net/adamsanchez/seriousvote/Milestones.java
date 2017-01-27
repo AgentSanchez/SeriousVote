@@ -72,7 +72,6 @@ public class Milestones {
             updateRecord(record);
         } else {
             // If it's been a day since the last vote, increase the vote spree and change the lastvote
-            U.info(new java.util.Date().getTime() + " - " + record.getLastVote().getTime() + " is > or < than " + 86400000 );
             if(new java.util.Date().getTime() - record.getLastVote().getTime() >= 86400000 ) {
                 //if it's been longer than a day then reset the voteSpree
                 if(new java.util.Date().getTime() - record.getLastVote().getTime() >= 172800000 ){
@@ -81,10 +80,6 @@ public class Milestones {
                     updateRecord(record);
                     return;
                 }
-
-
-
-                U.info(new java.util.Date().getTime() + " - " + record.getLastVote().getTime() + " is > or < than " + 86400000 );
                 record.setVoteSpree(record.getVoteSpree() + 1);
                 record.setLastVote(new Date(new java.util.Date().getTime()));
                 updateRecord(record);
