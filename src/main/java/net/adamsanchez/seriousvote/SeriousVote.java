@@ -212,7 +212,11 @@ public class SeriousVote
 
         registerCommands();
         getLogger().info("Serious Vote Has Loaded\n\n\n\n");
-        milestones = new Milestones();
+
+        if(!(databaseHostname=="")){
+            milestones = new Milestones();
+        }
+
 
 
     }

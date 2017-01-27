@@ -11,7 +11,7 @@ public class Database {
     private String host = "localhost";
     private String port = "3306";
     private String username = "root";
-    private String password = "anklebaldbedwhynook";
+    private String password = "ohokay";
     private String dbname = "SeriousVote";
     private String dbType = "mysql";
     private Connection db;
@@ -100,7 +100,6 @@ public class Database {
 
     public ResultSet genericSelectQuery(String table, String field, String value){
         String initial = "SELECT * FROM %s WHERE %s='%s'";
-        U.info(String.format(initial,table,field,value));
         ResultSet results = genericQuery(String.format(initial,table,field,value));
         return  results;
     }
@@ -115,7 +114,6 @@ public class Database {
         ResultSet results = genericSelectQuery(playerTable, "player", uuid.toString());
         try {
             if(results.first()){
-                U.info("" + results.getInt("voteSpree") + " " + results.getDate("lastVote"));
                 int sequentialVotes = results.getInt("voteSpree");
                 Date lastVote = results.getDate("lastVote");
                 int totalVote = results.getInt("totalVotes");
@@ -139,7 +137,6 @@ public class Database {
         try(PreparedStatement statement = preparedStatement(String.format(initial,table))){
             statement.setString(1, uuid);
             statement.setInt(2, totalVotes);
-            U.info("Trying to update user!");
             statement.setInt(3, voteSpree);
             statement.setDate(4, lastVote);
             statement.execute();
