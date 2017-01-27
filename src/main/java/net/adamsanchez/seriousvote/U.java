@@ -34,6 +34,10 @@ public class U {
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
         return userStorage.get().get(player).get().getName();
     }
+    public static UUID getUUID(String name){
+        Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
+        return userStorage.get().get(name).get().getUniqueId();
+    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 

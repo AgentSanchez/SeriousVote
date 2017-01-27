@@ -1,8 +1,5 @@
 package net.adamsanchez.seriousvote;
 
-import net.adamsanchez.seriousvote.data.Database;
-import net.adamsanchez.seriousvote.data.PlayerRecord;
-
 
 import java.sql.Date;
 import java.util.UUID;
@@ -85,6 +82,10 @@ public class Milestones {
             checkForMilestones(record, U.getName(player));
 
         }
+    }
+
+    public void reloadDB(){
+        this.db = new Database();
     }
 
 

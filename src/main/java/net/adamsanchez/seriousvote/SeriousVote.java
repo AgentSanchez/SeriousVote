@@ -108,7 +108,7 @@ public class SeriousVote
     private CommentedConfigurationNode rootNode;
 
     ///////////////////////////////////////////////////////
-
+    private Milestones milestones;
     ///////////////////////////////////////////////////////
     private LinkedList<String> commandQueue = new LinkedList<String>();
     private LinkedList<String> executingQueue = new LinkedList<String>();
@@ -127,12 +127,13 @@ public class SeriousVote
     boolean hasLoot = false;
     boolean isNoRandom = false;
     private static Optional<UserStorageService> userStorage;
-
+ //////////////////////////////////////////////////////////////////
 
 
 
     @Listener
     public void onInitialization(GamePreInitializationEvent event){
+        instance = this;
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
 
         getLogger().info("Serious Vote loading...");
@@ -201,12 +202,15 @@ public class SeriousVote
     @Listener
     public void onServerStart(GameInitializationEvent event)
     {
+        milestones = new Milestones();
+        milestones.addVote(U.getUUID("curscascis"));
         seriousVotePlugin = this;
 
         registerCommands();
 
 
         getLogger().info("Serious Vote Has Loaded\n\n\n\n");
+
 
 
     }
@@ -328,6 +332,13 @@ public class SeriousVote
         } catch (ClassNotFoundException e) {
             U.error("Well crap that is noooot a hash map! GO slap the dev!");
         }
+
+        //Reload DB configuration
+        if (milestones != null){
+            milestones.reloadDB();
+        }
+
+
         return true;
     }
     private List<String> getSetCommands(ConfigurationNode node) {

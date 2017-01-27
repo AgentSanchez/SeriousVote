@@ -1,6 +1,4 @@
-package net.adamsanchez.seriousvote.data;
-
-import net.adamsanchez.seriousvote.U;
+package net.adamsanchez.seriousvote;
 
 import java.sql.*;
 import java.util.*;
@@ -15,7 +13,7 @@ public class Database {
     private String username = "root";
     private String password = "anklebaldbedwhynook";
     private String dbname = "SeriousVote";
-    private String dbType = "mySQL";
+    private String dbType = "mysql";
     private Connection db;
     private String table_prefix = "SV";
     private String playerTable = "players";
@@ -24,9 +22,8 @@ public class Database {
 
 
     public Database(){
-        reconnect();
-        terminateConnection();
         playerTable = table_prefix + "players";
+        reconnect();
     }
 
 
@@ -55,7 +52,7 @@ public class Database {
         try {
             connection = DriverManager.getConnection("jdbc:" + dbType + "://" + host + ":" + port + "/" + dbname, username, password);
         } catch (SQLException e) {
-            U.error("Failed to establish connection to the database");
+            U.error("Failed to establish connection to the database", e);
         }
         return connection;
     }

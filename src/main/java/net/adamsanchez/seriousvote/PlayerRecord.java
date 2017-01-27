@@ -1,4 +1,4 @@
-package net.adamsanchez.seriousvote.data;
+package net.adamsanchez.seriousvote;
 
 import java.sql.Date;
 import java.util.UUID;
