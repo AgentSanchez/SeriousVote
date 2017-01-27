@@ -89,17 +89,18 @@ public class Milestones {
                     record.setVoteSpree(1);
                     record.setLastVote(new Date(new java.util.Date().getTime()));
                     updateRecord(record);
+
                     return;
                 }
                 record.setVoteSpree(record.getVoteSpree() + 1);
                 record.setLastVote(new Date(new java.util.Date().getTime()));
                 updateRecord(record);
+                checkForMilestones(record, U.getName(player));
                 return;
             }
             record.setTotalVotes(record.getTotalVotes() + 1);
             //TODO make it tell the player how many days left till his next reward!
             updateRecord(record);
-            checkForMilestones(record, U.getName(player));
 
         }
     }
