@@ -591,7 +591,10 @@ public class SeriousVote
 
         if (isOnline(username)) {
             giveReward(commandQueue);
-            milestones.addVote(game.getServer().getPlayer(username).get().getUniqueId());
+            if(!(milestones == null)){
+                milestones.addVote(game.getServer().getPlayer(username).get().getUniqueId());
+            }
+
         }
         else
         {
