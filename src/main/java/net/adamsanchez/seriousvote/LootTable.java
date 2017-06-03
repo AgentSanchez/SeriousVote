@@ -62,7 +62,7 @@ public class LootTable {
     Input is an integer for which algorithm, for now there will only be the standard
     seed is for inputting a randomization for the algorithm
      */
-    public String chooseReward(int algorithm,  long seed, int quantity){
+    public String chooseReward(){
 
         //compare
         int roll = this.roll();
@@ -81,9 +81,6 @@ public class LootTable {
     public int roll(){
         //Returns a number within the chancepool inclusive to 0
        return  ThreadLocalRandom.current().nextInt(0,chanceMax);
-    }
-    public String chooseReward(int algorithm,  int quantity){
-        return chooseReward(algorithm, -9923182, quantity);
     }
     public boolean isActivated(){
         return activated;

@@ -126,7 +126,6 @@ public class SeriousVote
     int rewardsMax;
     int randomRewardsGen;
     List<String> setCommands;
-    List<Integer> chanceMap;
     String currentRewards;
     String publicMessage;
     boolean hasLoot = false;
@@ -134,7 +133,11 @@ public class SeriousVote
     private static Optional<UserStorageService> userStorage;
  //////////////////////////////////////////////////////////////////
 
-    LootTable mainLoot;
+    String[][] mainRewardTables;
+    private int chanceTotal,chanceMax, chanceMin = 0;
+    private int[] chanceMap;
+
+
 
 
 
@@ -389,9 +392,35 @@ public class SeriousVote
     }
 
     public void updateLoot(ConfigurationNode node){
-        mainLoot = new LootTable("main",node);
+        List<String> nodeStrings = node.getNode("config","vote-reward","random").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+        if(nodeStrings.size()%2!= 0){
+            U.error("Please check the Config for your main random rewards, to make sure they are formatted correctly");
+        } else {
+            String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
+            //Create a new Array of the proper size x*2 to hold the tables for choosing later
+            String[][] table = new String[2][inputLootSource.length/2];
+            chanceMap = new int[inputLootSource.length/2];
+
+            for(int ix = 0; ix < inputLootSource.length; ix+=2){
+                table[0][ix/2] = inputLootSource[ix];
+                table[1][ix/2] = inputLootSource[ix+1];
+                //Initialize chanceMap
+                chanceMap[ix/2] = Integer.parseInt(table[0][ix/2]);
+                if(ix != 0){
+                    chanceMap[ix/2]+= chanceMap[(ix/2)-1];
+
+                }
+            }
+            chanceTotal = chanceMap.length-1;
+            chanceMin = chanceMap[0];
+            chanceMax = chanceTotal;
+
+        }
 
     }
+
+
 
 
 
@@ -463,13 +492,32 @@ public class SeriousVote
 
     }
 
+    public String chooseTable(){
+
+        //compare
+        int roll = this.roll();
+        int currentChoice = -1;
+        for(int ix = 0; ix < chanceMap.length; ix++){
+            if(roll <= ix){
+                currentChoice = ix;
+                break;
+            }
+        }
+        if(currentChoice < 1 ) U.error("There was a problem while rolling something might be broken");
+        String chosenReward = mainRewardTables[1][currentChoice];
+        return chosenReward;
+    }
+
     public boolean giveVote(String username){
+        LootTable mainLoot;
+        mainLoot = new LootTable(chooseTable(),rootNode);
+
         currentRewards = "";
         ArrayList<String> commandQueue = new ArrayList<String>();
         if(hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
             for (int i = 0; i < randomRewardsNumber; i++) {
                 U.info("Choosing a random reward.");
-                String chosenReward = mainLoot.chooseReward(1,1);
+                String chosenReward = mainLoot.chooseReward();
                 currentRewards = currentRewards + rootNode.getNode("Rewards",chosenReward,"name").getString() + ", ";
                 for(String ix: rootNode.getNode("Rewards",chosenReward).getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())){
@@ -480,7 +528,7 @@ public class SeriousVote
             randomRewardsGen = generateRandomRewardNumber();
             for (int i = 0; i < randomRewardsGen; i++) {
                 U.info("Choosing a random reward.");
-                String chosenReward = mainLoot.chooseReward(1,1);
+                String chosenReward = mainLoot.chooseReward();
                 currentRewards = currentRewards + rootNode.getNode("Rewards",chosenReward,"name").getString() + ", ";
                 for(String ix: rootNode.getNode("Rewards",chosenReward).getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())){
@@ -587,6 +635,11 @@ public class SeriousVote
         storedVotes = (HashMap<UUID, Integer>) objectInputStream.readObject();
         objectInputStream.close();
 
+    }
+
+    public int roll(){
+        //Returns a number within the chancepool inclusive to 0
+        return  ThreadLocalRandom.current().nextInt(0,chanceMax);
     }
 
     public static SeriousVote getInstance(){

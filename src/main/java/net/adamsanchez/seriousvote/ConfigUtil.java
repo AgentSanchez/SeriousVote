@@ -63,7 +63,7 @@ public class ConfigUtil {
 
 
     public static List<String> getSetCommands(ConfigurationNode node) {
-        return node.getNode("config","Rewards","set").getChildrenList().stream()
+        return node.getNode("config","vote-reward","set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
     public static List<String> getRandomCommands(ConfigurationNode node) {
