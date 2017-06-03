@@ -63,6 +63,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
+
 /**
  * Created by adam_ on 12/08/16.
  */
@@ -132,6 +133,8 @@ public class SeriousVote
     boolean isNoRandom = false;
     private static Optional<UserStorageService> userStorage;
  //////////////////////////////////////////////////////////////////
+
+    LootTable mainLoot;
 
 
 
@@ -290,7 +293,7 @@ public class SeriousVote
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
             src.sendMessage(Text.of("Thank You! Below are the places you can vote!").toBuilder().color(TextColors.GOLD).build());
-            getVoteSites(rootNode).forEach(site -> {
+            ConfigUtil.getVoteSites(rootNode).forEach(site -> {
                 src.sendMessage(convertLink(site));
             });
             return CommandResult.success();
@@ -315,14 +318,12 @@ public class SeriousVote
         }
 
         //update variables and other instantiations
-        publicMessage = getPublicMessage(rootNode);
+        publicMessage = ConfigUtil.getPublicMessage(rootNode);
         randomRewardsNumber = getRewardsNumber(rootNode);
-
-        updateLoot(getRandomCommands(rootNode));
-        buildChanceMap();
-        setCommands = getSetCommands(rootNode);
+        updateLoot(rootNode);
+        setCommands = ConfigUtil.getSetCommands(rootNode);
         U.debug("Here's your commands");
-        for(String ix : getRandomCommands(rootNode)){
+        for(String ix : ConfigUtil.getRandomCommands(rootNode)){
             U.debug(ix);
         }
 
@@ -338,94 +339,32 @@ public class SeriousVote
         }
 
         //Reload DB configuration
-        databaseHostname = getDatabaseHostname(rootNode);
-        databaseName = getDatabaseName(rootNode);
-        databasePassword = getDatabasePassword(rootNode);
-        databasePrefix = getDatabasePrefix(rootNode);
-        databaseUsername = getDatabaseUsername(rootNode);
-        databasePort = getDatabasePort(rootNode);
+        databaseHostname = ConfigUtil.getDatabaseHostname(rootNode);
+        databaseName = ConfigUtil.getDatabaseName(rootNode);
+        databasePassword = ConfigUtil.getDatabasePassword(rootNode);
+        databasePrefix = ConfigUtil.getDatabasePrefix(rootNode);
+        databaseUsername = ConfigUtil.getDatabaseUsername(rootNode);
+        databasePort = ConfigUtil.getDatabasePort(rootNode);
 
         if (milestones != null){
             milestones.reloadDB();
 
         }
         /////////Load Up Milestones/////////
-        monthlySet = getMonthlySetCommands(rootNode);
-        yearlySet = getYearlySetCommands(rootNode);
-        weeklySet = getWeeklySetCommands(rootNode);
+        monthlySet = ConfigUtil.getMonthlySetCommands(rootNode);
+        yearlySet = ConfigUtil.getYearlySetCommands(rootNode);
+        weeklySet = ConfigUtil.getWeeklySetCommands(rootNode);
 
 
         return true;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
-    private List<String> getWeeklySetCommands(ConfigurationNode node){
-        return node.getNode("config","milestones","weekly","set").getChildrenList().stream()
-                .map(ConfigurationNode::getString).collect(Collectors.toList());
-    }
-    private List<String> getMonthlySetCommands(ConfigurationNode node){
-        return node.getNode("config","milestones","monthly","set").getChildrenList().stream()
-                .map(ConfigurationNode::getString).collect(Collectors.toList());
-    }
-    private List<String> getYearlySetCommands(ConfigurationNode node){
-        return node.getNode("config","milestones","yearly","set").getChildrenList().stream()
-                .map(ConfigurationNode::getString).collect(Collectors.toList());
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    private String getDatabaseName(ConfigurationNode node){
-        return node.getNode("config","database","name").getString();
-    }
-    private String getDatabaseHostname(ConfigurationNode node){
-        return node.getNode("config","database","hostname").getString();
-    }
-    private String getDatabasePort(ConfigurationNode node){
-        return node.getNode("config","database","port").getString();
-    }
-    private String getDatabasePrefix(ConfigurationNode node){
-        return node.getNode("config","database","prefix").getString();
-    }
-    private String getDatabaseUsername(ConfigurationNode node){
-        return node.getNode("config","database","username").getString();
-    }
-    private String getDatabasePassword(ConfigurationNode node){
-        return node.getNode("config","database","password").getString();
-    }
-
-
-
-
-
-
-
-
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    private List<String> getSetCommands(ConfigurationNode node) {
-        return node.getNode("config","Rewards","set").getChildrenList().stream()
-                .map(ConfigurationNode::getString).collect(Collectors.toList());
-    }
-    private List<String> getRandomCommands(ConfigurationNode node) {
-           return node.getNode("config","Rewards","random").getChildrenList().stream()
-                   .map(ConfigurationNode::getString).collect(Collectors.toList());
-    }
-    private List<String> getVoteSites(ConfigurationNode node) {
-        //TODO code potentially breaking here -- investigate
-        return node.getNode("config","vote-sites").getChildrenList().stream()
-                .map(ConfigurationNode::getString).collect(Collectors.toList());
-    }
-
-    //Returns the string value from the Config for the public message. This must be deserialized
-    private String getPublicMessage(ConfigurationNode node){
-        return node.getNode("config","broadcast-message").getString();
-    }
     private int getRewardsNumber(ConfigurationNode node){
-         int number = node.getNode("config", "random-rewards-number").getInt();
-         isNoRandom = number == 0? true:false;
-         rewardsMin = node.getNode("config", "rewards-min").getInt();
-         rewardsMax = node.getNode("config", "rewards-max").getInt() + 1;
+        int number = node.getNode("config", "random-rewards-number").getInt();
+        isNoRandom = number == 0? true:false;
+        rewardsMin = node.getNode("config", "rewards-min").getInt();
+        rewardsMax = node.getNode("config", "rewards-max").getInt() + 1;
         return number;
     }
 
@@ -449,55 +388,9 @@ public class SeriousVote
         return 0;
     }
 
-    public void updateLoot(List<String> lootTable){
+    public void updateLoot(ConfigurationNode node){
+        mainLoot = new LootTable("main",node);
 
-        String[] inputLootTable = lootTable.stream().toArray(String[]::new);
-        lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
-        chanceMap = new ArrayList<Integer>();
-        //count to get the correct size of the lootMap
-        for (int i = 0; i < inputLootTable.length; i+=3)
-        {
-            //get the current integer add it to the table, Since it is a Map duplicates will be removed
-            lootMap.put(Integer.parseInt(inputLootTable[i]), new ArrayList<Map<String,String>>());
-        }
-
-        for (int i = 0; i < inputLootTable.length; i+=3)
-        {
-            //add in all the commands
-            List lootList = lootMap.get(Integer.parseInt(inputLootTable[i]));
-            Map<String,String>  lootEntry = new LinkedHashMap<String,String>();
-            lootEntry.put(inputLootTable[i+1],inputLootTable[i+2]);
-            lootList.add(lootEntry);
-        }
-
-
-        if (lootMap.size() == 0) {
-            U.error("The lootMap Hasn't been loaded Check your config for errors!");
-            hasLoot = false;
-            return;        }
-        hasLoot = true;
-        U.info("Rewards for seriousVote Have been loaded successfully");
-
-
-    }
-    void buildChanceMap() {
-
-        if (!hasLoot) {
-            U.error("The lootMap Hasn't been loaded Check your config for errors!");
-            return;
-        } else {
-            U.info("There are currently " + lootMap.size() + " Loot Tables");
-            for (int i = 0; i < lootMap.size(); i++) {
-                Map.Entry currentSet = Iterables.get(lootMap.entrySet(), i);
-                Integer currentKey = Integer.parseInt(currentSet.getKey().toString());
-                U.info("Gathering Table " + i + " of type" + currentKey);
-
-                for (int ix = 0; ix < currentKey.intValue(); ix++) {
-                    chanceMap.add(currentKey.intValue());
-                }
-
-            }
-        }
     }
 
 
@@ -517,6 +410,7 @@ public class SeriousVote
         if(isOnline(username)) {
             broadCastMessage(publicMessage, username);
         }
+
 
 
     }
@@ -575,13 +469,23 @@ public class SeriousVote
         if(hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
             for (int i = 0; i < randomRewardsNumber; i++) {
                 U.info("Choosing a random reward.");
-                commandQueue.add(chooseReward(username));
+                String chosenReward = mainLoot.chooseReward(1,1);
+                currentRewards = currentRewards + rootNode.getNode("Rewards",chosenReward,"name").getString() + ", ";
+                for(String ix: rootNode.getNode("Rewards",chosenReward).getChildrenList().stream()
+                        .map(ConfigurationNode::getString).collect(Collectors.toList())){
+                    commandQueue.add(ix);
+                }
             }
         } else if(hasLoot && !isNoRandom){
             randomRewardsGen = generateRandomRewardNumber();
             for (int i = 0; i < randomRewardsGen; i++) {
                 U.info("Choosing a random reward.");
-                commandQueue.add(chooseReward(username));
+                String chosenReward = mainLoot.chooseReward(1,1);
+                currentRewards = currentRewards + rootNode.getNode("Rewards",chosenReward,"name").getString() + ", ";
+                for(String ix: rootNode.getNode("Rewards",chosenReward).getChildrenList().stream()
+                        .map(ConfigurationNode::getString).collect(Collectors.toList())){
+                commandQueue.add(ix);
+                }
             }
         }
         //Get Set Rewards
@@ -635,22 +539,7 @@ public class SeriousVote
                 TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username, currentRewards)));
         return true;
     }
-    public void gatherRandomRewards(){
 
-    }
-    //Chooses 1 random reward
-    public String chooseReward(String username) {
-
-        Integer reward = chanceMap.get(ThreadLocalRandom.current().nextInt(0, chanceMap.size()));
-        U.info("Chose Reward from Table" + reward.toString());
-        List<Map<String,String>> commandList = lootMap.get(reward);
-        Map<String, String> commandMap = commandList.get(ThreadLocalRandom.current().nextInt(0, commandList.size()));
-        Map.Entry runCommand = Iterables.get(commandMap.entrySet(),0);
-        //Get "Name of reward"
-        currentRewards += runCommand.getKey().toString() + " & ";
-        return parseVariables(runCommand.getValue().toString(), username);
-
-    }
     public Text convertLink(String link){
         Text textLink = TextSerializers.FORMATTING_CODE.deserialize(link);
         try {

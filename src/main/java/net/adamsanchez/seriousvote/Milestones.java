@@ -45,7 +45,12 @@ public class Milestones {
         return db.getPlayer(player);
     }
 
+
     public void checkForMilestones(PlayerRecord record, String playerName){
+        //Check based on amount of votes given.
+
+    }
+    public void checkForDailies(PlayerRecord record, String playerName){
         List<String> commandList = new ArrayList<String>();
         //yearly
         if(record.getVoteSpree() >= 365 && record.getVoteSpree()%365 == 0){
@@ -95,6 +100,7 @@ public class Milestones {
                 record.setVoteSpree(record.getVoteSpree() + 1);
                 record.setLastVote(new Date(new java.util.Date().getTime()));
                 updateRecord(record);
+                checkForDailies(record, U.getName(player));
                 checkForMilestones(record, U.getName(player));
                 return;
             }
