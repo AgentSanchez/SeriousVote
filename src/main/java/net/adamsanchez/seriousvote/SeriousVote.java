@@ -401,6 +401,7 @@ public class SeriousVote
             //Create a new Array of the proper size x*2 to hold the tables for choosing later
             String[][] table = new String[2][inputLootSource.length/2];
             chanceMap = new int[inputLootSource.length/2];
+            U.info(inputLootSource.length/2 + " Tables Imported for Rewards");
 
             for(int ix = 0; ix < inputLootSource.length; ix+=2){
                 table[0][ix/2] = inputLootSource[ix];
@@ -412,9 +413,11 @@ public class SeriousVote
 
                 }
             }
+            mainRewardTables = table;
             chanceTotal = chanceMap.length-1;
             chanceMin = chanceMap[0];
             chanceMax = chanceTotal;
+
 
         }
 
@@ -503,7 +506,9 @@ public class SeriousVote
                 break;
             }
         }
-        if(currentChoice < 1 ) U.error("There was a problem while rolling something might be broken");
+
+        U.info("help: " + currentChoice + " was chosen. Size= " + mainRewardTables.length);
+        if(currentChoice < 0 ) U.error("There was a problem while rolling something might be broken");
         String chosenReward = mainRewardTables[1][currentChoice];
         return chosenReward;
     }
@@ -634,12 +639,18 @@ public class SeriousVote
 
         storedVotes = (HashMap<UUID, Integer>) objectInputStream.readObject();
         objectInputStream.close();
-
     }
 
     public int roll(){
         //Returns a number within the chancepool inclusive to 0
-        return  ThreadLocalRandom.current().nextInt(0,chanceMax);
+        int nextInt;
+        //U.info("chanceMax = " + chanceMax);
+        if(chanceMax>0) {
+            nextInt = ThreadLocalRandom.current().nextInt(0, chanceMax);
+            return nextInt;
+        }
+        nextInt = ThreadLocalRandom.current().nextInt(0);
+        return  nextInt;
     }
 
     public static SeriousVote getInstance(){

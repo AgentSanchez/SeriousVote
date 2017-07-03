@@ -79,6 +79,7 @@ public class LootTable {
     }
 
     public int roll(){
+
         //Returns a number within the chancepool inclusive to 0
        return  ThreadLocalRandom.current().nextInt(0,chanceMax);
     }
