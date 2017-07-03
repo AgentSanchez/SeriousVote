@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class LootTable {
     private ConfigurationNode tableSource;
     private boolean activated = false;
+    private String tableName = "";
 
     private String[][] Table;
 
@@ -24,12 +25,12 @@ public class LootTable {
 
     public LootTable(String rewardSet, ConfigurationNode tableSource) {
         //Gather Reward Set From Configurations
-        this.tableSource = tableSource.getNode("Tables").getNode(rewardSet);
-
+        this.tableSource = tableSource.getNode("config","Tables", rewardSet);
+        this.tableName = rewardSet;
         List<String> nodeStrings = this.tableSource.getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
 
-        if(nodeStrings.size()%2!= 0){
+        if(nodeStrings.size()%2!= 0 || nodeStrings.size()<1){
             U.error("Please check the Config for Table: " + rewardSet + " It might not be formatted correctly.");
             activated = false;
         } else {
@@ -79,8 +80,9 @@ public class LootTable {
     }
 
     public int roll(){
-
+        if(chanceMax == 0) return 0;
         //Returns a number within the chancepool inclusive to 0
+        U.info("chanceMax is " + chanceMax + "Table is" + tableSource.toString() + "or" + tableName);
        return  ThreadLocalRandom.current().nextInt(0,chanceMax);
     }
     public boolean isActivated(){

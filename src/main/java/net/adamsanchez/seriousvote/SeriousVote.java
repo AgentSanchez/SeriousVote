@@ -373,7 +373,7 @@ public class SeriousVote
 
     public int generateRandomRewardNumber(){
         int nextInt;
-        if(randomRewardsNumber < 0 && hasLoot) {
+        if(randomRewardsNumber < 0 ) {
             //Inclusive
             if(rewardsMin < 0) rewardsMin = 0;
             if (rewardsMax > rewardsMin){
@@ -397,6 +397,7 @@ public class SeriousVote
         if(nodeStrings.size()%2!= 0){
             U.error("Please check the Config for your main random rewards, to make sure they are formatted correctly");
         } else {
+            hasLoot = true;
             String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
             //Create a new Array of the proper size x*2 to hold the tables for choosing later
             String[][] table = new String[2][inputLootSource.length/2];
@@ -507,7 +508,6 @@ public class SeriousVote
             }
         }
 
-        U.info("help: " + currentChoice + " was chosen. Size= " + mainRewardTables.length);
         if(currentChoice < 0 ) U.error("There was a problem while rolling something might be broken");
         String chosenReward = mainRewardTables[1][currentChoice];
         return chosenReward;
@@ -519,27 +519,33 @@ public class SeriousVote
 
         currentRewards = "";
         ArrayList<String> commandQueue = new ArrayList<String>();
+        U.info(hasLoot + " " + isNoRandom + randomRewardsNumber);
         if(hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
             for (int i = 0; i < randomRewardsNumber; i++) {
                 U.info("Choosing a random reward.");
                 String chosenReward = mainLoot.chooseReward();
-                currentRewards = currentRewards + rootNode.getNode("Rewards",chosenReward,"name").getString() + ", ";
-                for(String ix: rootNode.getNode("Rewards",chosenReward).getChildrenList().stream()
+
+                currentRewards = currentRewards + rootNode.getNode("config","Rewards",chosenReward,"name").getString() + ", ";
+                for(String ix: rootNode.getNode("config","Rewards",chosenReward,"rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())){
-                    commandQueue.add(ix);
+                    commandQueue.add(parseVariables(ix,username));
                 }
             }
         } else if(hasLoot && !isNoRandom){
             randomRewardsGen = generateRandomRewardNumber();
             for (int i = 0; i < randomRewardsGen; i++) {
                 U.info("Choosing a random reward.");
+
                 String chosenReward = mainLoot.chooseReward();
-                currentRewards = currentRewards + rootNode.getNode("Rewards",chosenReward,"name").getString() + ", ";
-                for(String ix: rootNode.getNode("Rewards",chosenReward).getChildrenList().stream()
+                                currentRewards = currentRewards + rootNode.getNode("config", "Rewards",chosenReward,"name").getString() + ", ";
+                for(String ix: rootNode.getNode("config", "Rewards", chosenReward,"rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())){
-                commandQueue.add(ix);
+                commandQueue.add(parseVariables(ix,username));
+
+
                 }
             }
+
         }
         //Get Set Rewards
         for(String setCommand: setCommands){
@@ -644,13 +650,11 @@ public class SeriousVote
     public int roll(){
         //Returns a number within the chancepool inclusive to 0
         int nextInt;
-        //U.info("chanceMax = " + chanceMax);
         if(chanceMax>0) {
             nextInt = ThreadLocalRandom.current().nextInt(0, chanceMax);
             return nextInt;
         }
-        nextInt = ThreadLocalRandom.current().nextInt(0);
-        return  nextInt;
+        return  0;
     }
 
     public static SeriousVote getInstance(){
