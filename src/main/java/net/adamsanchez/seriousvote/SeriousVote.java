@@ -515,13 +515,14 @@ public class SeriousVote
 
     public boolean giveVote(String username){
         LootTable mainLoot;
-        mainLoot = new LootTable(chooseTable(),rootNode);
+
 
         currentRewards = "";
         ArrayList<String> commandQueue = new ArrayList<String>();
         U.info(hasLoot + " " + isNoRandom + randomRewardsNumber);
         if(hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
             for (int i = 0; i < randomRewardsNumber; i++) {
+                mainLoot = new LootTable(chooseTable(),rootNode);
                 U.info("Choosing a random reward.");
                 String chosenReward = mainLoot.chooseReward();
 
@@ -534,6 +535,7 @@ public class SeriousVote
         } else if(hasLoot && !isNoRandom){
             randomRewardsGen = generateRandomRewardNumber();
             for (int i = 0; i < randomRewardsGen; i++) {
+                mainLoot = new LootTable(chooseTable(),rootNode);
                 U.info("Choosing a random reward.");
 
                 String chosenReward = mainLoot.chooseReward();
@@ -650,6 +652,7 @@ public class SeriousVote
     public int roll(){
         //Returns a number within the chancepool inclusive to 0
         int nextInt;
+        U.info("chanceMax is" + chanceMax);
         if(chanceMax>0) {
             nextInt = ThreadLocalRandom.current().nextInt(0, chanceMax);
             return nextInt;

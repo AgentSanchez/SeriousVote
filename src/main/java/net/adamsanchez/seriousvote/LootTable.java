@@ -82,7 +82,7 @@ public class LootTable {
     public int roll(){
         if(chanceMax == 0) return 0;
         //Returns a number within the chancepool inclusive to 0
-        U.info("chanceMax is " + chanceMax + "Table is" + tableSource.toString() + "or" + tableName);
+        U.info( "Table is" +  tableName);
        return  ThreadLocalRandom.current().nextInt(0,chanceMax);
     }
     public boolean isActivated(){
