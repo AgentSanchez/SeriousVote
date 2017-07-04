@@ -502,7 +502,7 @@ public class SeriousVote
         int roll = this.roll();
         int currentChoice = -1;
         for(int ix = 0; ix < chanceMap.length; ix++){
-            U.info(roll + ""+ currentChoice);
+
             if(roll <= chanceMap[ix]){
 
                 currentChoice = ix;
@@ -619,7 +619,6 @@ public class SeriousVote
         } else if(currentRewards == "") {
             return string.replace("{player}",username).replace("{rewards}", "No Random Rewards");
         }
-        U.info("Player " + username + " voted and received " + currentRewards);
         return string.replace("{player}",username).replace("{rewards}", currentRewards.substring(0,currentRewards.length() -2));
     }
 
