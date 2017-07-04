@@ -477,11 +477,13 @@ public class SeriousVote
         String username = event.getTargetEntity().getName();
 
         if(storedVotes.containsKey(playerID)){
-            broadCastMessage(publicMessage, username);
+
 
             for(int ix = 0; ix < storedVotes.get(playerID).intValue(); ix ++){
                 giveVote(username);
             }
+            broadCastMessage(publicMessage, username);
+            currentRewards = "";
 
             storedVotes.remove(playerID);
             try {

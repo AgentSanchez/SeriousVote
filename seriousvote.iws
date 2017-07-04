@@ -2,28 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fda961bb-3405-49cd-8a4c-5e16db308023" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/ConfigUtil.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Database.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/LootTable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics$AdvancedBarChart.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics$AdvancedMapChart.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics$AdvancedPie.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics$Country.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics$CustomChart.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics$MultiLineChart.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics$SimpleBarChart.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics$SimpleMapChart.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics$SimplePie.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics$SingleLineChart.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Metrics.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Milestones.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/PlayerRecord.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote$SVoteGiveVote.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote$SVoteReload.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote$SVoteVote.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/U.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/seriousvote.iws" afterPath="$PROJECT_DIR$/seriousvote.iws" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
     </list>
@@ -135,8 +113,8 @@
       <file leaf-file-name="SeriousVote.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="281" column="65" lean-forward="false" selection-start-line="281" selection-start-column="65" selection-end-line="281" selection-end-column="65" />
+            <state relative-caret-position="269">
+              <caret line="488" column="17" lean-forward="true" selection-start-line="488" selection-start-column="17" selection-end-line="488" selection-end-column="17" />
               <folding>
                 <element signature="e#9811#9819#0" expanded="true" />
               </folding>
@@ -1489,8 +1467,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="281" column="65" lean-forward="false" selection-start-line="281" selection-start-column="65" selection-end-line="281" selection-end-column="65" />
+        <state relative-caret-position="269">
+          <caret line="488" column="17" lean-forward="true" selection-start-line="488" selection-start-column="17" selection-end-line="488" selection-end-column="17" />
           <folding>
             <element signature="e#9811#9819#0" expanded="true" />
           </folding>
