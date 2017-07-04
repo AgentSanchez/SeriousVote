@@ -38,9 +38,6 @@ public class Milestones {
         rootNode = node;
     }
 
-    //TODO Create Milestones Table
-    //Each milestone table will have a random  selection
-    //Each milestone table will have a set selection
 
     public boolean updateRecord(UUID player, int totalVotes, int voteSpree, Date lastVote){
         PlayerRecord record = new PlayerRecord(player, totalVotes, voteSpree, lastVote);
@@ -84,7 +81,12 @@ public class Milestones {
         List<String> commandList = new ArrayList<String>();
         //yearly
         if(record.getVoteSpree() >= 365 && record.getVoteSpree()%365 == 0){
-
+            LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","dailies","yearly", "random")),rootNode);
+            //Choose The Random Rewards from the chosen table
+            for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
+                    .map(ConfigurationNode::getString).collect(Collectors.toList())){
+                commandList.add(sv.parseVariables(command, playerName));
+            }
             for(String command:sv.yearlySet) {
                 commandList.add(sv.parseVariables(command, playerName));
             }
@@ -93,6 +95,12 @@ public class Milestones {
 
         }
         else if(record.getVoteSpree() >= 30 && record.getVoteSpree()%30 == 0){
+            LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","dailies","monthly", "random")),rootNode);
+            //Choose The Random Rewards from the chosen table
+            for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
+                    .map(ConfigurationNode::getString).collect(Collectors.toList())){
+                commandList.add(sv.parseVariables(command, playerName));
+            }
             for(String command:sv.monthlySet) {
                 commandList.add(sv.parseVariables(command, playerName));
             }
@@ -100,6 +108,12 @@ public class Milestones {
             U.bcast(rootNode.getNode("config","dailies", "monthly","message").getString(),playerName);
         }
         else if(record.getVoteSpree() >= 7 && record.getVoteSpree()%7 == 0){
+            LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","dailies","weekly", "random")),rootNode);
+            //Choose The Random Rewards from the chosen table
+            for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
+                    .map(ConfigurationNode::getString).collect(Collectors.toList())){
+                commandList.add(sv.parseVariables(command, playerName));
+            }
             for(String command:sv.weeklySet) {
                 commandList.add(sv.parseVariables(command, playerName));
             }
@@ -107,7 +121,7 @@ public class Milestones {
             U.bcast(rootNode.getNode("config","dailies", "yearly","message").getString(),playerName);
         }
 
-        int vs = record.getVoteSpree()+1
+        int vs = record.getVoteSpree()+1;
         int a = 365*(vs/365+1)-vs;
         int b = 30*(vs/30+1)-vs;
         int c = 7*(vs/7+1)-vs;
