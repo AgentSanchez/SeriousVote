@@ -219,7 +219,7 @@ public class SeriousVote
         getLogger().info("Serious Vote Has Loaded\n\n\n\n");
 
         if(milestonesEnabled == true || dailiesEnabled == true){
-            milestones = new Milestones();
+            milestones = new Milestones(rootNode);
         } else {
             milestones = null;
         }
@@ -685,6 +685,8 @@ public class SeriousVote
         }
         return  0;
     }
+
+
 
     public static SeriousVote getInstance(){
         return instance;

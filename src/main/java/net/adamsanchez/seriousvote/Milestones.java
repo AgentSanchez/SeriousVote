@@ -1,11 +1,15 @@
 package net.adamsanchez.seriousvote;
 
 
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
+import ninja.leaping.configurate.ConfigurationNode;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -17,6 +21,7 @@ public class Milestones {
     String msgMonth = "{player} Has voted for a month straight!!! He's earned a prize!";
     String msgWeek = "{player} Has voted for a week straight!!! He's earned a prize!";
     SeriousVote sv;
+    ConfigurationNode rootNode;
 
 
     //query database for person
@@ -24,10 +29,11 @@ public class Milestones {
     //check number of sequential votes
     //If more than or equal to the milestone give reward
     Database db;
-    public Milestones(){
+    public Milestones(ConfigurationNode node){
         sv = SeriousVote.getInstance();
         db = new Database();
         db.createPlayerTable();
+        rootNode = node;
     }
 
     //TODO Create Milestones Table
@@ -51,10 +57,24 @@ public class Milestones {
 
     public void checkForMilestones(PlayerRecord record, String playerName){
         //Check based on amount of votes given.
+        List<String> commandList = new ArrayList<String>();
         if(IntStream.of(sv.milestonesUsed).anyMatch(x -> x == record.getTotalVotes())){
-            look at tables of  record.getTotalVotes();
-            choose a InheritableThreadLocal
-            //TODO make a tablechooser class takes a 2d array of tables and chances and returns 1 table. Takes care of rolling as well
+            LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","milestones","records", ""+ record.getTotalVotes())),rootNode);
+            //Choose The Random Rewards from the chosen table
+            for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
+                    .map(ConfigurationNode::getString).collect(Collectors.toList())){
+                commandList.add(sv.parseVariables(command, playerName));
+            }
+            //Add The Set Commands
+            for(String command: rootNode.getNode("config","milestones","records", ""+ record.getTotalVotes(),"set").getChildrenList().stream()
+                    .map(ConfigurationNode::getString).collect(Collectors.toList())){
+                commandList.add(sv.parseVariables(command, playerName));
+            }
+            //Send the Commands to Be Run
+            sv.giveReward(commandList);
+            //Now Send a Public Message
+            U.bcast(rootNode.getNode("config","milestones","records", ""+ record.getTotalVotes(),"message").getString(),record.toString());
+
         }
 
     }
