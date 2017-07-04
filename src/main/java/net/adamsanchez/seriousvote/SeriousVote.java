@@ -696,6 +696,10 @@ public class SeriousVote
         return userStorage;
     }
 
+    public Game getPublicGame(){
+        return this.getGame();
+    }
+
 
 
 

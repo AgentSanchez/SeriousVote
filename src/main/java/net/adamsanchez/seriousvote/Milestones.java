@@ -3,6 +3,8 @@ package net.adamsanchez.seriousvote;
 
 import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import ninja.leaping.configurate.ConfigurationNode;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.Text;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -105,6 +107,21 @@ public class Milestones {
             U.bcast(rootNode.getNode("config","dailies", "yearly","message").getString(),playerName);
         }
 
+        int vs = record.getVoteSpree()+1
+        int a = 365*(vs/365+1)-vs;
+        int b = 30*(vs/30+1)-vs;
+        int c = 7*(vs/7+1)-vs;
+        Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
+        int leastDays = 0;
+        if(a<b && a<c){
+            leastDays = a;
+        } else if(b<c&&b<a){
+            leastDays = b;
+        } else if(c<b&&c<a) {
+            leastDays = c;
+        }
+        player.sendMessage(Text.of("You have " + leastDays + "Until your next dailies reward!"));
+
 
     }
 
@@ -136,7 +153,6 @@ public class Milestones {
                 return;
             }
             record.setTotalVotes(record.getTotalVotes() + 1);
-            //TODO make it tell the player how many days left till his next reward!
             updateRecord(record);
 
         }
