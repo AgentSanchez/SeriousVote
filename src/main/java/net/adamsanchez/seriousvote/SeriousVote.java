@@ -279,7 +279,7 @@ public class SeriousVote
     public class SVoteGiveVote implements CommandExecutor {
         @Override
         public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-            String username = isOnline(args.<String>getOne("player").get();
+            String username = args.<String>getOne("player").get();
             if(isOnline(username))
                 {
                 Player player = game.getServer().getPlayer(username).get();
