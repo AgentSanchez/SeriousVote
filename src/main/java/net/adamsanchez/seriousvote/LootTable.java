@@ -74,7 +74,7 @@ public class LootTable {
                 break;
             }
         }
-        if(currentChoice < 1 ) U.error("There was a problem while rolling something might be broken");
+        if(currentChoice < 0 ) U.error("There was a problem while rolling something might be broken");
         String chosenReward = Table[1][currentChoice];
         return chosenReward;
     }
