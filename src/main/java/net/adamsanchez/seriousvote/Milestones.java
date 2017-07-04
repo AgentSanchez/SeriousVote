@@ -87,6 +87,7 @@ public class Milestones {
                 commandList.add(sv.parseVariables(command, playerName));
             }
             sv.giveReward(commandList);
+            U.bcast(rootNode.getNode("config","dailies", "yearly","message").getString(),playerName);
 
         }
         else if(record.getVoteSpree() >= 30 && record.getVoteSpree()%30 == 0){
@@ -94,12 +95,14 @@ public class Milestones {
                 commandList.add(sv.parseVariables(command, playerName));
             }
             sv.giveReward(commandList);
+            U.bcast(rootNode.getNode("config","dailies", "monthly","message").getString(),playerName);
         }
         else if(record.getVoteSpree() >= 7 && record.getVoteSpree()%7 == 0){
             for(String command:sv.weeklySet) {
                 commandList.add(sv.parseVariables(command, playerName));
             }
             sv.giveReward(commandList);
+            U.bcast(rootNode.getNode("config","dailies", "yearly","message").getString(),playerName);
         }
 
 
@@ -128,8 +131,8 @@ public class Milestones {
                 record.setVoteSpree(record.getVoteSpree() + 1);
                 record.setLastVote(new Date(new java.util.Date().getTime()));
                 updateRecord(record);
-                checkForDailies(record, U.getName(player));
-                checkForMilestones(record, U.getName(player));
+                if(sv.dailiesEnabled) checkForDailies(record, U.getName(player));
+                if(sv.milestonesEnabled)checkForMilestones(record, U.getName(player));
                 return;
             }
             record.setTotalVotes(record.getTotalVotes() + 1);

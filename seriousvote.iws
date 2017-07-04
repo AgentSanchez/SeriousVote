@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="fda961bb-3405-49cd-8a4c-5e16db308023" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -145,8 +144,8 @@
       <file leaf-file-name="Milestones.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="69" column="85" lean-forward="true" selection-start-line="69" selection-start-column="85" selection-end-line="69" selection-end-column="85" />
+            <state relative-caret-position="598">
+              <caret line="97" column="100" lean-forward="false" selection-start-line="97" selection-start-column="100" selection-end-line="97" selection-end-column="100" />
               <folding />
             </state>
           </provider>
@@ -187,7 +186,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>chanc</find>
       <find>there was a p</find>
       <find>choosing a random</find>
       <find>chooseRewa</find>
@@ -217,6 +215,7 @@
       <find>give</find>
       <find>public</find>
       <find>broadcast</find>
+      <find>bcast</find>
     </findStrings>
     <replaceStrings>
       <replace>dailies</replace>
@@ -1504,8 +1503,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="69" column="85" lean-forward="true" selection-start-line="69" selection-start-column="85" selection-end-line="69" selection-end-column="85" />
+        <state relative-caret-position="598">
+          <caret line="97" column="100" lean-forward="false" selection-start-line="97" selection-start-column="100" selection-end-line="97" selection-end-column="100" />
           <folding />
         </state>
       </provider>
