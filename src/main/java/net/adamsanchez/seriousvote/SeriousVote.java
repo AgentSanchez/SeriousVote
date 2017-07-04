@@ -280,13 +280,16 @@ public class SeriousVote
         @Override
         public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
-            Player player = args.<Player>getOne("player").get();
+            if(isOnline(args.<String>getOne("player").get()))
+                {
+                Player player = args.<Player>getOne("player").get();
 
-            player.sendMessage(Text.of("An administrator has awarded you a vote!"));
-            giveVote(player.getName());
-            currentRewards = "";
-            src.sendMessage(Text.of("You have successfully given " + player.getName() + " a vote"));
+                player.sendMessage(Text.of("An administrator has awarded you a vote!"));
+                giveVote(player.getName());
+                src.sendMessage(Text.of("You have successfully given " + player.getName() + " a vote"));
+                }
 
+                currentRewards = "";
 
             return CommandResult.success();
         }
