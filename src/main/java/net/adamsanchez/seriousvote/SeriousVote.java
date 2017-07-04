@@ -253,7 +253,7 @@ public class SeriousVote
         CommandSpec giveVote = CommandSpec.builder()
                 .description(Text.of("For admins to give a player a vote"))
                 .permission("seriousvote.commands.admin.give")
-                .arguments(GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))))
+                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))))
                 .executor(new SVoteGiveVote())
                 .build();
 
@@ -279,14 +279,34 @@ public class SeriousVote
     public class SVoteGiveVote implements CommandExecutor {
         @Override
         public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-
-            if(isOnline(args.<String>getOne("player").get()))
+            String username = isOnline(args.<String>getOne("player").get();
+            if(isOnline(username))
                 {
-                Player player = args.<Player>getOne("player").get();
-
+                Player player = game.getServer().getPlayer(username).get();
                 player.sendMessage(Text.of("An administrator has awarded you a vote!"));
-                giveVote(player.getName());
-                src.sendMessage(Text.of("You have successfully given " + player.getName() + " a vote"));
+                giveVote(username);
+                src.sendMessage(Text.of("You have successfully given " + username + " a vote"));
+                }
+            else {
+                UUID playerID;
+
+                if (userStorage.get().get(username).isPresent())
+                    {
+                        playerID = userStorage.get().get(username).get().getUniqueId();
+
+                        //Write to File
+                        if (storedVotes.containsKey(playerID)) {
+                            storedVotes.put(playerID, storedVotes.get(playerID).intValue() + 1);
+                        } else {
+                            storedVotes.put(playerID, new Integer(1));
+                        }
+                        try {
+                            saveOffline();
+                            src.sendMessage(Text.of("You have successfully given " + username + " an offline vote"));
+                        } catch (IOException e) {
+                            U.error("Woah did that just happen? I couldn't save that offline player's vote!", e);
+                        }
+                    }
                 }
 
                 currentRewards = "";
