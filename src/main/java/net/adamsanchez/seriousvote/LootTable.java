@@ -69,7 +69,7 @@ public class LootTable {
         int roll = this.roll();
         int currentChoice = -1;
         for(int ix = 0; ix < chanceMap.length; ix++){
-            if(roll <= ix){
+            if(roll <= chanceMap[ix]){
                 currentChoice = ix;
                 break;
             }

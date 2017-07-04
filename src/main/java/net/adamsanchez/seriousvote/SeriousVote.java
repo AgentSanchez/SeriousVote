@@ -502,7 +502,8 @@ public class SeriousVote
         int roll = this.roll();
         int currentChoice = -1;
         for(int ix = 0; ix < chanceMap.length; ix++){
-            if(roll <= ix){
+            U.info(roll + ""+ currentChoice);
+            if(roll <= chanceMap[ix]){
 
                 currentChoice = ix;
                 break;
@@ -650,7 +651,6 @@ public class SeriousVote
     public int roll(){
         //Returns a number within the chance pool bound is lower inclusive upper exclusive
         int nextInt;
-        U.info("chanceMax is" + chanceMax);
         if(chanceMax>0) {
             nextInt = ThreadLocalRandom.current().nextInt(0, chanceMax + 1);
             return nextInt;
