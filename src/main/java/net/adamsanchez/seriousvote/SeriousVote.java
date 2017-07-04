@@ -516,11 +516,8 @@ public class SeriousVote
 
     public boolean giveVote(String username){
         LootTable mainLoot;
-        for(int ix = 0; ix < chanceMap.length; ix++)U.info("chancemap " + ix + " is " + chanceMap[ix]);
-
         currentRewards = "";
         ArrayList<String> commandQueue = new ArrayList<String>();
-        U.info(hasLoot + " " + isNoRandom + randomRewardsNumber);
         if(hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
             for (int i = 0; i < randomRewardsNumber; i++) {
                 mainLoot = new LootTable(chooseTable(),rootNode);
