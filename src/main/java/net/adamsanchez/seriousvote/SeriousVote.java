@@ -503,6 +503,7 @@ public class SeriousVote
         int currentChoice = -1;
         for(int ix = 0; ix < chanceMap.length; ix++){
             if(roll <= ix){
+
                 currentChoice = ix;
                 break;
             }
@@ -515,7 +516,7 @@ public class SeriousVote
 
     public boolean giveVote(String username){
         LootTable mainLoot;
-
+        for(int ix = 0; ix < chanceMap.length; ix++)U.info("chancemap " + ix + " is " + chanceMap[ix]);
 
         currentRewards = "";
         ArrayList<String> commandQueue = new ArrayList<String>();
@@ -650,11 +651,11 @@ public class SeriousVote
     }
 
     public int roll(){
-        //Returns a number within the chancepool inclusive to 0
+        //Returns a number within the chance pool bound is lower inclusive upper exclusive
         int nextInt;
         U.info("chanceMax is" + chanceMax);
         if(chanceMax>0) {
-            nextInt = ThreadLocalRandom.current().nextInt(0, chanceMax);
+            nextInt = ThreadLocalRandom.current().nextInt(0, chanceMax + 1);
             return nextInt;
         }
         return  0;
