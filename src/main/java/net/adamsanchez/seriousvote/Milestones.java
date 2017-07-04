@@ -3,8 +3,10 @@ package net.adamsanchez.seriousvote;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 /**
  * Created by adam_ on 01/22/17.
@@ -15,6 +17,7 @@ public class Milestones {
     String msgMonth = "{player} Has voted for a month straight!!! He's earned a prize!";
     String msgWeek = "{player} Has voted for a week straight!!! He's earned a prize!";
     SeriousVote sv;
+
 
     //query database for person
     //Check for last day of voting
@@ -48,6 +51,11 @@ public class Milestones {
 
     public void checkForMilestones(PlayerRecord record, String playerName){
         //Check based on amount of votes given.
+        if(IntStream.of(sv.milestonesUsed).anyMatch(x -> x == record.getTotalVotes())){
+            look at tables of  record.getTotalVotes();
+            choose a InheritableThreadLocal
+            //TODO make a tablechooser class takes a 2d array of tables and chances and returns 1 table. Takes care of rolling as well
+        }
 
     }
     public void checkForDailies(PlayerRecord record, String playerName){

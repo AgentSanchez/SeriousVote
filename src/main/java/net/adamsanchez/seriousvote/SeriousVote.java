@@ -110,8 +110,10 @@ public class SeriousVote
     private CommentedConfigurationNode rootNode;
 
     ///////////////////////////////////////////////////////
+    boolean milestonesEnabled = false ,dailiesEnabled = false;
     private Milestones milestones;
     public List<String> monthlySet, yearlySet, weeklySet;
+    int [] milestonesUsed;
     ///////////////////////////////////////////////////////
     public String databaseName, databaseHostname,databasePort,databasePrefix,databaseUsername,databasePassword;
     ///////////////////////////////////////////////////////
@@ -216,7 +218,7 @@ public class SeriousVote
         registerCommands();
         getLogger().info("Serious Vote Has Loaded\n\n\n\n");
 
-        if(!(databaseHostname=="" || databaseHostname == null)){
+        if(milestonesEnabled == true || dailiesEnabled == true){
             milestones = new Milestones();
         } else {
             milestones = null;
@@ -371,15 +373,17 @@ public class SeriousVote
         databasePrefix = ConfigUtil.getDatabasePrefix(rootNode);
         databaseUsername = ConfigUtil.getDatabaseUsername(rootNode);
         databasePort = ConfigUtil.getDatabasePort(rootNode);
+        milestonesEnabled = ConfigUtil.getMilestonesEnabled(rootNode);
+        dailiesEnabled = ConfigUtil.getDailiesEnabled(rootNode);
 
         if (milestones != null){
             milestones.reloadDB();
-
         }
         /////////Load Up Milestones/////////
         monthlySet = ConfigUtil.getMonthlySetCommands(rootNode);
         yearlySet = ConfigUtil.getYearlySetCommands(rootNode);
         weeklySet = ConfigUtil.getWeeklySetCommands(rootNode);
+        milestonesUsed = ConfigUtil.getEnabledMilestones(rootNode);
 
 
         return true;

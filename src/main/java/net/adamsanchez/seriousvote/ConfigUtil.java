@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote;
 
 import com.google.common.collect.Iterables;
 import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -19,17 +20,29 @@ public class ConfigUtil {
     public static ConfigurationNode RootNode;
 
     public static List<String> getWeeklySetCommands(ConfigurationNode node){
-        return node.getNode("config","milestones","weekly","set").getChildrenList().stream()
+        return node.getNode("config","dailies","weekly","set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
     public static List<String> getMonthlySetCommands(ConfigurationNode node){
-        return node.getNode("config","milestones","monthly","set").getChildrenList().stream()
+        return node.getNode("config","dailies","monthly","set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
     public static List<String> getYearlySetCommands(ConfigurationNode node){
-        return node.getNode("config","milestones","yearly","set").getChildrenList().stream()
+        return node.getNode("config","dailies","yearly","set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
+
+    public static int[] getEnabledMilestones(ConfigurationNode node){
+        List<String> list = node.getNode("config","dailies","yearly","set").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+        int[] array = new int[list.size()];
+        for(int ix = 0; ix < list.size(); ix++){
+            array[ix]=Integer.parseInt(list.get(ix));
+        }
+
+        return array;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////
     public static String getDatabaseName(ConfigurationNode node){
         return node.getNode("config","database","name").getString();
@@ -48,6 +61,14 @@ public class ConfigUtil {
     }
     public static String getDatabasePassword(ConfigurationNode node){
         return node.getNode("config","database","password").getString();
+    }
+
+    public static boolean getMilestonesEnabled(CommentedConfigurationNode node) {
+        return node.getNode("config","milestones","enabled").getBoolean();
+    }
+
+    public static boolean getDailiesEnabled(CommentedConfigurationNode node) {
+        return node.getNode("config","dailies","enabled").getBoolean();
     }
 
 
@@ -80,5 +101,6 @@ public class ConfigUtil {
     public static String getPublicMessage(ConfigurationNode node){
         return node.getNode("config","broadcast-message").getString();
     }
+
 
 }
