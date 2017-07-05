@@ -5,6 +5,7 @@ import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -79,6 +80,7 @@ public class Milestones {
     }
     public void checkForDailies(PlayerRecord record, String playerName){
         List<String> commandList = new ArrayList<String>();
+        Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
         //yearly
         if(record.getVoteSpree() >= 365 && record.getVoteSpree()%365 == 0){
             LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","dailies","yearly", "random")),rootNode);
@@ -92,6 +94,7 @@ public class Milestones {
             }
             sv.giveReward(commandList);
             U.bcast(rootNode.getNode("config","dailies", "yearly","message").getString(),playerName);
+            player.sendMessage(Text.of("You voted a year in a row!! WOW that's awesome").toBuilder().color(TextColors.GOLD).build());
 
         }
         else if(record.getVoteSpree() >= 30 && record.getVoteSpree()%30 == 0){
@@ -106,6 +109,8 @@ public class Milestones {
             }
             sv.giveReward(commandList);
             U.bcast(rootNode.getNode("config","dailies", "monthly","message").getString(),playerName);
+            player.sendMessage(Text.of("WOOT! 1 straight month of voting!").toBuilder().color(TextColors.GOLD).build());
+
         }
         else if(record.getVoteSpree() >= 7 && record.getVoteSpree()%7 == 0){
             LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","dailies","weekly", "random")),rootNode);
@@ -119,13 +124,13 @@ public class Milestones {
             }
             sv.giveReward(commandList);
             U.bcast(rootNode.getNode("config","dailies", "yearly","message").getString(),playerName);
+            player.sendMessage(Text.of("You've voted 7 days straight! Congrats!!").toBuilder().color(TextColors.GOLD).build());
         }
 
         int vs = record.getVoteSpree()+1;
         int a = 365*(vs/365+1)-vs;
         int b = 30*(vs/30+1)-vs;
         int c = 7*(vs/7+1)-vs;
-        Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
         int leastDays = 0;
         if(a<b && a<c){
             leastDays = a;
@@ -134,7 +139,7 @@ public class Milestones {
         } else if(c<b&&c<a) {
             leastDays = c;
         }
-        player.sendMessage(Text.of("You have " + leastDays + "Until your next dailies reward!"));
+        player.sendMessage(Text.of("You have " + leastDays + "Until your next dailies reward!").toBuilder().color(TextColors.GOLD).build());
 
 
     }
@@ -162,6 +167,7 @@ public class Milestones {
                 record.setVoteSpree(record.getVoteSpree() + 1);
                 record.setLastVote(new Date(new java.util.Date().getTime()));
                 updateRecord(record);
+
                 if(sv.dailiesEnabled) checkForDailies(record, U.getName(player));
                 if(sv.milestonesEnabled)checkForMilestones(record, U.getName(player));
                 return;
