@@ -218,7 +218,7 @@ public class SeriousVote
         registerCommands();
         getLogger().info("Serious Vote Has Loaded\n\n\n\n");
 
-        if(milestonesEnabled == true || dailiesEnabled == true){
+        if(milestonesEnabled == true | dailiesEnabled == true){
             milestones = new Milestones(rootNode);
         } else {
             milestones = null;
@@ -376,6 +376,7 @@ public class SeriousVote
         milestonesEnabled = ConfigUtil.getMilestonesEnabled(rootNode);
         dailiesEnabled = ConfigUtil.getDailiesEnabled(rootNode);
 
+        //TODO Fix database won't attempt to reconnect on /svreload
         if (milestones != null){
             milestones.reloadDB();
         }
