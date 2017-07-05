@@ -139,7 +139,7 @@ public class Milestones {
         } else if(c<b&&c<a) {
             leastDays = c;
         }
-        player.sendMessage(Text.of("You have " + leastDays + "Until your next dailies reward!").toBuilder().color(TextColors.GOLD).build());
+        player.sendMessage(Text.of("You have " + leastDays + " left until your next dailies reward!").toBuilder().color(TextColors.GOLD).build());
 
 
     }
