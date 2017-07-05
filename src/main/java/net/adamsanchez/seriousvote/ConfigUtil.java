@@ -33,7 +33,7 @@ public class ConfigUtil {
     }
 
     public static int[] getEnabledMilestones(ConfigurationNode node){
-        List<String> list = node.getNode("config","dailies","yearly","set").getChildrenList().stream()
+        List<String> list = node.getNode("config","dailies","records-enabled").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
         int[] array = new int[list.size()];
         for(int ix = 0; ix < list.size(); ix++){
@@ -88,7 +88,7 @@ public class ConfigUtil {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
     public static List<String> getRandomCommands(ConfigurationNode node) {
-        return node.getNode("config","Rewards","random").getChildrenList().stream()
+        return node.getNode("config","vote-reward","random").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
     public static List<String> getVoteSites(ConfigurationNode node) {
