@@ -13,7 +13,7 @@ public class TableManager {
 
     public static String[][] makeTableSet(ConfigurationNode node){
         List<String> nodeStrings = node.getChildrenList().stream().map(ConfigurationNode::getString).collect(Collectors.toList());
-        if(nodeStrings.size()%2!= 0){
+        if(nodeStrings.size()%2!= 0 || nodeStrings.size() < 1){
             U.error("Please check the Config for errors.");
         }
             String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
