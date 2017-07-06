@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fda961bb-3405-49cd-8a4c-5e16db308023" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/seriousvote.iws" afterPath="$PROJECT_DIR$/seriousvote.iws" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -152,11 +150,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Milestones.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Milestones.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
-              <caret line="67" column="155" lean-forward="false" selection-start-line="67" selection-start-column="155" selection-end-line="67" selection-end-column="155" />
+            <state relative-caret-position="234">
+              <caret line="67" column="161" lean-forward="false" selection-start-line="67" selection-start-column="161" selection-end-line="67" selection-end-column="161" />
               <folding>
                 <element signature="e#1287#1288#0" expanded="true" />
                 <element signature="e#1318#1319#0" expanded="true" />
@@ -169,7 +167,7 @@
       <file leaf-file-name="LootTable.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="339">
+            <state relative-caret-position="481">
               <caret line="40" column="18" lean-forward="false" selection-start-line="40" selection-start-column="18" selection-end-line="40" selection-end-column="18" />
               <folding>
                 <element signature="e#3122#3123#0" expanded="true" />
@@ -179,11 +177,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TableManager.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TableManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="15" column="61" lean-forward="false" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
+            <state relative-caret-position="510">
+              <caret line="36" column="57" lean-forward="true" selection-start-line="36" selection-start-column="57" selection-end-line="36" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -588,9 +586,9 @@
         <option value="$PROJECT_DIR$/src/main/resources/assets/seriousvote/seriousvote.conf" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/ConfigUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/ConfigUtil.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" />
       </list>
     </option>
   </component>
@@ -1566,9 +1564,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="36" column="57" lean-forward="true" selection-start-line="36" selection-start-column="57" selection-end-line="36" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
+        <state relative-caret-position="481">
           <caret line="40" column="18" lean-forward="false" selection-start-line="40" selection-start-column="18" selection-end-line="40" selection-end-column="18" />
           <folding>
             <element signature="e#3122#3123#0" expanded="true" />
@@ -1579,21 +1585,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="67" column="155" lean-forward="false" selection-start-line="67" selection-start-column="155" selection-end-line="67" selection-end-column="155" />
+        <state relative-caret-position="234">
+          <caret line="67" column="161" lean-forward="false" selection-start-line="67" selection-start-column="161" selection-end-line="67" selection-end-column="161" />
           <folding>
             <element signature="e#1287#1288#0" expanded="true" />
             <element signature="e#1318#1319#0" expanded="true" />
             <element signature="e#2021#2029#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="15" column="61" lean-forward="false" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
-          <folding />
         </state>
       </provider>
     </entry>
