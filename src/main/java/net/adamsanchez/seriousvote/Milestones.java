@@ -61,6 +61,7 @@ public class Milestones {
 
     public void checkForMilestones(PlayerRecord record, String playerName){
         //Check based on amount of votes given.
+        U.info("Player has " + record.getTotalVotes() + " votes currently.");
         List<String> commandList = new ArrayList<String>();
         if(IntStream.of(sv.milestonesUsed).anyMatch(x -> x == record.getTotalVotes())){
             LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","milestones","records", ""+ record.getTotalVotes())),rootNode);
