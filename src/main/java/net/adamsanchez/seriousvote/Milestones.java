@@ -79,7 +79,7 @@ public class Milestones {
             //Send the Commands to Be Run
             sv.giveReward(commandList);
             //Now Send a Public Message
-            U.bcast(rootNode.getNode("config","milestones","records", ""+ record.getTotalVotes(),"message").getString(),record.toString());
+            U.bcast(rootNode.getNode("config","milestones","records", ""+ record.getTotalVotes(),"message").getString(),playerName);
 
         }
 
