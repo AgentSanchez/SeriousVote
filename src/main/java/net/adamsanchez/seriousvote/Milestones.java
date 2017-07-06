@@ -183,8 +183,9 @@ public class Milestones {
                 if(sv.milestonesEnabled)checkForMilestones(record, U.getName(player));
                 return;
             }
-            if(sv.milestonesEnabled)checkForMilestones(record, U.getName(player));
             record.setTotalVotes(record.getTotalVotes() + 1);
+            if(sv.milestonesEnabled)checkForMilestones(record, U.getName(player));
+
             updateRecord(record);
 
         }
