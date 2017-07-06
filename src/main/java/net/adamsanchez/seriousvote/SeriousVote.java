@@ -375,6 +375,7 @@ public class SeriousVote
         databasePrefix = ConfigUtil.getDatabasePrefix(rootNode);
         databaseUsername = ConfigUtil.getDatabaseUsername(rootNode);
         databasePort = ConfigUtil.getDatabasePort(rootNode);
+
         milestonesEnabled = ConfigUtil.getMilestonesEnabled(rootNode);
         dailiesEnabled = ConfigUtil.getDailiesEnabled(rootNode);
 
