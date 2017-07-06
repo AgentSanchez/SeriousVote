@@ -180,6 +180,7 @@ public class Milestones {
                 updateRecord(record);
 
                 if(sv.dailiesEnabled) checkForDailies(record, U.getName(player));
+                if(sv.milestonesEnabled)checkForMilestones(record, U.getName(player));
                 return;
             }
             if(sv.milestonesEnabled)checkForMilestones(record, U.getName(player));
