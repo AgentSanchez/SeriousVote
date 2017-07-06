@@ -34,7 +34,7 @@ public class ConfigUtil {
     }
 
     public static int[] getEnabledMilestones(ConfigurationNode node){
-        List<String> list = node.getNode("config","dailies","records-enabled").getChildrenList().stream()
+        List<String> list = node.getNode("config","milestones","records-enabled").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
         int[] array = new int[list.size()];
         for(int ix = 0; ix < list.size(); ix++){
