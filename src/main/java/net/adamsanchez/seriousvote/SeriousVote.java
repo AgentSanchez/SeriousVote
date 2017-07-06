@@ -379,6 +379,7 @@ public class SeriousVote
         //TODO Fix database won't attempt to reconnect on /svreload
         if (milestones != null){
             milestones.reloadDB();
+            milestones.updateNode(rootNode);
         }
         /////////Load Up Milestones/////////
         monthlySet = ConfigUtil.getMonthlySetCommands(rootNode);
