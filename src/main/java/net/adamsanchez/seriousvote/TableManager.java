@@ -14,7 +14,7 @@ public class TableManager {
     public static String[][] makeTableSet(ConfigurationNode node){
         List<String> nodeStrings = node.getChildrenList().stream().map(ConfigurationNode::getString).collect(Collectors.toList());
         if(nodeStrings.size()%2!= 0){
-            U.error("Please check the Config for your main random rewards, to make sure they are formatted correctly");
+            U.error("Please check the Config for errors.");
         }
             String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
             //Create a new Array of the proper size x*2 to hold the tables for choosing later
