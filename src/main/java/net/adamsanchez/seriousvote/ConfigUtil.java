@@ -1,6 +1,7 @@
 package net.adamsanchez.seriousvote;
 
 import com.google.common.collect.Iterables;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
@@ -100,6 +101,10 @@ public class ConfigUtil {
     //Returns the string value from the Config for the public message. This must be deserialized
     public static String getPublicMessage(ConfigurationNode node){
         return node.getNode("config","broadcast-message").getString();
+    }
+
+    public static String getVoteSiteMessage(ConfigurationNode node){
+        return node.getNode("config","vote-sites-message").getString();
     }
 
 

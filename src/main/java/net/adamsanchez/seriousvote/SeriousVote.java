@@ -272,7 +272,7 @@ public class SeriousVote
             if (reloadConfigs()) {
                 src.sendMessage(Text.of("Reloaded successfully!"));
             } else {
-                src.sendMessage(Text.of("Could not reload properly :( did you break your config?"));
+                src.sendMessage(Text.of("Could not reload properly :( did you break your config?").toBuilder().color(TextColors.RED).build());
             }
             return CommandResult.success();
         }
@@ -320,7 +320,9 @@ public class SeriousVote
     public class SVoteVote implements CommandExecutor {
         public CommandResult execute(CommandSource src, CommandContext args) throws
                 CommandException {
-            src.sendMessage(Text.of("Thank You! Below are the places you can vote!").toBuilder().color(TextColors.GOLD).build());
+            src.sendMessage(
+                    TextSerializers.FORMATTING_CODE.deserialize(ConfigUtil.getVoteSiteMessage(rootNode))
+            );
             ConfigUtil.getVoteSites(rootNode).forEach(site -> {
                 src.sendMessage(convertLink(site));
             });
