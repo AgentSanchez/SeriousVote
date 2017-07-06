@@ -64,10 +64,10 @@ public class LootTable {
     seed is for inputting a randomization for the algorithm
      */
     public String chooseReward(){
-
         //compare
         int roll = this.roll();
         int currentChoice = -1;
+        U.info("Choosing from " + chanceMap.length +"items.");
         for(int ix = 0; ix < chanceMap.length; ix++){
             if(roll <= chanceMap[ix]){
                 currentChoice = ix;
@@ -88,5 +88,8 @@ public class LootTable {
         return activated;
     }
 
+    public String getTableName(){
+        return tableName;
+    }
 
 }

@@ -83,6 +83,7 @@ public class Milestones {
         Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
         //yearly
         if(record.getVoteSpree() >= 365 && record.getVoteSpree()%365 == 0){
+            player.sendMessage(Text.of("You voted a year in a row!! WOW that's awesome").toBuilder().color(TextColors.GOLD).build());
             LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","dailies","yearly", "random")),rootNode);
             //Choose The Random Rewards from the chosen table
             for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
@@ -94,10 +95,11 @@ public class Milestones {
             }
             sv.giveReward(commandList);
             U.bcast(rootNode.getNode("config","dailies", "yearly","message").getString(),playerName);
-            player.sendMessage(Text.of("You voted a year in a row!! WOW that's awesome").toBuilder().color(TextColors.GOLD).build());
+
 
         }
         else if(record.getVoteSpree() >= 30 && record.getVoteSpree()%30 == 0){
+            player.sendMessage(Text.of("WOOT! 1 straight month of voting!").toBuilder().color(TextColors.GOLD).build());
             LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","dailies","monthly", "random")),rootNode);
             //Choose The Random Rewards from the chosen table
             for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
@@ -109,11 +111,12 @@ public class Milestones {
             }
             sv.giveReward(commandList);
             U.bcast(rootNode.getNode("config","dailies", "monthly","message").getString(),playerName);
-            player.sendMessage(Text.of("WOOT! 1 straight month of voting!").toBuilder().color(TextColors.GOLD).build());
 
         }
         else if(record.getVoteSpree() >= 7 && record.getVoteSpree()%7 == 0){
+            player.sendMessage(Text.of("You've voted 7 days straight! Congrats!!").toBuilder().color(TextColors.GOLD).build());
             LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","dailies","weekly", "random")),rootNode);
+            U.info("Chosing from Table: " + chosenTable.getTableName());
             //Choose The Random Rewards from the chosen table
             for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
                     .map(ConfigurationNode::getString).collect(Collectors.toList())){
@@ -124,13 +127,13 @@ public class Milestones {
             }
             sv.giveReward(commandList);
             U.bcast(rootNode.getNode("config","dailies", "yearly","message").getString(),playerName);
-            player.sendMessage(Text.of("You've voted 7 days straight! Congrats!!").toBuilder().color(TextColors.GOLD).build());
+
         }
 
-        int vs = record.getVoteSpree()+1;
-        int a = 365*(vs/365+1)-vs;
-        int b = 30*(vs/30+1)-vs;
-        int c = 7*(vs/7+1)-vs;
+        int vsa = record.getVoteSpree()+1;
+        int a = 365*(vsa/365+1)-vsa;
+        int b = 30*(vsa/30+1)-vsa;
+        int c = 7*(vsa/7+1)-vsa;
         int leastDays = 0;
         if(a<b && a<c){
             leastDays = a;
@@ -160,18 +163,20 @@ public class Milestones {
                 if(new java.util.Date().getTime() - record.getLastVote().getTime() >= 172800000 ){
                     record.setVoteSpree(1);
                     record.setLastVote(new Date(new java.util.Date().getTime()));
+                    record.setTotalVotes(record.getTotalVotes() + 1);
                     updateRecord(record);
 
                     return;
                 }
                 record.setVoteSpree(record.getVoteSpree() + 1);
                 record.setLastVote(new Date(new java.util.Date().getTime()));
+                record.setTotalVotes(record.getTotalVotes() + 1);
                 updateRecord(record);
 
                 if(sv.dailiesEnabled) checkForDailies(record, U.getName(player));
-                if(sv.milestonesEnabled)checkForMilestones(record, U.getName(player));
                 return;
             }
+            if(sv.milestonesEnabled)checkForMilestones(record, U.getName(player));
             record.setTotalVotes(record.getTotalVotes() + 1);
             updateRecord(record);
 
