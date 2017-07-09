@@ -375,11 +375,10 @@ public class SeriousVote
         databasePrefix = ConfigUtil.getDatabasePrefix(rootNode);
         databaseUsername = ConfigUtil.getDatabaseUsername(rootNode);
         databasePort = ConfigUtil.getDatabasePort(rootNode);
-
         milestonesEnabled = ConfigUtil.getMilestonesEnabled(rootNode);
         dailiesEnabled = ConfigUtil.getDailiesEnabled(rootNode);
 
-        //TODO Fix database won't attempt to reconnect on /svreload
+
         if (milestones != null){
             milestones.reloadDB();
             milestones.updateNode(rootNode);
@@ -449,7 +448,7 @@ public class SeriousVote
             mainRewardTables = table;
             chanceTotal = chanceMap.length-1;
             chanceMin = chanceMap[0];
-            chanceMax = chanceTotal;
+            chanceMax = chanceMap[chanceTotal];
 
 
         }
@@ -685,7 +684,9 @@ public class SeriousVote
         //Returns a number within the chance pool bound is lower inclusive upper exclusive
         int nextInt;
         if(chanceMax>0) {
+
             nextInt = ThreadLocalRandom.current().nextInt(0, chanceMax + 1);
+            U.info("Rolled a " + nextInt + " out of" + chanceMax + "for table.");
             return nextInt;
         }
         return  0;

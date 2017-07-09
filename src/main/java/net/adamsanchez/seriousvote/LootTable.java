@@ -52,7 +52,7 @@ public class LootTable {
             }
             chanceTotal = chanceMap.length-1;
             chanceMin = chanceMap[0];
-            chanceMax = chanceTotal;
+            chanceMax = chanceMap[chanceTotal];
 
 
         }
@@ -82,7 +82,9 @@ public class LootTable {
     public int roll(){
         if(chanceMax == 0) return 0;
         //Returns a number within the chancepool inclusive to 0
-       return  ThreadLocalRandom.current().nextInt(0,chanceMax + 1);
+        int response = ThreadLocalRandom.current().nextInt(0,chanceMax + 1);
+        U.info("Rolled a " + response + " out of " + chanceMax);
+       return  response;
     }
     public boolean isActivated(){
         return activated;
