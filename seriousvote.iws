@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fda961bb-3405-49cd-8a4c-5e16db308023" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/libs/seriousvote-4.0.jar" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/cache.properties.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/LootTable.class" afterPath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/LootTable.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Milestones.class" afterPath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Milestones.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote.class" afterPath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/resources/main/assets/seriousvote/seriousvote.conf" afterPath="$PROJECT_DIR$/build/resources/main/assets/seriousvote/seriousvote.conf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/seriousvote.iws" afterPath="$PROJECT_DIR$/seriousvote.iws" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
     </list>
@@ -133,11 +121,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SeriousVote.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SeriousVote.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="688" column="78" lean-forward="false" selection-start-line="688" selection-start-column="78" selection-end-line="688" selection-end-column="78" />
+            <state relative-caret-position="225">
+              <caret line="68" column="3" lean-forward="true" selection-start-line="68" selection-start-column="3" selection-end-line="68" selection-end-column="3" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -168,11 +156,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="102">
-              <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+              <caret line="6" column="12" lean-forward="false" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -203,8 +191,8 @@
       <file leaf-file-name="LootTable.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11">
-              <caret line="71" column="38" lean-forward="false" selection-start-line="71" selection-start-column="38" selection-end-line="71" selection-end-column="38" />
+            <state relative-caret-position="-697">
+              <caret line="32" column="35" lean-forward="false" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -213,8 +201,8 @@
       <file leaf-file-name="TableManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="36" column="57" lean-forward="false" selection-start-line="36" selection-start-column="57" selection-end-line="36" selection-end-column="57" />
+            <state relative-caret-position="-804">
+              <caret line="2" column="50" lean-forward="false" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -241,8 +229,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>commandQueue</find>
-      <find>executingq</find>
       <find>parseVari</find>
       <find>give</find>
       <find>public</find>
@@ -268,9 +254,11 @@
       <find>default</find>
       <find>gete</find>
       <find>choosetable</find>
-      <find>chancemax</find>
       <find>roll(</find>
       <find>updateLo</find>
+      <find>debug</find>
+      <find>chancemax</find>
+      <find>roll</find>
     </findStrings>
     <replaceStrings>
       <replace>dailies</replace>
@@ -609,13 +597,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/gradlew" />
-        <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/PlayerRecord.java" />
         <option value="$PROJECT_DIR$/src/main/resources/assets/seriousvote/rewards.conf" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Config.java" />
         <option value="$PROJECT_DIR$/src/main/resources/main/assets/seriousvote/seriousvote.conf" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableChooser.java" />
-        <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/ConfigUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/ConfigUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java" />
@@ -627,6 +613,8 @@
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/build.gradle" />
       </list>
     </option>
   </component>
@@ -1128,7 +1116,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1138,7 +1126,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47128928" sideWeight="0.5063966" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4312026" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4312026" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28602383" sideWeight="0.48933902" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.49520257" order="7" side_tool="false" content_ui="tabs" />
@@ -1561,14 +1549,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="36" column="57" lean-forward="false" selection-start-line="36" selection-start-column="57" selection-end-line="36" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/U.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
@@ -1577,14 +1557,6 @@
             <element signature="e#1498#1499#0" expanded="true" />
             <element signature="e#1570#1571#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1606,14 +1578,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11">
-          <caret line="71" column="38" lean-forward="false" selection-start-line="71" selection-start-column="38" selection-end-line="71" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/ConfigUtil.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -1622,13 +1586,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-804">
+          <caret line="2" column="50" lean-forward="false" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-697">
+          <caret line="32" column="35" lean-forward="false" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="688" column="78" lean-forward="false" selection-start-line="688" selection-start-column="78" selection-end-line="688" selection-end-column="78" />
+        <state relative-caret-position="225">
+          <caret line="68" column="3" lean-forward="true" selection-start-line="68" selection-start-column="3" selection-end-line="68" selection-end-column="3" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="12" lean-forward="false" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>

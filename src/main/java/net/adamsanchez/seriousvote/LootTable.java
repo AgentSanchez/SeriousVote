@@ -67,7 +67,7 @@ public class LootTable {
         //compare
         int roll = this.roll();
         int currentChoice = -1;
-        U.info("Choosing from " + chanceMap.length +"items.");
+        U.debug("Choosing from " + chanceMap.length +"items.");
         for(int ix = 0; ix < chanceMap.length; ix++){
             if(roll <= chanceMap[ix]){
                 currentChoice = ix;
@@ -83,7 +83,7 @@ public class LootTable {
         if(chanceMax == 0) return 0;
         //Returns a number within the chancepool inclusive to 0
         int response = ThreadLocalRandom.current().nextInt(0,chanceMax + 1);
-        U.info("Rolled a " + response + " out of " + chanceMax);
+        U.debug("Rolled a " + response + " out of " + chanceMax);
        return  response;
     }
     public boolean isActivated(){

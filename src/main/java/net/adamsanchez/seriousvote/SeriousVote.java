@@ -68,7 +68,7 @@ import java.util.stream.Collectors;
  * Created by adam_ on 12/08/16.
  */
 @SuppressWarnings("unused")
-@Plugin(id = "seriousvote", name = "SeriousVote", version = "4.0", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
+@Plugin(id = "seriousvote", name = "SeriousVote", version = "4.1", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
 public class SeriousVote
 {
 
@@ -686,7 +686,7 @@ public class SeriousVote
         if(chanceMax>0) {
 
             nextInt = ThreadLocalRandom.current().nextInt(0, chanceMax + 1);
-            U.info("Rolled a " + nextInt + " out of" + chanceMax + "for table.");
+            U.debug("Rolled a " + nextInt + " out of" + chanceMax + "for table.");
             return nextInt;
         }
         return  0;
