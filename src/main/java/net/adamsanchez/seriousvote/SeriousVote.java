@@ -469,12 +469,10 @@ public class SeriousVote
         synchronized (voteQueue)
         {
             voteQueue.add(vote);
-            U.info("I added a vote to the queue");
         }
     }
 
     public void processVotes(){
-        U.info("Votequeue is being checked");
         if(!voteQueue.isEmpty()) {
             LinkedList<Vote> localQueue = new LinkedList<>();
             synchronized (voteQueue) {
