@@ -69,7 +69,7 @@ import java.util.stream.Collectors;
  * Created by adam_ on 12/08/16.
  */
 @SuppressWarnings("unused")
-@Plugin(id = "seriousvote", name = "SeriousVote", version = "4.1", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
+@Plugin(id = "seriousvote", name = "SeriousVote", version = "4.3", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
 public class SeriousVote
 {
 
@@ -120,6 +120,7 @@ public class SeriousVote
     ///////////////////////////////////////////////////////
     private LinkedList<String> commandQueue = new LinkedList<String>();
     private LinkedList<String> executingQueue = new LinkedList<String>();
+    private LinkedList<Vote> voteQueue = new LinkedList<Vote>();
 
 
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String,String>>>();
@@ -139,6 +140,8 @@ public class SeriousVote
     String[][] mainRewardTables;
     private int chanceTotal,chanceMax, chanceMin = 0;
     private int[] chanceMap;
+
+    //For NV Async Fix
 
 
 
@@ -222,7 +225,12 @@ public class SeriousVote
     @Listener
     public void onPostInit(GamePostInitializationEvent event)
     {
-
+        Scheduler scheduler = Sponge.getScheduler();
+        Task.Builder taskBuilder = scheduler.createTaskBuilder();
+        Task task = taskBuilder.execute(() -> processVotes())
+                .interval(1000, TimeUnit.MILLISECONDS)
+                .name("SeriousVote-CommandRewardExecutor")
+                .submit(plugin);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -454,20 +462,40 @@ public class SeriousVote
     ///////////////////////////LISTENERS///////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
     @Listener
-    public void onVote(VotifierEvent event)
+    public synchronized void onVote(VotifierEvent event)
     {
         Vote vote = event.getVote();
-        String username = vote.getUsername();
-        U.info("Vote Registered From " +vote.getServiceName() + " for "+ username);
 
-        giveVote(username);
-
-        if(isOnline(username)) {
-            broadCastMessage(publicMessage, username);
+        synchronized (voteQueue)
+        {
+            voteQueue.add(vote);
         }
+    }
+
+    public void processVotes(){
+        if(!voteQueue.isEmpty()) {
+            LinkedList<Vote> localQueue = new LinkedList<>();
+            synchronized (voteQueue) {
+                localQueue.addAll(voteQueue);
+                voteQueue.clear();
+            }
+
+            for (Vote vote : localQueue) {
+                String username = vote.getUsername();
+                U.info("Vote Registered From " + vote.getServiceName() + " for " + username);
+
+                String currentRewards = giveVote(username);
+                if (currentRewards != "offline"){
+                    broadCastMessage(publicMessage, username, currentRewards);
+                }
 
 
-
+                if (milestones!=null) {
+                    milestones.addVote(game.getServer().getPlayer(username).get().getUniqueId());
+                }
+            }
+        }
+        executeCommands();
     }
 
     @Listener
@@ -495,15 +523,25 @@ public class SeriousVote
     ///////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////ACTION METHODS///////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
+    public void executeCommands(){
+
+        for(String command:commandQueue)
+        {
+            game.getCommandManager().process(game.getServer().getConsole(),command );
+        }
+        commandQueue.clear();
+
+    }
+
 
     public boolean giveReward(List<String> commands){
         //Execute Commands
 
         for (String command: commands)
         {
-            synchronized (game) {
+
                 game.getCommandManager().process(game.getServer().getConsole(), command);
-            }
+
         }
 
         return true;
@@ -529,61 +567,56 @@ public class SeriousVote
         return chosenReward;
     }
 
-    public boolean giveVote(String username){
-        LootTable mainLoot;
-        currentRewards = "";
-        ArrayList<String> commandQueue = new ArrayList<String>();
-        if(hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
-            for (int i = 0; i < randomRewardsNumber; i++) {
-                mainLoot = new LootTable(chooseTable(),rootNode);
-                U.info("Choosing a random reward.");
-                String chosenReward = mainLoot.chooseReward();
+    public String giveVote(String username){
 
-                currentRewards = currentRewards + rootNode.getNode("config","Rewards",chosenReward,"name").getString() + ", ";
-                for(String ix: rootNode.getNode("config","Rewards",chosenReward,"rewards").getChildrenList().stream()
-                        .map(ConfigurationNode::getString).collect(Collectors.toList())){
-                    commandQueue.add(parseVariables(ix,username));
+        if(isOnline(username)) {
+            LootTable mainLoot;
+            currentRewards = "";
+            ArrayList<String> commandQueue = new ArrayList<String>();
+            if (hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
+                for (int i = 0; i < randomRewardsNumber; i++) {
+                    mainLoot = new LootTable(chooseTable(), rootNode);
+                    U.info("Choosing a random reward.");
+                    String chosenReward = mainLoot.chooseReward();
+
+                    currentRewards = currentRewards + rootNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
+                    for (String ix : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
+                            .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+                        commandQueue.add(parseVariables(ix, username));
+                    }
                 }
-            }
-        } else if(hasLoot && !isNoRandom){
-            randomRewardsGen = generateRandomRewardNumber();
-            for (int i = 0; i < randomRewardsGen; i++) {
-                mainLoot = new LootTable(chooseTable(),rootNode);
-                U.info("Choosing a random reward.");
+            } else if (hasLoot && !isNoRandom) {
+                randomRewardsGen = generateRandomRewardNumber();
+                for (int i = 0; i < randomRewardsGen; i++) {
+                    mainLoot = new LootTable(chooseTable(), rootNode);
+                    U.info("Choosing a random reward.");
 
-                String chosenReward = mainLoot.chooseReward();
-                                currentRewards = currentRewards + rootNode.getNode("config", "Rewards",chosenReward,"name").getString() + ", ";
-                for(String ix: rootNode.getNode("config", "Rewards", chosenReward,"rewards").getChildrenList().stream()
-                        .map(ConfigurationNode::getString).collect(Collectors.toList())){
-                commandQueue.add(parseVariables(ix,username));
+                    String chosenReward = mainLoot.chooseReward();
+                    currentRewards = currentRewards + rootNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
+                    for (String ix : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
+                            .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+                        commandQueue.add(parseVariables(ix, username));
 
 
+                    }
                 }
+
+            }
+            //Get Set Rewards
+            for (String setCommand : setCommands) {
+                commandQueue.add(parseVariables(setCommand, username, currentRewards));
             }
 
+            return currentRewards;
         }
-        //Get Set Rewards
-        for(String setCommand: setCommands){
-            commandQueue.add(parseVariables(setCommand, username, currentRewards));
-        }
-
-
-        if (isOnline(username)) {
-            giveReward(commandQueue);
-            if(milestones != null){
-                milestones.addVote(game.getServer().getPlayer(username).get().getUniqueId());
-            }
-
-        }
-        else
-        {
+        else {
             UUID playerID;
 
-            if(userStorage.get().get(username).isPresent()){
+            if (userStorage.get().get(username).isPresent()) {
                 playerID = userStorage.get().get(username).get().getUniqueId();
 
                 //Write to File
-                if(storedVotes.containsKey(playerID)) {
+                if (storedVotes.containsKey(playerID)) {
                     storedVotes.put(playerID, storedVotes.get(playerID).intValue() + 1);
                 } else {
                     storedVotes.put(playerID, new Integer(1));
@@ -594,12 +627,8 @@ public class SeriousVote
                     U.error("Woah did that just happen? I couldn't save that offline player's vote!", e);
                 }
             }
-
-
-
+            return "offline";
         }
-
-        return true;
     }
     //Adds a reward(command) to the queue which is scheduled along with the main thread.
     //Bypass for Async NuVotifier
@@ -608,6 +637,12 @@ public class SeriousVote
         return true;
     }
     public boolean broadCastMessage(String message, String username){
+        if (message.isEmpty()) return false;
+        game.getServer().getBroadcastChannel().send(
+                TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username)));
+        return true;
+    }
+    public boolean broadCastMessage(String message, String username, String currentRewards){
         if (message.isEmpty()) return false;
         game.getServer().getBroadcastChannel().send(
                 TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username, currentRewards)));

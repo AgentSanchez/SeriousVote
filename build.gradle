@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'SeriousVote'
-version '4.1'
+version '4.3'
 description 'Seriously We Have TO VOTE'
 
 
@@ -21,6 +21,7 @@ repositories {
 
 dependencies {
     compile 'org.spongepowered:spongeapi:5.0.0'
+    compile 'org.spongepowered:spongeapi:6.0.0'
     compile fileTree(dir: 'lib', include: '*.jar')
 
 }
