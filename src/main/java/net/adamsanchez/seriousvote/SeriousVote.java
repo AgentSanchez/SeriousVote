@@ -15,6 +15,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
 
 import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -508,12 +509,11 @@ public class SeriousVote
         //Execute Commands
         //executingQueue = commandQueue;
         commandQueue = new LinkedList<String>();
+                    for (String command : executingQueue) {
+                game.getCommandManager().process(game.getServer().getConsole(), command);
+            }
+            executingQueue = null;
 
-        for (String command: executingQueue)
-        {
-            game.getCommandManager().process(game.getServer().getConsole(), command);
-        }
-        executingQueue = null;
         return true;
 
     }
@@ -522,7 +522,9 @@ public class SeriousVote
 
         for (String command: commands)
         {
-            game.getCommandManager().process(game.getServer().getConsole(), command);
+            synchronized (game) {
+                game.getCommandManager().process(game.getServer().getConsole(), command);
+            }
         }
 
         return true;
