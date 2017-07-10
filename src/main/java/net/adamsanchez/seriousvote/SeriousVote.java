@@ -228,7 +228,7 @@ public class SeriousVote
         Scheduler scheduler = Sponge.getScheduler();
         Task.Builder taskBuilder = scheduler.createTaskBuilder();
         Task task = taskBuilder.execute(() -> processVotes())
-                .interval(1000, TimeUnit.MILLISECONDS)
+                .interval(700, TimeUnit.MILLISECONDS)
                 .name("SeriousVote-CommandRewardExecutor")
                 .submit(plugin);
     }
@@ -469,10 +469,12 @@ public class SeriousVote
         synchronized (voteQueue)
         {
             voteQueue.add(vote);
+            U.info("I added a vote to the queue");
         }
     }
 
     public void processVotes(){
+        U.info("Votequeue is being checked");
         if(!voteQueue.isEmpty()) {
             LinkedList<Vote> localQueue = new LinkedList<>();
             synchronized (voteQueue) {
@@ -606,6 +608,7 @@ public class SeriousVote
             for (String setCommand : setCommands) {
                 commandQueue.add(parseVariables(setCommand, username, currentRewards));
             }
+            this.commandQueue.addAll(commandQueue);
 
             return currentRewards;
         }
