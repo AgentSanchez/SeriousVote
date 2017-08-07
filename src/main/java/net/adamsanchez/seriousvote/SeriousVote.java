@@ -54,7 +54,9 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializers;
+import sun.font.ExtendedTextLabel;
 
 
 import java.nio.file.Paths;
@@ -257,13 +259,18 @@ public class SeriousVote
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))))
                 .executor(new SVoteGiveVote())
                 .build();
-
-        //TODO add command to give player his/her current vote streak
+        CommandSpec checkVote = CommandSpec.builder()
+                .description(Text.of("Check another player's vote record"))
+                .permission("seriousvote.commands.admin.check")
+                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))))
+                .executor(new SVoteCheckVote())
+                .build();
 
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
         Sponge.getCommandManager().register(this, vote, "vote");
         Sponge.getCommandManager().register(this, reload,"svreload","seriousvotereload");
         Sponge.getCommandManager().register(this, giveVote, "givevote" );
+        Sponge.getCommandManager().register(this,checkVote,"checkvote");
     }
 
     //////////////////////////////COMMAND EXECUTOR CLASSES/////////////////////////////////////
@@ -327,10 +334,65 @@ public class SeriousVote
             ConfigUtil.getVoteSites(rootNode).forEach(site -> {
                 src.sendMessage(convertLink(site));
             });
+
+            if(dailiesEnabled || milestonesEnabled){
+                UUID playerID = userStorage.get().get(src.getName()).get().getUniqueId();
+                PlayerRecord record = milestones.getRecord(playerID);
+                src.sendMessage(Text.of("You have a total of " + record.getTotalVotes()
+                        + " votes. You have currently voted " + record.getVoteSpree()
+                        + " days in a row." ).toBuilder().color(TextColors.GOLD).build());
+                if(dailiesEnabled){
+                    int vsa = record.getVoteSpree()+1;
+                    int a = 365*(vsa/365+1)-vsa;
+                    int b = 30*(vsa/30+1)-vsa;
+                    int c = 7*(vsa/7+1)-vsa;
+                    int leastDays = 0;
+                    if(a<b && a<c){
+                        leastDays = a;
+                    } else if(b<c&&b<a){
+                        leastDays = b;
+                    } else if(c<b&&c<a) {
+                        leastDays = c;
+                    }
+                    src.sendMessage(Text.of("You have to vote " + leastDays + "More days until your next dailies reward.") );
+                }
+
+            }
             return CommandResult.success();
 
 
 
+        }
+    }
+
+    public class SVoteCheckVote implements CommandExecutor {
+        public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+            String username = args.<String>getOne("player").get();
+            UUID playerID = userStorage.get().get(username).get().getUniqueId();
+            if(dailiesEnabled || milestonesEnabled){
+                PlayerRecord record = milestones.getRecord(playerID);
+                src.sendMessage(Text.of(username + "has a total of " + record.getTotalVotes()
+                        + " votes. They have currently voted " + record.getVoteSpree()
+                        + " days in a row." ).toBuilder().color(TextColors.GOLD).build());
+                if(dailiesEnabled){
+                    int vsa = record.getVoteSpree()+1;
+                    int a = 365*(vsa/365+1)-vsa;
+                    int b = 30*(vsa/30+1)-vsa;
+                    int c = 7*(vsa/7+1)-vsa;
+                    int leastDays = 0;
+                    if(a<b && a<c){
+                        leastDays = a;
+                    } else if(b<c&&b<a){
+                        leastDays = b;
+                    } else if(c<b&&c<a) {
+                        leastDays = c;
+                    }
+                    src.sendMessage(Text.of("They have to vote " + leastDays + "More days until their next dailies reward.") );
+                }
+
+            }
+
+            return CommandResult.success();
         }
     }
 
