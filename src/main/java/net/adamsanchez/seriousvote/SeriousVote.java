@@ -258,6 +258,8 @@ public class SeriousVote
                 .executor(new SVoteGiveVote())
                 .build();
 
+        //TODO add command to give player his/her current vote streak
+
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
         Sponge.getCommandManager().register(this, vote, "vote");
         Sponge.getCommandManager().register(this, reload,"svreload","seriousvotereload");
@@ -505,11 +507,11 @@ public class SeriousVote
 
         if(storedVotes.containsKey(playerID)){
 
-
+            String rewardString= "";
             for(int ix = 0; ix < storedVotes.get(playerID).intValue(); ix ++){
-                giveVote(username);
+                rewardString = giveVote(username);
             }
-            broadCastMessage(publicMessage, username);
+            broadCastMessage(publicMessage, username,rewardString);
             currentRewards = "";
 
             storedVotes.remove(playerID);

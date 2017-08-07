@@ -1,31 +1,31 @@
 package net.adamsanchez.seriousvote;
 
 
-            import com.google.gson.JsonArray;
-            import com.google.gson.JsonObject;
-            import com.google.gson.JsonPrimitive;
-            import com.google.inject.Inject;
-            import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-            import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-            import org.apache.commons.lang3.Validate;
-            import org.slf4j.Logger;
-            import org.spongepowered.api.Sponge;
-            import org.spongepowered.api.config.ConfigDir;
-            import org.spongepowered.api.plugin.PluginContainer;
-            import org.spongepowered.api.scheduler.Scheduler;
-            import org.spongepowered.api.scheduler.Task;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.inject.Inject;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
+import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.scheduler.Scheduler;
+import org.spongepowered.api.scheduler.Task;
 
-            import javax.net.ssl.HttpsURLConnection;
-            import java.io.*;
-            import java.lang.reflect.InvocationTargetException;
-            import java.net.URL;
-            import java.nio.file.Path;
-            import java.util.*;
-            import java.util.zip.GZIPOutputStream;
+import javax.net.ssl.HttpsURLConnection;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * bStats collects some data for plugin authors.
- *
+ * <p>
  * Check out https://bStats.org/ to learn more about bStats!
  */
 public class Metrics {
@@ -103,7 +103,7 @@ public class Metrics {
         } else {
             // We aren't the first so we link to the first metrics class
             try {
-                usedMetricsClass.getMethod("linkMetrics", Object.class).invoke(null,this);
+                usedMetricsClass.getMethod("linkMetrics", Object.class).invoke(null, this);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 if (logFailedRequests) {
                     logger.warn("Failed to link to first metrics class {}!", usedMetricsClass.getName(), e);
@@ -178,7 +178,7 @@ public class Metrics {
                 Task.Builder taskBuilder = scheduler.createTaskBuilder();
                 taskBuilder.execute(() -> submitData()).submit(plugin);
             }
-        }, 1000*60*5, 1000*60*30);
+        }, 1000 * 60 * 5, 1000 * 60 * 30);
         // Submit the data every 30 minutes, first time after 5 minutes to give other plugins enough time to start
         // WARNING: Changing the frequency has no effect but your plugin WILL be blocked/deleted!
         // WARNING: Just don't do it!
@@ -234,13 +234,14 @@ public class Metrics {
                 if (plugin instanceof JsonObject) {
                     pluginData.add((JsonObject) plugin);
                 }
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) { }
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+            }
         }
 
         data.add("plugins", pluginData);
 
         // Create a new thread for the connection to the bStats server
-        new Thread(() ->  {
+        new Thread(() -> {
             try {
                 // Send the data
                 sendData(data);
@@ -310,7 +311,8 @@ public class Metrics {
                 try {
                     // Let's check if a class with the given name exists.
                     return Class.forName(className);
-                } catch (ClassNotFoundException ignored) { }
+                } catch (ClassNotFoundException ignored) {
+                }
             }
             writeFile(tempFile, getClass().getName());
             return getClass();
@@ -335,7 +337,7 @@ public class Metrics {
         }
         try (
                 FileReader fileReader = new FileReader(file);
-                BufferedReader bufferedReader =  new BufferedReader(fileReader);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
         ) {
             return bufferedReader.readLine();
         }
@@ -1114,7 +1116,7 @@ public class Metrics {
          *
          * @param locale The locale.
          * @return The country from the giben locale or <code>null</code> if unknown country or
-         *         if the locale does not contain a country.
+         * if the locale does not contain a country.
          */
         public static Country byLocale(Locale locale) {
             return byIsoTag(locale.getCountry());
