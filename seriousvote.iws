@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fda961bb-3405-49cd-8a4c-5e16db308023" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/seriousvote.iws" afterPath="$PROJECT_DIR$/seriousvote.iws" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -123,8 +123,8 @@
       <file leaf-file-name="SeriousVote.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="588">
-              <caret line="354" column="81" lean-forward="false" selection-start-line="354" selection-start-column="81" selection-end-line="354" selection-end-column="81" />
+            <state relative-caret-position="707">
+              <caret line="391" column="53" lean-forward="false" selection-start-line="391" selection-start-column="53" selection-end-line="391" selection-end-column="54" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1673,8 +1673,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
-          <caret line="354" column="81" lean-forward="false" selection-start-line="354" selection-start-column="81" selection-end-line="354" selection-end-column="81" />
+        <state relative-caret-position="707">
+          <caret line="391" column="53" lean-forward="false" selection-start-line="391" selection-start-column="53" selection-end-line="391" selection-end-column="54" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

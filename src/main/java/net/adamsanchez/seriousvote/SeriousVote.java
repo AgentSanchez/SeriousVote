@@ -388,6 +388,8 @@ public class SeriousVote
                     src.sendMessage(Text.of("They have to vote " + leastDays + "More days until their next dailies reward.") );
                 }
 
+            } else {
+                src.sendMessage(Text.of("It seems that currently all the database modules are currently disabled."));
             }
 
             return CommandResult.success();
