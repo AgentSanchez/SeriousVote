@@ -54,9 +54,7 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializers;
-import sun.font.ExtendedTextLabel;
 
 
 import java.nio.file.Paths;
@@ -71,7 +69,7 @@ import java.util.stream.Collectors;
  * Created by adam_ on 12/08/16.
  */
 @SuppressWarnings("unused")
-@Plugin(id = "seriousvote", name = "SeriousVote", version = "4.3", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
+@Plugin(id = "seriousvote", name = "SeriousVote", version = "4.4", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
 public class SeriousVote
 {
 
@@ -354,7 +352,7 @@ public class SeriousVote
                     } else if(c<b&&c<a) {
                         leastDays = c;
                     }
-                    src.sendMessage(Text.of("You have to vote " + leastDays + "More days until your next dailies reward.") );
+                    src.sendMessage(Text.of("You have to vote " + leastDays + " more days until your next dailies reward.") );
                 }
 
             }
@@ -442,9 +440,9 @@ public class SeriousVote
         dailiesEnabled = ConfigUtil.getDailiesEnabled(rootNode);
 
 
-        if (milestones != null){
-            milestones.reloadDB();
-            milestones.updateNode(rootNode);
+        if (dailiesEnabled || milestonesEnabled){
+            U.info("Attempting to reload database...");
+            milestones = new Milestones(rootNode);
         }
         /////////Load Up Milestones/////////
         monthlySet = ConfigUtil.getMonthlySetCommands(rootNode);
