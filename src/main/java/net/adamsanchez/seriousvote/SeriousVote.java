@@ -3,6 +3,7 @@ package net.adamsanchez.seriousvote;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.vexsoftware.votifier.model.Vote;
+import com.vexsoftware.votifier.sponge.VotifierPlugin;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 
@@ -231,6 +232,10 @@ public class SeriousVote
                 .interval(700, TimeUnit.MILLISECONDS)
                 .name("SeriousVote-CommandRewardExecutor")
                 .submit(plugin);
+        Task task2 = taskBuilder.execute(() -> reloadDB())
+                .interval(60, TimeUnit.MINUTES)
+                .name("SeriousVote-DataBaseReloadExecutor")
+                .submit(plugin);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -280,6 +285,8 @@ public class SeriousVote
             } else {
                 src.sendMessage(Text.of("Could not reload properly :( did you break your config?").toBuilder().color(TextColors.RED).build());
             }
+
+
             return CommandResult.success();
         }
     }
@@ -442,10 +449,9 @@ public class SeriousVote
         dailiesEnabled = ConfigUtil.getDailiesEnabled(rootNode);
 
 
-        if (dailiesEnabled || milestonesEnabled){
-            U.info("Attempting to reload database...");
-            milestones = new Milestones(rootNode);
-        }
+        reloadDB();
+
+
         /////////Load Up Milestones/////////
         monthlySet = ConfigUtil.getMonthlySetCommands(rootNode);
         yearlySet = ConfigUtil.getYearlySetCommands(rootNode);
@@ -560,6 +566,13 @@ public class SeriousVote
             }
         }
         executeCommands();
+    }
+
+    public void reloadDB(){
+        if (dailiesEnabled || milestonesEnabled){
+            U.info("Attempting to reload database...");
+            milestones = new Milestones(rootNode);
+        }
     }
 
     @Listener
