@@ -553,9 +553,8 @@ public class SeriousVote
             for (Vote vote : localQueue) {
                 String username = vote.getUsername();
                 U.info("Vote Registered From " + vote.getServiceName() + " for " + username);
-
                 String currentRewards = giveVote(username);
-                if (currentRewards != "offline"){
+                if (!currentRewards.equals("offline")){
                     broadCastMessage(publicMessage, username, currentRewards);
                 }
 
