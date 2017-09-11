@@ -343,25 +343,26 @@ public class SeriousVote
             if(dailiesEnabled || milestonesEnabled){
                 UUID playerID = userStorage.get().get(src.getName()).get().getUniqueId();
                 PlayerRecord record = milestones.getRecord(playerID);
-                src.sendMessage(Text.of("You have a total of " + record.getTotalVotes()
-                        + " votes. You have currently voted " + record.getVoteSpree()
-                        + " days in a row." ).toBuilder().color(TextColors.GOLD).build());
-                if(dailiesEnabled){
-                    int vsa = record.getVoteSpree()+1;
-                    int a = 365*(vsa/365+1)-vsa;
-                    int b = 30*(vsa/30+1)-vsa;
-                    int c = 7*(vsa/7+1)-vsa;
-                    int leastDays = 0;
-                    if(a<b && a<c){
-                        leastDays = a;
-                    } else if(b<c&&b<a){
-                        leastDays = b;
-                    } else if(c<b&&c<a) {
-                        leastDays = c;
+                if(record!=null) {
+                    src.sendMessage(Text.of("You have a total of " + record.getTotalVotes()
+                            + " votes. You have currently voted " + record.getVoteSpree()
+                            + " days in a row.").toBuilder().color(TextColors.GOLD).build());
+                    if (dailiesEnabled) {
+                        int vsa = record.getVoteSpree() + 1;
+                        int a = 365 * (vsa / 365 + 1) - vsa;
+                        int b = 30 * (vsa / 30 + 1) - vsa;
+                        int c = 7 * (vsa / 7 + 1) - vsa;
+                        int leastDays = 0;
+                        if (a < b && a < c) {
+                            leastDays = a;
+                        } else if (b < c && b < a) {
+                            leastDays = b;
+                        } else if (c < b && c < a) {
+                            leastDays = c;
+                        }
+                        src.sendMessage(Text.of("You have to vote " + leastDays + " more days until your next dailies reward."));
                     }
-                    src.sendMessage(Text.of("You have to vote " + leastDays + " more days until your next dailies reward.") );
                 }
-
             }
             return CommandResult.success();
 
@@ -376,23 +377,25 @@ public class SeriousVote
             UUID playerID = userStorage.get().get(username).get().getUniqueId();
             if(dailiesEnabled || milestonesEnabled){
                 PlayerRecord record = milestones.getRecord(playerID);
-                src.sendMessage(Text.of(username + "has a total of " + record.getTotalVotes()
-                        + " votes. They have currently voted " + record.getVoteSpree()
-                        + " days in a row." ).toBuilder().color(TextColors.GOLD).build());
-                if(dailiesEnabled){
-                    int vsa = record.getVoteSpree()+1;
-                    int a = 365*(vsa/365+1)-vsa;
-                    int b = 30*(vsa/30+1)-vsa;
-                    int c = 7*(vsa/7+1)-vsa;
-                    int leastDays = 0;
-                    if(a<b && a<c){
-                        leastDays = a;
-                    } else if(b<c&&b<a){
-                        leastDays = b;
-                    } else if(c<b&&c<a) {
-                        leastDays = c;
+                if(record!=null) {
+                    src.sendMessage(Text.of(username + "has a total of " + record.getTotalVotes()
+                            + " votes. They have currently voted " + record.getVoteSpree()
+                            + " days in a row.").toBuilder().color(TextColors.GOLD).build());
+                    if (dailiesEnabled) {
+                        int vsa = record.getVoteSpree() + 1;
+                        int a = 365 * (vsa / 365 + 1) - vsa;
+                        int b = 30 * (vsa / 30 + 1) - vsa;
+                        int c = 7 * (vsa / 7 + 1) - vsa;
+                        int leastDays = 0;
+                        if (a < b && a < c) {
+                            leastDays = a;
+                        } else if (b < c && b < a) {
+                            leastDays = b;
+                        } else if (c < b && c < a) {
+                            leastDays = c;
+                        }
+                        src.sendMessage(Text.of("They have to vote " + leastDays + "More days until their next dailies reward."));
                     }
-                    src.sendMessage(Text.of("They have to vote " + leastDays + "More days until their next dailies reward.") );
                 }
 
             } else {
@@ -595,6 +598,8 @@ public class SeriousVote
                 U.error("Error while saving offline votes file", e);
             }
         }
+
+        milestones.
     }
     ///////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////ACTION METHODS///////////////////////////////////////////////
