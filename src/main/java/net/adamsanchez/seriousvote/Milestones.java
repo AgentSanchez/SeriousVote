@@ -55,7 +55,12 @@ public class Milestones {
     }
 
     public PlayerRecord getRecord(UUID player){
-        return db.getPlayer(player);
+
+        PlayerRecord record =  db.getPlayer(player);
+        if (record == null){
+            return createRecord(player);
+        }
+        return record;
     }
 
 
@@ -163,6 +168,7 @@ public class Milestones {
             record.setTotalVotes(1);
             record.setVoteSpree(1);
             updateRecord(record);
+
         } else {
             // If it's been a day since the last vote, increase the vote spree and change the lastvote
             if(new java.util.Date().getTime() - record.getLastVote().getTime() >= 86400000 ) {
@@ -190,6 +196,17 @@ public class Milestones {
             updateRecord(record);
 
         }
+    }
+
+    public PlayerRecord createRecord(UUID player){
+        U.info("Creating a new record for " + player.toString() + ".");
+        PlayerRecord record;
+            record = PlayerRecord.getBlankRecord(player);
+            record.setLastVote(new Date(new java.util.Date().getTime()));
+            record.setTotalVotes(0);
+            record.setVoteSpree(0);
+            updateRecord(record);
+            return record;
     }
 
     public void reloadDB(){
