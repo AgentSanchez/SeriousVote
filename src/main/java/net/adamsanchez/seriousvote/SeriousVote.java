@@ -497,6 +497,10 @@ public class SeriousVote
     public void updateLoot(ConfigurationNode node){
         List<String> nodeStrings = node.getNode("config","vote-reward","random").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
+        if(nodeStrings.size() < 1){
+            U.info("There are no random tables to load");
+            return;
+        }
         if(nodeStrings.size()%2!= 0){
             U.error("Please check the Config for your main random rewards, to make sure they are formatted correctly");
         } else {
