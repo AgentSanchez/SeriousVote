@@ -1,5 +1,7 @@
 package net.adamsanchez.seriousvote;
 
+import ninja.leaping.configurate.ConfigurationNode;
+
 
 import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import ninja.leaping.configurate.ConfigurationNode;
@@ -137,7 +139,7 @@ public class Milestones {
                 commandList.add(sv.parseVariables(command, playerName));
             }
             sv.giveReward(commandList);
-            U.bcast(rootNode.getNode("config","dailies", "yearly","message").getString(),playerName);
+            U.bcast(rootNode.getNode("config","dailies", "weekly","message").getString(),playerName);
 
         }
 
@@ -153,6 +155,7 @@ public class Milestones {
         } else if(c<b&&c<a) {
             leastDays = c;
         }
+        leastDays += 1;
         player.sendMessage(Text.of("You have " + leastDays + " left until your next dailies reward!").toBuilder().color(TextColors.GOLD).build());
 
 
