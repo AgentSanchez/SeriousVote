@@ -1,5 +1,8 @@
 package net.adamsanchez.seriousvote;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import java.sql.*;
 import java.util.*;
 import java.sql.Date;
@@ -14,9 +17,12 @@ public class Database {
     private String password = "ohokay";
     private String dbname = "SeriousVote";
     private String dbType = "mysql";
-    private Connection db;
     private String table_prefix = "SV";
     private String playerTable = "players";
+    private String url = "jdbc:mysql://test.com:3306/testdata?useSSL=false";
+    private String timezoneFix = "&useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    HikariConfig config = new HikariConfig();
+    HikariDataSource ds;
 
 
 
@@ -30,8 +36,18 @@ public class Database {
         this.table_prefix = sv.databasePrefix;
         this.username = sv.databaseUsername;
         this.password = sv.databasePassword;
-        reconnect();
         playerTable = table_prefix + "players";
+
+        url = "jdbc:mysql://"+ host + ":" + port + "/" + dbname + "?useSSL=false";
+
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(url + timezoneFix);
+        config.setUsername(username);
+        config.setPassword(password);
+
+        //Instantiate Pool
+        ds = new HikariDataSource(config);
+        U.info("Ready for connections");
     }
 
 
@@ -42,28 +58,14 @@ public class Database {
     /////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void reconnect(){
-        db = getConnection();
+
+    public void shutdown(){
+        ds.close();
     }
 
-    public void terminateConnection(){
-        try {
-            db.close();
-        } catch (SQLException e) {
-            U.error("DB could not be closed...Maybe it's still in use?");
-        }
-    }
-
-    public Connection getConnection(){
+    public Connection getConnection() throws SQLException {
         Connection connection = null;
-        U.info("Attempting to connect to the database...");
-        try {
-            DriverManager.setLoginTimeout(2);
-            connection = DriverManager.getConnection("jdbc:" + dbType + "://" + host + ":" + port + "/" + dbname, username, password);
-        } catch (SQLException e) {
-            U.error("Failed to establish connection to the database", e);
-        }
-        return connection;
+        return ds.getConnection();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +73,7 @@ public class Database {
     public Statement statement(){
         Statement statement = null;
         try{
-            statement= db.createStatement();
+            statement= ds.getConnection().createStatement();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,7 +83,7 @@ public class Database {
     public PreparedStatement preparedStatement(String string){
         PreparedStatement statement = null;
         try{
-            statement= db.prepareStatement(string);
+            statement= ds.getConnection().prepareStatement(string);
 
         } catch (SQLException e) {
             U.error("Error in DB Connection");
@@ -98,6 +100,7 @@ public class Database {
         }
         return results;
     }
+
 
     public ResultSet genericSelectQuery(String table, String field, String value){
         String initial = "SELECT * FROM %s WHERE %s='%s'";
@@ -133,7 +136,6 @@ public class Database {
 
     public void playerUpdateQuery(String table, String uuid, int totalVotes, int voteSpree, Date lastVote){
         String initial = "REPLACE INTO %s(player, totalVotes, voteSpree, lastVote) VALUES(?,?,?,?)";
-        //PreparedStatement statement = db.prepareStatement(String.format(initial,table));
 
         try(PreparedStatement statement = preparedStatement(String.format(initial,table))){
             statement.setString(1, uuid);
