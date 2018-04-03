@@ -58,6 +58,7 @@ public class Database {
         Connection connection = null;
         U.info("Attempting to connect to the database...");
         try {
+            DriverManager.setLoginTimeout(2);
             connection = DriverManager.getConnection("jdbc:" + dbType + "://" + host + ":" + port + "/" + dbname, username, password);
         } catch (SQLException e) {
             U.error("Failed to establish connection to the database", e);

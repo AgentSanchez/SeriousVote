@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fda961bb-3405-49cd-8a4c-5e16db308023" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/seriousvote.ipr" afterPath="$PROJECT_DIR$/seriousvote.ipr" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/seriousvote.iws" afterPath="$PROJECT_DIR$/seriousvote.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -107,11 +102,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SeriousVote.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SeriousVote.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="373" column="75" lean-forward="false" selection-start-line="373" selection-start-column="75" selection-end-line="373" selection-end-column="75" />
+            <state relative-caret-position="275">
+              <caret line="576" column="9" lean-forward="true" selection-start-line="576" selection-start-column="9" selection-end-line="576" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#4108#4116#0" expanded="true" />
@@ -121,7 +116,7 @@
                 <element signature="e#4432#4446#0" expanded="true" />
                 <element signature="e#10750#10758#0" expanded="true" />
                 <element signature="e#14313#14321#0" expanded="true" />
-                <element signature="e#24728#24736#0" expanded="true" />
+                <element signature="e#24729#24737#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -130,11 +125,21 @@
       <file leaf-file-name="Milestones.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
+            <state relative-caret-position="2428">
               <caret line="157" column="23" lean-forward="false" selection-start-line="157" selection-start-column="23" selection-end-line="157" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Database.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="595">
+              <caret line="60" column="43" lean-forward="false" selection-start-line="60" selection-start-column="43" selection-end-line="60" selection-end-column="43" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -150,9 +155,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>executing</find>
-      <find>v</find>
-      <find>giverewa</find>
       <find>postinit</find>
       <find>onplayerjo</find>
       <find>currentRewards</find>
@@ -165,7 +167,6 @@
       <find>Database</find>
       <find>Mileso</find>
       <find>onvote</find>
-      <find>offline</find>
       <find>check</find>
       <find>join</find>
       <find>reload</find>
@@ -180,6 +181,10 @@
       <find>List&lt;String</find>
       <find>onplayer</find>
       <find>milestones</find>
+      <find>giveVote</find>
+      <find>givevot</find>
+      <find>offline</find>
+      <find>attempting to conn</find>
     </findStrings>
     <replaceStrings>
       <replace>dailies</replace>
@@ -539,6 +544,7 @@
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java" />
       </list>
     </option>
   </component>
@@ -587,6 +593,17 @@
             <path>
               <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
               <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="build" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="build" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
@@ -1098,7 +1115,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47128928" sideWeight="0.5063966" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0069296374" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43369564" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12826087" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28602383" sideWeight="0.48933902" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.125" sideWeight="0.49520257" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1204,7 +1221,7 @@
             <element signature="e#4432#4446#0" expanded="true" />
             <element signature="e#10750#10758#0" expanded="true" />
             <element signature="e#14313#14321#0" expanded="true" />
-            <element signature="e#24728#24736#0" expanded="true" />
+            <element signature="e#24729#24737#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1290,7 +1307,7 @@
             <element signature="e#4432#4446#0" expanded="true" />
             <element signature="e#10750#10758#0" expanded="true" />
             <element signature="e#14313#14321#0" expanded="true" />
-            <element signature="e#24728#24736#0" expanded="true" />
+            <element signature="e#24729#24737#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1369,7 +1386,7 @@
             <element signature="e#4432#4446#0" expanded="true" />
             <element signature="e#10750#10758#0" expanded="true" />
             <element signature="e#14313#14321#0" expanded="true" />
-            <element signature="e#24728#24736#0" expanded="true" />
+            <element signature="e#24729#24737#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1448,7 +1465,7 @@
             <element signature="e#4432#4446#0" expanded="true" />
             <element signature="e#10750#10758#0" expanded="true" />
             <element signature="e#14313#14321#0" expanded="true" />
-            <element signature="e#24728#24736#0" expanded="true" />
+            <element signature="e#24729#24737#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1564,14 +1581,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1887">
-          <caret line="115" column="32" lean-forward="false" selection-start-line="115" selection-start-column="32" selection-end-line="115" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/assets/seriousvote/seriousvote.conf">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -1593,20 +1602,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="157" column="23" lean-forward="false" selection-start-line="157" selection-start-column="23" selection-end-line="157" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="373" column="75" lean-forward="false" selection-start-line="373" selection-start-column="75" selection-end-line="373" selection-end-column="75" />
+        <state relative-caret-position="275">
+          <caret line="576" column="9" lean-forward="true" selection-start-line="576" selection-start-column="9" selection-end-line="576" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#4108#4116#0" expanded="true" />
@@ -1616,8 +1615,26 @@
             <element signature="e#4432#4446#0" expanded="true" />
             <element signature="e#10750#10758#0" expanded="true" />
             <element signature="e#14313#14321#0" expanded="true" />
-            <element signature="e#24728#24736#0" expanded="true" />
+            <element signature="e#24729#24737#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2428">
+          <caret line="157" column="23" lean-forward="false" selection-start-line="157" selection-start-column="23" selection-end-line="157" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="60" column="43" lean-forward="false" selection-start-line="60" selection-start-column="43" selection-end-line="60" selection-end-column="43" />
+          <folding />
         </state>
       </provider>
     </entry>

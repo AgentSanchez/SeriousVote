@@ -588,6 +588,7 @@ public class SeriousVote
             for(int ix = 0; ix < storedVotes.get(playerID).intValue(); ix ++){
                 rewardString = giveVote(username);
             }
+
             broadCastMessage(publicMessage, username,rewardString);
             currentRewards = "";
 
@@ -700,6 +701,7 @@ public class SeriousVote
                 //Write to File
                 if (storedVotes.containsKey(playerID)) {
                     storedVotes.put(playerID, storedVotes.get(playerID).intValue() + 1);
+
                 } else {
                     storedVotes.put(playerID, new Integer(1));
                 }
