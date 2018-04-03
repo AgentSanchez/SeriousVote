@@ -93,70 +93,68 @@ public class Milestones {
     }
     public void checkForDailies(PlayerRecord record, String playerName){
         List<String> commandList = new ArrayList<String>();
-        Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
-        //yearly
-        if(record.getVoteSpree() >= 365 && record.getVoteSpree()%365 == 0){
-            player.sendMessage(Text.of("You voted a year in a row!! WOW that's awesome").toBuilder().color(TextColors.GOLD).build());
-            LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","dailies","yearly", "random")),rootNode);
-            //Choose The Random Rewards from the chosen table
-            for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
-                    .map(ConfigurationNode::getString).collect(Collectors.toList())){
-                commandList.add(sv.parseVariables(command, playerName));
-            }
-            for(String command:sv.yearlySet) {
-                commandList.add(sv.parseVariables(command, playerName));
-            }
-            sv.giveReward(commandList);
-            U.bcast(rootNode.getNode("config","dailies", "yearly","message").getString(),playerName);
+            //yearly
+        if(sv.isOnline(playerName)) {
+            if (record.getVoteSpree() >= 365 && record.getVoteSpree() % 365 == 0) {
+                LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", "yearly", "random")), rootNode);
+                //Choose The Random Rewards from the chosen table
+                for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
+                        .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+                    commandList.add(sv.parseVariables(command, playerName));
+                }
+                for (String command : sv.yearlySet) {
+                    commandList.add(sv.parseVariables(command, playerName));
+                }
+                sv.giveReward(commandList);
+                U.bcast(rootNode.getNode("config", "dailies", "yearly", "message").getString(), playerName);
 
 
+            } else if (record.getVoteSpree() >= 30 && record.getVoteSpree() % 30 == 0) {
+                LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", "monthly", "random")), rootNode);
+                //Choose The Random Rewards from the chosen table
+                for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
+                        .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+                    commandList.add(sv.parseVariables(command, playerName));
+                }
+                for (String command : sv.monthlySet) {
+                    commandList.add(sv.parseVariables(command, playerName));
+                }
+                sv.giveReward(commandList);
+                U.bcast(rootNode.getNode("config", "dailies", "monthly", "message").getString(), playerName);
+
+            } else if (record.getVoteSpree() >= 7 && record.getVoteSpree() % 7 == 0) {
+                LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", "weekly", "random")), rootNode);
+                U.info("Chosing from Table: " + chosenTable.getTableName());
+                //Choose The Random Rewards from the chosen table
+                for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
+                        .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+                    commandList.add(sv.parseVariables(command, playerName));
+                }
+                for (String command : sv.weeklySet) {
+                    commandList.add(sv.parseVariables(command, playerName));
+                }
+                sv.giveReward(commandList);
+                U.bcast(rootNode.getNode("config", "dailies", "weekly", "message").getString(), playerName);
+            }
+
+            int vsa = record.getVoteSpree() + 1;
+            int a = 365 * (vsa / 365 + 1) - vsa;
+            int b = 30 * (vsa / 30 + 1) - vsa;
+            int c = 7 * (vsa / 7 + 1) - vsa;
+            int leastDays = 0;
+            if (a < b && a < c) {
+                leastDays = a;
+            } else if (b < c && b < a) {
+                leastDays = b;
+            } else if (c < b && c < a) {
+                leastDays = c;
+            }
+            leastDays += 1;
+
+            Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
+            player.sendMessage(Text.of("You have " + leastDays + " left until your next dailies reward!").toBuilder().color(TextColors.GOLD).build());
         }
-        else if(record.getVoteSpree() >= 30 && record.getVoteSpree()%30 == 0){
-            player.sendMessage(Text.of("WOOT! 1 straight month of voting!").toBuilder().color(TextColors.GOLD).build());
-            LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","dailies","monthly", "random")),rootNode);
-            //Choose The Random Rewards from the chosen table
-            for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
-                    .map(ConfigurationNode::getString).collect(Collectors.toList())){
-                commandList.add(sv.parseVariables(command, playerName));
-            }
-            for(String command:sv.monthlySet) {
-                commandList.add(sv.parseVariables(command, playerName));
-            }
-            sv.giveReward(commandList);
-            U.bcast(rootNode.getNode("config","dailies", "monthly","message").getString(),playerName);
 
-        }
-        else if(record.getVoteSpree() >= 7 && record.getVoteSpree()%7 == 0){
-            player.sendMessage(Text.of("You've voted 7 days straight! Congrats!!").toBuilder().color(TextColors.GOLD).build());
-            LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","dailies","weekly", "random")),rootNode);
-            U.info("Chosing from Table: " + chosenTable.getTableName());
-            //Choose The Random Rewards from the chosen table
-            for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
-                    .map(ConfigurationNode::getString).collect(Collectors.toList())){
-                commandList.add(sv.parseVariables(command, playerName));
-            }
-            for(String command:sv.weeklySet) {
-                commandList.add(sv.parseVariables(command, playerName));
-            }
-            sv.giveReward(commandList);
-            U.bcast(rootNode.getNode("config","dailies", "weekly","message").getString(),playerName);
-
-        }
-
-        int vsa = record.getVoteSpree()+1;
-        int a = 365*(vsa/365+1)-vsa;
-        int b = 30*(vsa/30+1)-vsa;
-        int c = 7*(vsa/7+1)-vsa;
-        int leastDays = 0;
-        if(a<b && a<c){
-            leastDays = a;
-        } else if(b<c&&b<a){
-            leastDays = b;
-        } else if(c<b&&c<a) {
-            leastDays = c;
-        }
-        leastDays += 1;
-        player.sendMessage(Text.of("You have " + leastDays + " left until your next dailies reward!").toBuilder().color(TextColors.GOLD).build());
 
 
     }

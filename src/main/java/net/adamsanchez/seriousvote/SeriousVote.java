@@ -766,10 +766,11 @@ public class SeriousVote
     //////////////////////////////Utilities/////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
     //returns weather a player is online
-    private boolean isOnline(String username){
+    public boolean isOnline(String username){
         if(getGame().getServer().getPlayer(username).isPresent()) return true;
         return false;
     }
+
 
     private void saveOffline() throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(offlineVotes.toFile());
