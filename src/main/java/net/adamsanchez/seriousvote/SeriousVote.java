@@ -356,6 +356,7 @@ public class SeriousVote
                         } else if (c < b && c < a) {
                             leastDays = c;
                         }
+                        leastDays += 1;
                         src.sendMessage(Text.of("You have to vote " + leastDays + " more days until your next dailies reward."));
                     }
                 }
@@ -563,7 +564,13 @@ public class SeriousVote
 
 
                 if (milestones!=null) {
-                    milestones.addVote(game.getServer().getPlayer(username).get().getUniqueId());
+                    if(isOnline(username)) {
+                        milestones.addVote(game.getServer().getPlayer(username).get().getUniqueId());
+                    } else {
+                        if (userStorage.get().get(username).isPresent()) {
+                            milestones.addVote(userStorage.get().get(username).get().getUniqueId());
+                        }
+                    }
                 }
             }
         }
