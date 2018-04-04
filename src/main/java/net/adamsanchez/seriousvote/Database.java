@@ -96,7 +96,7 @@ public class Database {
         try {
             results = statement().executeQuery(query);
         } catch (SQLException e) {
-            e.printStackTrace();
+            U.error("Error running query!", e);
         }
         return results;
     }
