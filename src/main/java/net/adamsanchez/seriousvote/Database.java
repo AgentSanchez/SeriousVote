@@ -76,7 +76,7 @@ public class Database {
             statement= ds.getConnection().createStatement();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            U.error("Unable to connect --- ", e);
         }
         return statement;
     }
