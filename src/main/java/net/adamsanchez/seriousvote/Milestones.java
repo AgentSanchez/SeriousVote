@@ -214,4 +214,7 @@ public class Milestones {
         this.db = new Database();
     }
 
+    public void shutdown() {
+        this.db.shutdown();
+    }
 }

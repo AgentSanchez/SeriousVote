@@ -40,15 +40,38 @@ public class Database {
 
         url = "jdbc:mysql://"+ host + ":" + port + "/" + dbname + "?useSSL=false";
 
-        HikariConfig config = new HikariConfig();
         config.setJdbcUrl(url + timezoneFix);
         config.setUsername(username);
         config.setPassword(password);
+        config.setMaximumPoolSize(20);
+        config.setMinimumIdle(5);
+        config.setConnectionTimeout(2000);
+        config.setMaxLifetime(6000);
+        config.setIdleTimeout(10000);
+        config.setPoolName("SeriousVote-SQL");
+
+
 
         //Instantiate Pool
         ds = new HikariDataSource(config);
         U.info("Ready for connections");
     }
+
+    public Database(String url, String username, String password){
+        config.setJdbcUrl(url + timezoneFix);
+        config.setUsername(username);
+        config.setPassword(password);
+        config.setMaximumPoolSize(20);
+        config.setMinimumIdle(5);
+        config.setConnectionTimeout(2000);
+        config.setMaxLifetime(6000);
+        config.setIdleTimeout(10000);
+        config.setPoolName("SeriousVote-SQL");
+
+        ds = new HikariDataSource(config);
+        U.info("Ready for connections");
+    }
+
 
 
 
@@ -73,17 +96,19 @@ public class Database {
     public Statement statement(){
         Statement statement = null;
         try{
-            statement= ds.getConnection().createStatement();
+            Connection con = getConnection();
+            statement = con.createStatement();
 
         } catch (SQLException e) {
             U.error("Unable to connect --- ", e);
         }
         return statement;
     }
+
     public PreparedStatement preparedStatement(String string){
         PreparedStatement statement = null;
         try{
-            statement= ds.getConnection().prepareStatement(string);
+            statement = getConnection().prepareStatement(string);
 
         } catch (SQLException e) {
             U.error("Error in DB Connection");
@@ -95,6 +120,7 @@ public class Database {
         ResultSet results = null;
         try {
             results = statement().executeQuery(query);
+            results.getStatement().getConnection().close();
         } catch (SQLException e) {
             U.error("Error running query!", e);
         }

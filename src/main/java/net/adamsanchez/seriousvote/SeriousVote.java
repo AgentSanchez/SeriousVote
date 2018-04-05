@@ -70,7 +70,7 @@ import java.util.stream.Collectors;
  * Created by adam_ on 12/08/16.
  */
 @SuppressWarnings("unused")
-@Plugin(id = "seriousvote", name = "SeriousVote", version = "4.8", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
+@Plugin(id = "seriousvote", name = "SeriousVote", version = "4.8.1", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false) )
 public class SeriousVote
 {
 
@@ -580,6 +580,9 @@ public class SeriousVote
     public void reloadDB(){
         if (dailiesEnabled || milestonesEnabled){
             U.info("Attempting to reload database...");
+            if(milestones != null){
+                milestones.shutdown();
+            }
             milestones = new Milestones(rootNode);
         }
     }

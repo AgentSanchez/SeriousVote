@@ -310,6 +310,15 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.inject/javax.inject/1/a00123f261762a7c5e0ec916a2c7c8298d29c400/javax.inject-1-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Gradle: mysql:mysql-connector-java:8.0.8-dmr">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/8.0.8-dmr/2b1c562057c48d99ac71d1dea7c8ccebe1e43812/mysql-connector-java-8.0.8-dmr.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/8.0.8-dmr/179ac56e8830746c39254c62ffc49c1eb724a840/mysql-connector-java-8.0.8-dmr-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Gradle: ninja.leaping.configurate:configurate-core:3.2">
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ninja.leaping.configurate/configurate-core/3.2/166fb82311704208782b4e1faf99dbeac9c84d00/configurate-core-3.2.jar!/" />

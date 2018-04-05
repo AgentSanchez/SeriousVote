@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'SeriousVote'
-version '4.8'
+version '4.8.1'
 description 'Seriously We Have TO VOTE'
 
 
@@ -23,6 +23,7 @@ dependencies {
     compile 'org.spongepowered:spongeapi:5.0.0'
     compile 'org.spongepowered:spongeapi:6.0.0'
     compile 'com.zaxxer:HikariCP:2.7.2'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.8-dmr'
     compile fileTree(dir: 'lib', include: '*.jar')
 }
 
@@ -31,6 +32,7 @@ shadowJar {
     dependencies {
         //Connection Pooling
         include(dependency("com.zaxxer:HikariCP:2.7.2"))
+        include(dependency("mysql::"))
     }
 }
 
