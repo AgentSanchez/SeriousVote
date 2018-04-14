@@ -8,6 +8,7 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 
 import jdk.nashorn.internal.runtime.regexp.joni.Config;
+import net.adamsanchez.seriousvote.commands.CheckVoteCommand;
 import ninja.leaping.configurate.ConfigurationNode;
 
 import org.slf4j.Logger;
@@ -70,7 +71,7 @@ import java.util.stream.Collectors;
  * Created by adam_ on 12/08/16.
  */
 @SuppressWarnings("unused")
-@Plugin(id = "seriousvote", name = "SeriousVote", version = "4.8.3", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false))
+@Plugin(id = "seriousvote", name = "SeriousVote", version = "4.8.4", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false))
 public class SeriousVote {
 
     @Inject
@@ -260,7 +261,7 @@ public class SeriousVote {
                 .description(Text.of("Check another player's vote record"))
                 .permission("seriousvote.commands.admin.check")
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))))
-                .executor(new SVoteCheckVote())
+                .executor(new CheckVoteCommand())
                 .build();
 
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
@@ -364,40 +365,6 @@ public class SeriousVote {
         }
     }
 
-    public class SVoteCheckVote implements CommandExecutor {
-        public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-            String username = args.<String>getOne("player").get();
-            UUID playerID = userStorage.get().get(username).get().getUniqueId();
-            if (milestones != null && (dailiesEnabled || milestonesEnabled)) {
-                PlayerRecord record = milestones.getRecord(playerID);
-                if (record != null) {
-                    src.sendMessage(Text.of(username + " has a total of " + record.getTotalVotes()
-                            + " votes. They have currently voted " + record.getVoteSpree()
-                            + " days in a row.").toBuilder().color(TextColors.GOLD).build());
-                    if (dailiesEnabled) {
-                        int vsa = record.getVoteSpree() + 1;
-                        int a = 365 * (vsa / 365 + 1) - vsa;
-                        int b = 30 * (vsa / 30 + 1) - vsa;
-                        int c = 7 * (vsa / 7 + 1) - vsa;
-                        int leastDays = 0;
-                        if (a < b && a < c) {
-                            leastDays = a;
-                        } else if (b < c && b < a) {
-                            leastDays = b;
-                        } else if (c < b && c < a) {
-                            leastDays = c;
-                        }
-                        src.sendMessage(Text.of("They have to vote " + leastDays + "More days until their next dailies reward."));
-                    }
-                }
-
-            } else {
-                src.sendMessage(Text.of("It seems that currently all the database modules are currently disabled."));
-            }
-
-            return CommandResult.success();
-        }
-    }
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -809,6 +776,23 @@ public class SeriousVote {
 
     public Game getPublicGame() {
         return this.getGame();
+    }
+
+    public boolean isDailiesEnabled(){
+        return dailiesEnabled;
+    }
+
+    public boolean usingMilestones(){
+        if(milestones != null) return true;
+        return false;
+    }
+
+    public boolean isMilestonesEnabled(){
+        return milestonesEnabled;
+    }
+
+    public Milestones getMilestones(){
+        return milestones;
     }
 
 
