@@ -759,5 +759,8 @@ public class SeriousVote {
         currentRewards = "";
     }
 
+    public ConfigurationNode getRootNode() {
+        return rootNode;
+    }
 
 }
