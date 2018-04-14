@@ -6,6 +6,7 @@ import org.spongepowered.api.service.user.UserStorageService;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -38,6 +39,19 @@ public class U {
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
         return userStorage.get().get(name).get().getUniqueId();
     }
+
+    public static int roll(int chanceMax){
+        //Returns a number within the chance pool bound is lower inclusive upper exclusive
+        int nextInt;
+        if (chanceMax > 0) {
+
+            nextInt = ThreadLocalRandom.current().nextInt(0, chanceMax + 1);
+            U.debug("Rolled a " + nextInt + " out of" + chanceMax + "for table.");
+            return nextInt;
+        }
+        return 0;
+    }
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 

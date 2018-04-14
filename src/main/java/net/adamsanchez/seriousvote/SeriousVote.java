@@ -467,7 +467,7 @@ public class SeriousVote {
     public String chooseTable() {
 
         //compare
-        int roll = this.roll();
+        int roll = U.roll(chanceMax);
         int currentChoice = -1;
         for (int ix = 0; ix < chanceMap.length; ix++) {
 
@@ -547,13 +547,7 @@ public class SeriousVote {
             return "offline";
         }
     }
-
-    //Adds a reward(command) to the queue which is scheduled along with the main thread.
-    //Bypass for Async NuVotifier
-    public boolean queueReward() {
-
-        return true;
-    }
+    
 
     public boolean broadCastMessage(String message, String username) {
         if (message.isEmpty()) return false;
@@ -619,19 +613,6 @@ public class SeriousVote {
         storedVotes = (HashMap<UUID, Integer>) objectInputStream.readObject();
         objectInputStream.close();
     }
-
-    public int roll() {
-        //Returns a number within the chance pool bound is lower inclusive upper exclusive
-        int nextInt;
-        if (chanceMax > 0) {
-
-            nextInt = ThreadLocalRandom.current().nextInt(0, chanceMax + 1);
-            U.debug("Rolled a " + nextInt + " out of" + chanceMax + "for table.");
-            return nextInt;
-        }
-        return 0;
-    }
-
 
     public static SeriousVote getInstance() {
         return instance;
