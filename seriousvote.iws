@@ -6,18 +6,9 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileSnapshots.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Database.class" afterPath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Database.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Milestones.class" afterPath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Milestones.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote.class" afterPath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/reports/tests/test/index.html" afterPath="$PROJECT_DIR$/build/reports/tests/test/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/resources/main/mcmod.info" afterPath="$PROJECT_DIR$/build/resources/main/mcmod.info" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tmp/generateMetadata/mcmod.info" afterPath="$PROJECT_DIR$/build/tmp/generateMetadata/mcmod.info" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/seriousvote.iws" afterPath="$PROJECT_DIR$/seriousvote.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -118,8 +109,8 @@
       <file leaf-file-name="SeriousVote.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="514">
-              <caret line="568" column="5" lean-forward="true" selection-start-line="568" selection-start-column="5" selection-end-line="568" selection-end-column="5" />
+            <state relative-caret-position="276">
+              <caret line="72" column="66" lean-forward="false" selection-start-line="72" selection-start-column="66" selection-end-line="72" selection-end-column="66" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2829#2830#0" expanded="true" />
@@ -137,7 +128,7 @@
       <file leaf-file-name="Milestones.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="705">
+            <state relative-caret-position="719">
               <caret line="217" column="27" lean-forward="false" selection-start-line="217" selection-start-column="27" selection-end-line="217" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -1230,7 +1221,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1239,7 +1229,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47128928" sideWeight="0.5063966" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0069296374" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.019565217" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.019565217" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28602383" sideWeight="0.48933902" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.125" sideWeight="0.49520257" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1731,7 +1721,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
+        <state relative-caret-position="719">
           <caret line="217" column="27" lean-forward="false" selection-start-line="217" selection-start-column="27" selection-end-line="217" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1751,8 +1741,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="514">
-          <caret line="568" column="5" lean-forward="true" selection-start-line="568" selection-start-column="5" selection-end-line="568" selection-end-column="5" />
+        <state relative-caret-position="276">
+          <caret line="72" column="66" lean-forward="false" selection-start-line="72" selection-start-column="66" selection-end-line="72" selection-end-column="66" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2829#2830#0" expanded="true" />
