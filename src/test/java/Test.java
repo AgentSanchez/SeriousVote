@@ -1,7 +1,5 @@
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import net.adamsanchez.seriousvote.Database;
-import net.adamsanchez.seriousvote.PlayerRecord;
+import net.adamsanchez.seriousvote.Data.Database;
+import net.adamsanchez.seriousvote.Data.PlayerRecord;
 
 import java.util.UUID;
 
