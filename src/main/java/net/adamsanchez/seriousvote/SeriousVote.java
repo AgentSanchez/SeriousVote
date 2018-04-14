@@ -8,9 +8,7 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 
 import jdk.nashorn.internal.runtime.regexp.joni.Config;
-import net.adamsanchez.seriousvote.commands.CheckVoteCommand;
-import net.adamsanchez.seriousvote.commands.GiveVoteCommand;
-import net.adamsanchez.seriousvote.commands.ReloadCommand;
+import net.adamsanchez.seriousvote.commands.*;
 import ninja.leaping.configurate.ConfigurationNode;
 
 import org.slf4j.Logger;
@@ -209,7 +207,7 @@ public class SeriousVote {
     @Listener
     public void onServerStart(GameInitializationEvent event) {
         seriousVotePlugin = this;
-        registerCommands();
+        CommandHandler.registerCommands();
         getLogger().info("Serious Vote Has Loaded\n\n\n\n");
 
         if (milestonesEnabled == true | dailiesEnabled == true) {
@@ -234,93 +232,6 @@ public class SeriousVote {
                 .name("SeriousVote-DataBaseReloadExecutor")
                 .submit(plugin);
     }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////COMMAND MANAGER//////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////
-
-    private void registerCommands() {
-
-        //////////////////////COMMAND BUILDERS///////////////////////////////////////////////
-        CommandSpec reload = CommandSpec.builder()
-                .description(Text.of("Reload your configs for seriousvote"))
-                .permission("seriousvote.commands.admin.reload")
-                .executor(new ReloadCommand())
-                .build();
-        CommandSpec vote = CommandSpec.builder()
-                .description(Text.of("Checks to see if it's running"))
-                .permission("seriousvote.commands.vote")
-                .executor(new SVoteVote())
-                .build();
-
-        CommandSpec giveVote = CommandSpec.builder()
-                .description(Text.of("For admins to give a player a vote"))
-                .permission("seriousvote.commands.admin.give")
-                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))))
-                .executor(new GiveVoteCommand())
-                .build();
-        CommandSpec checkVote = CommandSpec.builder()
-                .description(Text.of("Check another player's vote record"))
-                .permission("seriousvote.commands.admin.check")
-                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))))
-                .executor(new CheckVoteCommand())
-                .build();
-
-        //////////////////////////COMMAND REGISTER////////////////////////////////////////////
-        Sponge.getCommandManager().register(this, vote, "vote");
-        Sponge.getCommandManager().register(this, reload, "svreload", "seriousvotereload");
-        Sponge.getCommandManager().register(this, giveVote, "givevote");
-        Sponge.getCommandManager().register(this, checkVote, "checkvote");
-    }
-
-    //////////////////////////////COMMAND EXECUTOR CLASSES/////////////////////////////////////
-
-
-
-
-    public class SVoteVote implements CommandExecutor {
-        public CommandResult execute(CommandSource src, CommandContext args) throws
-                CommandException {
-            src.sendMessage(
-                    TextSerializers.FORMATTING_CODE.deserialize(ConfigUtil.getVoteSiteMessage(rootNode))
-            );
-            ConfigUtil.getVoteSites(rootNode).forEach(site -> {
-                src.sendMessage(convertLink(site));
-            });
-
-            if (milestones != null && (dailiesEnabled || milestonesEnabled)) {
-                if (userStorage.get().get(src.getName()).isPresent()) {
-                    UUID playerID = userStorage.get().get(src.getName()).get().getUniqueId();
-                    PlayerRecord record = milestones.getRecord(playerID);
-                    if (record != null) {
-                        src.sendMessage(Text.of("You have a total of " + record.getTotalVotes()
-                                + " votes. You have currently voted " + record.getVoteSpree()
-                                + " days in a row.").toBuilder().color(TextColors.GOLD).build());
-                        if (dailiesEnabled) {
-                            int vsa = record.getVoteSpree() + 1;
-                            int a = 365 * (vsa / 365 + 1) - vsa;
-                            int b = 30 * (vsa / 30 + 1) - vsa;
-                            int c = 7 * (vsa / 7 + 1) - vsa;
-                            int leastDays = 0;
-                            if (a < b && a < c) {
-                                leastDays = a;
-                            } else if (b < c && b < a) {
-                                leastDays = b;
-                            } else if (c < b && c < a) {
-                                leastDays = c;
-                            }
-                            leastDays += 1;
-                            src.sendMessage(Text.of("You have to vote " + leastDays + " more days until your next dailies reward."));
-                        }
-                    }
-                }
-            }
-            return CommandResult.success();
-
-
-        }
-    }
-
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////
