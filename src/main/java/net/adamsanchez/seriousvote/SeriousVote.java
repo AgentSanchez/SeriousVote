@@ -9,6 +9,8 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import net.adamsanchez.seriousvote.commands.CheckVoteCommand;
+import net.adamsanchez.seriousvote.commands.GiveVoteCommand;
+import net.adamsanchez.seriousvote.commands.ReloadCommand;
 import ninja.leaping.configurate.ConfigurationNode;
 
 import org.slf4j.Logger;
@@ -243,7 +245,7 @@ public class SeriousVote {
         CommandSpec reload = CommandSpec.builder()
                 .description(Text.of("Reload your configs for seriousvote"))
                 .permission("seriousvote.commands.admin.reload")
-                .executor(new SVoteReload())
+                .executor(new ReloadCommand())
                 .build();
         CommandSpec vote = CommandSpec.builder()
                 .description(Text.of("Checks to see if it's running"))
@@ -255,7 +257,7 @@ public class SeriousVote {
                 .description(Text.of("For admins to give a player a vote"))
                 .permission("seriousvote.commands.admin.give")
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))))
-                .executor(new SVoteGiveVote())
+                .executor(new GiveVoteCommand())
                 .build();
         CommandSpec checkVote = CommandSpec.builder()
                 .description(Text.of("Check another player's vote record"))
@@ -272,55 +274,9 @@ public class SeriousVote {
     }
 
     //////////////////////////////COMMAND EXECUTOR CLASSES/////////////////////////////////////
-    public class SVoteReload implements CommandExecutor {
-        public CommandResult execute(CommandSource src, CommandContext args) throws
-                CommandException {
-            if (reloadConfigs()) {
-                src.sendMessage(Text.of("Reloaded successfully!"));
-            } else {
-                src.sendMessage(Text.of("Could not reload properly :( did you break your config?").toBuilder().color(TextColors.RED).build());
-            }
 
 
-            return CommandResult.success();
-        }
-    }
 
-    public class SVoteGiveVote implements CommandExecutor {
-        @Override
-        public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-            String username = args.<String>getOne("player").get();
-            if (isOnline(username)) {
-                Player player = game.getServer().getPlayer(username).get();
-                player.sendMessage(Text.of("An administrator has awarded you a vote!"));
-                giveVote(username);
-                src.sendMessage(Text.of("You have successfully given " + username + " a vote"));
-            } else {
-                UUID playerID;
-
-                if (userStorage.get().get(username).isPresent()) {
-                    playerID = userStorage.get().get(username).get().getUniqueId();
-
-                    //Write to File
-                    if (storedVotes.containsKey(playerID)) {
-                        storedVotes.put(playerID, storedVotes.get(playerID).intValue() + 1);
-                    } else {
-                        storedVotes.put(playerID, new Integer(1));
-                    }
-                    try {
-                        saveOffline();
-                        src.sendMessage(Text.of("You have successfully given " + username + " an offline vote"));
-                    } catch (IOException e) {
-                        U.error("Woah did that just happen? I couldn't save that offline player's vote!", e);
-                    }
-                }
-            }
-
-            currentRewards = "";
-
-            return CommandResult.success();
-        }
-    }
 
     public class SVoteVote implements CommandExecutor {
         public CommandResult execute(CommandSource src, CommandContext args) throws
@@ -736,7 +692,7 @@ public class SeriousVote {
     }
 
 
-    private void saveOffline() throws IOException {
+    public void saveOffline() throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(offlineVotes.toFile());
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
@@ -793,6 +749,14 @@ public class SeriousVote {
 
     public Milestones getMilestones(){
         return milestones;
+    }
+
+    public HashMap<UUID,Integer> getStoredVotes(){
+        return getStoredVotes();
+    }
+
+    public void resetCurrentRewards(){
+        currentRewards = "";
     }
 
 
