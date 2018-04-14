@@ -1,6 +1,6 @@
 package net.adamsanchez.seriousvote.commands;
 
-import net.adamsanchez.seriousvote.PlayerRecord;
+import net.adamsanchez.seriousvote.Data.PlayerRecord;
 import net.adamsanchez.seriousvote.SeriousVote;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;

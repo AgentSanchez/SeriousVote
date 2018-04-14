@@ -29,11 +29,8 @@ public class GiveVoteCommand implements CommandExecutor {
             sv.giveVote(username);
             src.sendMessage(Text.of("You have successfully given " + username + " a vote"));
         } else {
-            UUID playerID;
-
-            if (sv.getUserStorage().get().get(username).isPresent()) {
-                playerID = sv.getUserStorage().get().get(username).get().getUniqueId();
-
+            UUID playerID = U.getIdFromName(username);
+            if (playerID != null) {
                 //Write to File
                 if (sv.getStoredVotes().containsKey(playerID)) {
                     sv.getStoredVotes().put(playerID, sv.getStoredVotes().get(playerID).intValue() + 1);

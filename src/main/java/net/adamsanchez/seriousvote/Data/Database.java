@@ -1,7 +1,9 @@
-package net.adamsanchez.seriousvote;
+package net.adamsanchez.seriousvote.Data;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.U;
 
 import java.sql.*;
 import java.util.*;

@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.user.UserStorageService;
 
 import java.util.Optional;
@@ -35,9 +36,13 @@ public class U {
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
         return userStorage.get().get(player).get().getName();
     }
-    public static UUID getUUID(String name){
+    public static UUID getIdFromName(String name){
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
-        return userStorage.get().get(name).get().getUniqueId();
+        if((userStorage.get().get(name).isPresent())){
+            return userStorage.get().get(name).get().getUniqueId();
+        } else {
+            return null;
+        }
     }
 
     public static int roll(int chanceMax){

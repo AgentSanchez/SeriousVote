@@ -1,17 +1,15 @@
-package net.adamsanchez.seriousvote;
+package net.adamsanchez.seriousvote.Data;
 
+import net.adamsanchez.seriousvote.*;
 import ninja.leaping.configurate.ConfigurationNode;
 
 
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
-import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -70,8 +68,8 @@ public class Milestones {
         //Check based on amount of votes given.
         U.info("Player has " + record.getTotalVotes() + " votes currently.");
         List<String> commandList = new ArrayList<String>();
-        if(sv.milestonesUsed.length <1)U.error("You have no enabled custom milestones or your config is broken :(");
-        if(IntStream.of(sv.milestonesUsed).anyMatch(x -> x == record.getTotalVotes())){
+        if(ConfigUtil.getEnabledMilestones(rootNode).length <1)U.error("You have no enabled custom milestones or your config is broken :(");
+        if(IntStream.of(ConfigUtil.getEnabledMilestones(rootNode)).anyMatch(x -> x == record.getTotalVotes())){
             LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","milestones","records", ""+ record.getTotalVotes(), "random" )),rootNode);
             //Choose The Random Rewards from the chosen table
             for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
@@ -187,12 +185,12 @@ public class Milestones {
                 record.setTotalVotes(record.getTotalVotes() + 1);
                 updateRecord(record);
 
-                if(sv.dailiesEnabled) checkForDailies(record, U.getName(player));
-                if(sv.milestonesEnabled)checkForMilestones(record, U.getName(player));
+                if(sv.isDailiesEnabled()) checkForDailies(record, U.getName(player));
+                if(sv.isMilestonesEnabled())checkForMilestones(record, U.getName(player));
                 return;
             }
             record.setTotalVotes(record.getTotalVotes() + 1);
-            if(sv.milestonesEnabled)checkForMilestones(record, U.getName(player));
+            if(sv.isMilestonesEnabled())checkForMilestones(record, U.getName(player));
 
             updateRecord(record);
 

@@ -1,13 +1,11 @@
 package net.adamsanchez.seriousvote;
 
-import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.vexsoftware.votifier.model.Vote;
-import com.vexsoftware.votifier.sponge.VotifierPlugin;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
+import net.adamsanchez.seriousvote.Data.Milestones;
 import net.adamsanchez.seriousvote.commands.*;
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -15,17 +13,6 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
-
-import org.spongepowered.api.command.CommandException;
-import org.spongepowered.api.command.CommandManager;
-import org.spongepowered.api.command.CommandResult;
-import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.args.GenericArguments;
-import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.command.spec.CommandSpec;
-
-import org.spongepowered.api.entity.living.player.Player;
 
 
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
@@ -56,7 +43,6 @@ import java.nio.file.Path;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.text.action.TextActions;
-import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 
@@ -273,10 +259,8 @@ public class SeriousVote {
         milestonesEnabled = ConfigUtil.getMilestonesEnabled(rootNode);
         dailiesEnabled = ConfigUtil.getDailiesEnabled(rootNode);
 
-
         reloadDB();
-
-
+        
         /////////Load Up Milestones/////////
         monthlySet = ConfigUtil.getMonthlySetCommands(rootNode);
         yearlySet = ConfigUtil.getYearlySetCommands(rootNode);
@@ -509,11 +493,8 @@ public class SeriousVote {
 
             return currentRewards;
         } else {
-            UUID playerID;
-
-            if (userStorage.get().get(username).isPresent()) {
-                playerID = userStorage.get().get(username).get().getUniqueId();
-
+            UUID playerID = U.getIdFromName(username);
+            if (playerID != null) {
                 //Write to File
                 if (storedVotes.containsKey(playerID)) {
                     storedVotes.put(playerID, storedVotes.get(playerID).intValue() + 1);
