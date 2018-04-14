@@ -260,7 +260,7 @@ public class SeriousVote {
         dailiesEnabled = ConfigUtil.getDailiesEnabled(rootNode);
 
         reloadDB();
-        
+
         /////////Load Up Milestones/////////
         monthlySet = ConfigUtil.getMonthlySetCommands(rootNode);
         yearlySet = ConfigUtil.getYearlySetCommands(rootNode);
