@@ -44,13 +44,10 @@ public class Database {
         config.setUsername(username);
         config.setPassword(password);
         config.setMaximumPoolSize(20);
-        config.setMinimumIdle(5);
-        config.setConnectionTimeout(2000);
-        config.setMaxLifetime(6000);
-        config.setIdleTimeout(10000);
+        config.setMinimumIdle(20);
+        config.setConnectionTimeout(10000);
+        config.setMaxLifetime(1770000);
         config.setPoolName("SeriousVote-SQL");
-
-
 
         //Instantiate Pool
         ds = new HikariDataSource(config);
@@ -62,10 +59,9 @@ public class Database {
         config.setUsername(username);
         config.setPassword(password);
         config.setMaximumPoolSize(20);
-        config.setMinimumIdle(5);
-        config.setConnectionTimeout(2000);
-        config.setMaxLifetime(6000);
-        config.setIdleTimeout(10000);
+        config.setMinimumIdle(20);
+        config.setConnectionTimeout(10000);
+        config.setMaxLifetime(1770000);
         config.setPoolName("SeriousVote-SQL");
 
         ds = new HikariDataSource(config);
@@ -169,6 +165,7 @@ public class Database {
             statement.setInt(3, voteSpree);
             statement.setDate(4, lastVote);
             statement.execute();
+            statement.getConnection().close();
         } catch (SQLException e) {
             U.error("Error in trying to update player vote record!");
         }
@@ -184,6 +181,7 @@ public class Database {
 
         try {
             statement().executeUpdate(table);
+            statement().getConnection().close();
         } catch (SQLException e) {
             U.error("Error Creating SQL TABLE-- CHECK YOUR DATA CONFIG", e);
         }
