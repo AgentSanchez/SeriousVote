@@ -148,9 +148,6 @@ public class SeriousVote {
     private int chanceTotal, chanceMax, chanceMin = 0;
     private int[] chanceMap;
 
-    //For NV Async Fix
-
-
     @Listener
     public void onInitialization(GamePreInitializationEvent event) {
         instance = this;
@@ -198,7 +195,6 @@ public class SeriousVote {
 
     }
 
-
     @Listener
     public void onPostInitalization(GamePostInitializationEvent event) {
         instance = this;
@@ -232,7 +228,6 @@ public class SeriousVote {
                 .name("SeriousVote-DataBaseReloadExecutor")
                 .submit(plugin);
     }
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////CONFIGURATION METHODS//////////////////////////////////////
@@ -357,8 +352,6 @@ public class SeriousVote {
         }
 
     }
-
-
     ///////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////LISTENERS///////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -442,7 +435,6 @@ public class SeriousVote {
     //////////////////////////////ACTION METHODS///////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
     public void executeCommands() {
-
         for (String command : commandQueue) {
             game.getCommandManager().process(game.getServer().getConsole(), command);
         }
@@ -450,29 +442,20 @@ public class SeriousVote {
 
     }
 
-
     public boolean giveReward(List<String> commands) {
         //Execute Commands
-
         for (String command : commands) {
-
             game.getCommandManager().process(game.getServer().getConsole(), command);
-
         }
-
         return true;
-
     }
 
     public String chooseTable() {
-
         //compare
         int roll = U.roll(chanceMax);
         int currentChoice = -1;
         for (int ix = 0; ix < chanceMap.length; ix++) {
-
             if (roll <= chanceMap[ix]) {
-
                 currentChoice = ix;
                 break;
             }
@@ -547,7 +530,7 @@ public class SeriousVote {
             return "offline";
         }
     }
-    
+
 
     public boolean broadCastMessage(String message, String username) {
         if (message.isEmpty()) return false;
@@ -592,15 +575,12 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////////////////////////////////////////
     //returns weather a player is online
     public boolean isOnline(String username) {
-        if (getGame().getServer().getPlayer(username).isPresent()) return true;
-        return false;
+        return getGame().getServer().getPlayer(username).isPresent() ? true : false;
     }
-
 
     public void saveOffline() throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(offlineVotes.toFile());
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-
         objectOutputStream.writeObject(storedVotes);
         objectOutputStream.close();
 
