@@ -127,6 +127,7 @@ public class SeriousVote {
     List<String> setCommands;
     String currentRewards;
     String publicMessage;
+    boolean debug = false;
     boolean hasLoot = false;
     boolean isNoRandom = false;
     boolean bypassOffline = false;
@@ -561,6 +562,15 @@ public class SeriousVote {
 
     public boolean isMilestonesEnabled() {
         return milestonesEnabled;
+    }
+
+    public boolean isDebug(){
+        return debug;
+    }
+
+    public boolean toggleDebug(){
+        debug = !debug;
+        return debug;
     }
 
     public Milestones getMilestones() {

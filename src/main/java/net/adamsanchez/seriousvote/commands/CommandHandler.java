@@ -40,8 +40,13 @@ public class CommandHandler {
 
         CommandSpec version = CommandSpec.builder()
                 .description(Text.of("SeriousVote Version"))
-                .permission("seriousvote.commands.admin.check")
+                .permission("seriousvote.commands.admin.version")
                 .executor(new VersionCommand())
+                .build();
+        CommandSpec debugMode = CommandSpec.builder()
+                .description(Text.of("Toggles Debug Mode - Off by default"))
+                .permission("seriousvote.commands.admin.debug")
+                .executor(new DebugCommand())
                 .build();
 
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
@@ -50,6 +55,7 @@ public class CommandHandler {
         Sponge.getCommandManager().register(SeriousVote.getInstance(), giveVote, "givevote");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), checkVote, "checkvote");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), version, "svversion","seriousvoteversion", "version");
+        Sponge.getCommandManager().register(SeriousVote.getInstance(), debugMode, "svdebug","seriousvotedebug");
 
     }
 }
