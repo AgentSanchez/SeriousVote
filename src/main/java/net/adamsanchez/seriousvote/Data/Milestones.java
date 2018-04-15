@@ -41,11 +41,6 @@ public class Milestones {
         rootNode = node;
     }
 
-    public void updateNode(ConfigurationNode node){
-        rootNode = node;
-    }
-
-
     public boolean updateRecord(UUID player, int totalVotes, int voteSpree, Date lastVote){
         PlayerRecord record = new PlayerRecord(player, totalVotes, voteSpree, lastVote);
         db.updatePlayer(record);
