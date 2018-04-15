@@ -25,6 +25,7 @@ dependencies {
     compile 'com.zaxxer:HikariCP:2.7.2'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.8-dmr'
     compile fileTree(dir: 'lib', include: '*.jar')
+    testCompile 'junit:junit:4.12'
 }
 
 shadowJar {

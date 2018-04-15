@@ -1,6 +1,7 @@
 package net.adamsanchez.seriousvote.Data;
 
 import net.adamsanchez.seriousvote.*;
+import net.adamsanchez.seriousvote.utils.CC;
 import net.adamsanchez.seriousvote.utils.U;
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -136,20 +137,7 @@ public class Milestones {
                 U.bcast(rootNode.getNode("config", "dailies", "weekly", "message").getString(), playerName);
             }
 
-            int vsa = record.getVoteSpree() + 1;
-            int a = 365 * (vsa / 365 + 1) - vsa;
-            int b = 30 * (vsa / 30 + 1) - vsa;
-            int c = 7 * (vsa / 7 + 1) - vsa;
-            int leastDays = 0;
-            if (a < b && a < c) {
-                leastDays = a;
-            } else if (b < c && b < a) {
-                leastDays = b;
-            } else if (c < b && c < a) {
-                leastDays = c;
-            }
-            leastDays += 1;
-
+            int leastDays = getRemainingDays(record.getVoteSpree());
             Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
             player.sendMessage(Text.of("You have " + leastDays + " left until your next dailies reward!").toBuilder().color(TextColors.GOLD).build());
         }
@@ -208,6 +196,28 @@ public class Milestones {
             updateRecord(record);
             return record;
     }
+
+    public static int getRemainingDays(int currentSpree){
+        //System.out.println("INPUT: " + CC.BLUE + currentSpree + CC.RESET);
+        int a = 365 * (currentSpree / 365 + 1) - currentSpree;
+        int b = 30 * (currentSpree / 30 + 1) - currentSpree;
+        int c = 7 * (currentSpree / 7 + 1) - currentSpree;
+        //System.out.println("A" +a + " B" + b + " C" + c);
+        int leastDays = -1;
+        if (a < b && a < c) {
+            leastDays = a;
+            System.out.println("1");
+        } else if (b < c && b < a) {
+            leastDays = b;
+            System.out.println("2");
+        } else if (c < b && c < a) {
+            leastDays = c;
+            //System.out.println("3");
+        }
+        //System.out.println("     -RESULT: " + CC.GREEN + leastDays + CC.RESET);
+        return leastDays;
+    }
+
 
     public void reloadDB(){
         this.db = new Database();
