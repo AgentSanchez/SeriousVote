@@ -9,6 +9,7 @@ import net.adamsanchez.seriousvote.Data.Milestones;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.utils.CC;
+import net.adamsanchez.seriousvote.utils.ConfigUtil;
 import net.adamsanchez.seriousvote.utils.U;
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -175,7 +176,7 @@ public class SeriousVote {
                 return;
             }
         }
-        
+
         currentRewards = "";
 
         reloadConfigs();

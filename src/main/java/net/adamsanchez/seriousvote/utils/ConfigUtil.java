@@ -1,4 +1,4 @@
-package net.adamsanchez.seriousvote;
+package net.adamsanchez.seriousvote.utils;
 
 import com.google.common.collect.Iterables;
 import jdk.nashorn.internal.runtime.regexp.joni.Config;

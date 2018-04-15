@@ -1,7 +1,7 @@
 package net.adamsanchez.seriousvote.Data;
 
 import net.adamsanchez.seriousvote.*;
-import net.adamsanchez.seriousvote.utils.CC;
+import net.adamsanchez.seriousvote.utils.ConfigUtil;
 import net.adamsanchez.seriousvote.utils.U;
 import ninja.leaping.configurate.ConfigurationNode;
 
