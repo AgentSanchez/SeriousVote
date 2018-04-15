@@ -2,9 +2,14 @@ package net.adamsanchez.seriousvote.utils;
 
 import com.google.common.collect.Iterables;
 import jdk.nashorn.internal.runtime.regexp.joni.Config;
+import net.adamsanchez.seriousvote.SeriousVote;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import org.spongepowered.api.asset.Asset;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -72,17 +77,7 @@ public class ConfigUtil {
         return node.getNode("config","dailies","enabled").getBoolean();
     }
 
-
-
-
-
-
-
-
-
-
     ////////////////////////////////////////////////////////////////////////////////////////////
-
 
     public static List<String> getSetCommands(ConfigurationNode node) {
         return node.getNode("config","vote-reward","set").getChildrenList().stream()
@@ -105,6 +100,28 @@ public class ConfigUtil {
 
     public static String getVoteSiteMessage(ConfigurationNode node){
         return node.getNode("config","vote-sites-message").getString();
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    public static void initConfig(Path pluginDirectory){
+        Asset configAsset = SeriousVote.getInstance().getPlugin().getAsset("seriousvote.conf").orElse(null);
+        if (Files.notExists(pluginDirectory)) {
+            if (configAsset != null) {
+                try {
+                    SeriousVote.getInstance().getLogger().info("Copying Default Config");
+                    SeriousVote.getInstance().getLogger().info(configAsset.readString());
+                    SeriousVote.getInstance().getLogger().info(pluginDirectory.toString());
+                    configAsset.copyToFile(pluginDirectory);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    SeriousVote.getInstance().getLogger().error("Could not unpack the default config from the jar! Maybe your Minecraft server doesn't have write permissions?");
+                    return;
+                }
+            } else {
+                SeriousVote.getInstance().getLogger().error("Could not find the default config file in the jar! Did you open the jar and delete it?");
+                return;
+            }
+        }
     }
 
 

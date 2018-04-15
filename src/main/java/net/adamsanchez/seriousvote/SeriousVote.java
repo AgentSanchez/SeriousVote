@@ -75,7 +75,7 @@ public class SeriousVote {
     @Inject
     private PluginContainer plugin;
 
-    private PluginContainer getPlugin() {
+    public PluginContainer getPlugin() {
         return this.plugin;
     }
 
@@ -154,32 +154,10 @@ public class SeriousVote {
                 + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown"));
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
 
-
-        Asset offlineVoteAsset = plugin.getAsset("offlinevotes.dat").orElse(null);
         offlineVotes = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
         OfflineHandler.initOfflineStorage();
-
-        Asset configAsset = plugin.getAsset("seriousvote.conf").orElse(null);
-        if (Files.notExists(defaultConfig)) {
-            if (configAsset != null) {
-                try {
-                    getLogger().info("Copying Default Config");
-                    getLogger().info(configAsset.readString());
-                    getLogger().info(defaultConfig.toString());
-                    configAsset.copyToFile(defaultConfig);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    getLogger().error("Could not unpack the default config from the jar! Maybe your Minecraft server doesn't have write permissions?");
-                    return;
-                }
-            } else {
-                getLogger().error("Could not find the default config file in the jar! Did you open the jar and delete it?");
-                return;
-            }
-        }
-
+        ConfigUtil.initConfig(defaultConfig);
         currentRewards = "";
-
         reloadConfigs();
 
     }
@@ -200,8 +178,6 @@ public class SeriousVote {
         } else {
             milestones = null;
         }
-
-
     }
 
     @Listener

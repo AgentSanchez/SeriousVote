@@ -1,6 +1,7 @@
 package net.adamsanchez.seriousvote.Data;
 
 import net.adamsanchez.seriousvote.SeriousVote;
+import org.spongepowered.api.asset.Asset;
 
 import java.io.*;
 import java.nio.file.Files;
