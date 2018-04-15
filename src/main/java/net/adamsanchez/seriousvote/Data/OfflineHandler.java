@@ -3,6 +3,7 @@ package net.adamsanchez.seriousvote.Data;
 import net.adamsanchez.seriousvote.SeriousVote;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -10,6 +11,17 @@ import java.util.UUID;
  * Created by Adam Sanchez on 4/15/2018.
  */
 public class OfflineHandler {
+
+    public  static void initOfflineStorage(){
+        if (Files.notExists(SeriousVote.getInstance().getOfflineVotes())) {
+            try {
+                OfflineHandler.saveOffline();
+            } catch (IOException e) {
+                SeriousVote.getInstance().getLogger().error("Could Not Initialize the offlinevotes file! What did you do with it");
+                //getLogger().error(e.toString());
+            }
+        }
+    }
 
     public static void saveOffline() throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(SeriousVote.getInstance().getOfflineVotes().toFile());

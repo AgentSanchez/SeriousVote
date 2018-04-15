@@ -175,17 +175,7 @@ public class SeriousVote {
                 return;
             }
         }
-
-        if (Files.notExists(offlineVotes)) {
-            try {
-                OfflineHandler.saveOffline();
-            } catch (IOException e) {
-                getLogger().error("Could Not Initialize the offlinevotes file! What did you do with it");
-                //getLogger().error(e.toString());
-            }
-        }
-
-
+        
         currentRewards = "";
 
         reloadConfigs();
