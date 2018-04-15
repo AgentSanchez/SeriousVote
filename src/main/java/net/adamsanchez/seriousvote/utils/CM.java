@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Created by adam_ on 4/26/2017.
  */
-public class ConfigUtil {
+public class CM {
 
 
     public static ConfigurationNode RootNode;

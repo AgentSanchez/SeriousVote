@@ -1,7 +1,7 @@
 package net.adamsanchez.seriousvote.Data;
 
 import net.adamsanchez.seriousvote.*;
-import net.adamsanchez.seriousvote.utils.ConfigUtil;
+import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.utils.U;
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -70,8 +70,8 @@ public class Milestones {
         //Check based on amount of votes given.
         U.info("Player has " + record.getTotalVotes() + " votes currently.");
         List<String> commandList = new ArrayList<String>();
-        if(ConfigUtil.getEnabledMilestones(rootNode).length <1)U.error("You have no enabled custom milestones or your config is broken :(");
-        if(IntStream.of(ConfigUtil.getEnabledMilestones(rootNode)).anyMatch(x -> x == record.getTotalVotes())){
+        if(CM.getEnabledMilestones(rootNode).length <1)U.error("You have no enabled custom milestones or your config is broken :(");
+        if(IntStream.of(CM.getEnabledMilestones(rootNode)).anyMatch(x -> x == record.getTotalVotes())){
             LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","milestones","records", ""+ record.getTotalVotes(), "random" )),rootNode);
             //Choose The Random Rewards from the chosen table
             for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()

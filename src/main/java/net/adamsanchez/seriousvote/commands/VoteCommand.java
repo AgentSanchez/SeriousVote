@@ -1,6 +1,6 @@
 package net.adamsanchez.seriousvote.commands;
 
-import net.adamsanchez.seriousvote.utils.ConfigUtil;
+import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.Data.PlayerRecord;
 import net.adamsanchez.seriousvote.SeriousVote;
 import org.spongepowered.api.command.CommandException;
@@ -23,9 +23,9 @@ public class VoteCommand implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws
             CommandException {
         src.sendMessage(
-                TextSerializers.FORMATTING_CODE.deserialize(ConfigUtil.getVoteSiteMessage(sv.getRootNode()))
+                TextSerializers.FORMATTING_CODE.deserialize(CM.getVoteSiteMessage(sv.getRootNode()))
         );
-        ConfigUtil.getVoteSites(sv.getRootNode()).forEach(site -> {
+        CM.getVoteSites(sv.getRootNode()).forEach(site -> {
             src.sendMessage(sv.convertLink(site));
         });
 

@@ -9,7 +9,7 @@ import net.adamsanchez.seriousvote.Data.Milestones;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.utils.CC;
-import net.adamsanchez.seriousvote.utils.ConfigUtil;
+import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.utils.U;
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -17,8 +17,6 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Platform;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.asset.Asset;
-
 
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
@@ -42,7 +40,6 @@ import org.spongepowered.api.text.Text;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -156,7 +153,7 @@ public class SeriousVote {
 
         offlineVotes = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
         OfflineHandler.initOfflineStorage();
-        ConfigUtil.initConfig(defaultConfig);
+        CM.initConfig(defaultConfig);
         currentRewards = "";
         reloadConfigs();
 
@@ -208,12 +205,12 @@ public class SeriousVote {
         }
 
         //update variables and other instantiations
-        publicMessage = ConfigUtil.getPublicMessage(rootNode);
+        publicMessage = CM.getPublicMessage(rootNode);
         randomRewardsNumber = getRewardsNumber(rootNode);
         updateLoot(rootNode);
-        setCommands = ConfigUtil.getSetCommands(rootNode);
+        setCommands = CM.getSetCommands(rootNode);
         U.debug("Here's your commands");
-        for (String ix : ConfigUtil.getRandomCommands(rootNode)) {
+        for (String ix : CM.getRandomCommands(rootNode)) {
             U.debug(ix);
         }
 
@@ -229,22 +226,22 @@ public class SeriousVote {
         }
 
         //Reload DB configuration
-        databaseHostname = ConfigUtil.getDatabaseHostname(rootNode);
-        databaseName = ConfigUtil.getDatabaseName(rootNode);
-        databasePassword = ConfigUtil.getDatabasePassword(rootNode);
-        databasePrefix = ConfigUtil.getDatabasePrefix(rootNode);
-        databaseUsername = ConfigUtil.getDatabaseUsername(rootNode);
-        databasePort = ConfigUtil.getDatabasePort(rootNode);
-        milestonesEnabled = ConfigUtil.getMilestonesEnabled(rootNode);
-        dailiesEnabled = ConfigUtil.getDailiesEnabled(rootNode);
+        databaseHostname = CM.getDatabaseHostname(rootNode);
+        databaseName = CM.getDatabaseName(rootNode);
+        databasePassword = CM.getDatabasePassword(rootNode);
+        databasePrefix = CM.getDatabasePrefix(rootNode);
+        databaseUsername = CM.getDatabaseUsername(rootNode);
+        databasePort = CM.getDatabasePort(rootNode);
+        milestonesEnabled = CM.getMilestonesEnabled(rootNode);
+        dailiesEnabled = CM.getDailiesEnabled(rootNode);
 
         reloadDB();
 
         /////////Load Up Milestones/////////
-        monthlySet = ConfigUtil.getMonthlySetCommands(rootNode);
-        yearlySet = ConfigUtil.getYearlySetCommands(rootNode);
-        weeklySet = ConfigUtil.getWeeklySetCommands(rootNode);
-        milestonesUsed = ConfigUtil.getEnabledMilestones(rootNode);
+        monthlySet = CM.getMonthlySetCommands(rootNode);
+        yearlySet = CM.getYearlySetCommands(rootNode);
+        weeklySet = CM.getWeeklySetCommands(rootNode);
+        milestonesUsed = CM.getEnabledMilestones(rootNode);
 
 
         return true;
