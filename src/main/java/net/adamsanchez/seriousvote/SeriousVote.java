@@ -6,6 +6,7 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 
 import net.adamsanchez.seriousvote.Data.Milestones;
+import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.utils.CC;
 import net.adamsanchez.seriousvote.utils.U;
@@ -130,6 +131,7 @@ public class SeriousVote {
     String publicMessage;
     boolean hasLoot = false;
     boolean isNoRandom = false;
+    boolean bypassOffline = false;
     private static Optional<UserStorageService> userStorage;
     //////////////////////////////////////////////////////////////////
 
@@ -176,7 +178,7 @@ public class SeriousVote {
 
         if (Files.notExists(offlineVotes)) {
             try {
-                saveOffline();
+                OfflineHandler.saveOffline();
             } catch (IOException e) {
                 getLogger().error("Could Not Initialize the offlinevotes file! What did you do with it");
                 //getLogger().error(e.toString());
@@ -251,7 +253,7 @@ public class SeriousVote {
         //Load Offline votes
         U.info(CC.YELLOW + "Trying to load offline player votes from ... " + offlineVotes.toString());
         try {
-            loadOffline();
+            storedVotes = OfflineHandler.loadOffline();
         } catch (IOException e) {
             U.error(CC.RED + "ahahahahaha We Couldn't load up the stored offline player votes", e);
         } catch (ClassNotFoundException e) {
@@ -370,7 +372,7 @@ public class SeriousVote {
                 String username = vote.getUsername();
                 U.info("Vote Registered From " + vote.getServiceName() + " for " + username);
                 String currentRewards = giveVote(username);
-                if (!currentRewards.equals("offline")) {
+                if (!currentRewards.equals("offline") || bypassOffline) {
                     broadCastMessage(publicMessage, username, currentRewards);
                 }
 
@@ -416,7 +418,7 @@ public class SeriousVote {
 
             storedVotes.remove(playerID);
             try {
-                saveOffline();
+                OfflineHandler.saveOffline();
             } catch (IOException e) {
                 U.error("Error while saving offline votes file", e);
             }
@@ -513,7 +515,7 @@ public class SeriousVote {
                     storedVotes.put(playerID, new Integer(1));
                 }
                 try {
-                    saveOffline();
+                    OfflineHandler.saveOffline();
                 } catch (IOException e) {
                     U.error("Woah did that just happen? I couldn't save that offline player's vote!", e);
                 }
@@ -569,21 +571,7 @@ public class SeriousVote {
         return getGame().getServer().getPlayer(username).isPresent() ? true : false;
     }
 
-    public void saveOffline() throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(offlineVotes.toFile());
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-        objectOutputStream.writeObject(storedVotes);
-        objectOutputStream.close();
 
-    }
-
-    private void loadOffline() throws IOException, ClassNotFoundException {
-        FileInputStream fileInputStream = new FileInputStream(offlineVotes.toFile());
-        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-
-        storedVotes = (HashMap<UUID, Integer>) objectInputStream.readObject();
-        objectInputStream.close();
-    }
 
     public static SeriousVote getInstance() {
         return instance;
@@ -616,6 +604,10 @@ public class SeriousVote {
 
     public HashMap<UUID, Integer> getStoredVotes() {
         return getStoredVotes();
+    }
+
+    public Path getOfflineVotes(){
+        return offlineVotes;
     }
 
     public void resetCurrentRewards() {
