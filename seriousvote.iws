@@ -2,14 +2,35 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fda961bb-3405-49cd-8a4c-5e16db308023" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/CC.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Database.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/Milestones.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/PlayerRecord.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote$SVoteCheckVote.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote$SVoteGiveVote.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote$SVoteReload.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote$SVoteVote.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/U.class" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/U.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/U.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileSnapshots.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote_main.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" afterPath="$PROJECT_DIR$/.idea/modules/seriousvote_test.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/LootTable.class" afterPath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/LootTable.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote.class" afterPath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/SeriousVote.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/TableManager.class" afterPath="$PROJECT_DIR$/build/classes/main/net/adamsanchez/seriousvote/TableManager.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/test/Test.class" afterPath="$PROJECT_DIR$/build/classes/test/Test.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/reports/tests/test/index.html" afterPath="$PROJECT_DIR$/build/reports/tests/test/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/resources/main/mcmod.info" afterPath="$PROJECT_DIR$/build/resources/main/mcmod.info" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tmp/generateMetadata/mcmod.info" afterPath="$PROJECT_DIR$/build/tmp/generateMetadata/mcmod.info" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/seriousvote.iws" afterPath="$PROJECT_DIR$/seriousvote.iws" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Database.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Database.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Milestones.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Milestones.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/GiveVoteCommand.java" afterPath="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/GiveVoteCommand.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -106,79 +127,92 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SeriousVote.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SeriousVote.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="72" column="66" lean-forward="false" selection-start-line="72" selection-start-column="66" selection-end-line="72" selection-end-column="66" />
+            <state relative-caret-position="1445">
+              <caret line="144" column="66" lean-forward="false" selection-start-line="144" selection-start-column="66" selection-end-line="144" selection-end-column="66" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2829#2830#0" expanded="true" />
-                <element signature="e#2953#2954#0" expanded="true" />
-                <element signature="e#6839#6840#0" expanded="true" />
-                <element signature="e#29319#29320#0" expanded="true" />
-                <element signature="e#31461#31462#0" expanded="true" />
-                <element signature="e#31559#31560#0" expanded="true" />
-                <element signature="e#31628#31629#0" expanded="true" />
+                <element signature="method#getRewardsNumber#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#generateRandomRewardNumber#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#onVote#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#processVotes#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#reloadDB#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#onPlayerJoin#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#executeCommands#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#giveReward#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#chooseTable#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#giveVote#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#broadCastMessage#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#broadCastMessage#1;class#SeriousVote#0" expanded="false" />
+                <element signature="method#convertLink#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#parseVariables#1;class#SeriousVote#0" expanded="false" />
+                <element signature="method#isOnline#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#saveOffline#0;class#SeriousVote#0" expanded="false" />
+                <element signature="method#loadOffline#0;class#SeriousVote#0" expanded="false" />
+                <element signature="e#22973#22974#0" expanded="true" />
+                <element signature="e#23010#23011#0" expanded="true" />
+                <element signature="method#usingMilestones#0;class#SeriousVote#0" expanded="false" />
+                <element signature="e#23167#23168#0" expanded="true" />
+                <element signature="e#23207#23208#0" expanded="true" />
+                <element signature="e#23248#23249#0" expanded="true" />
+                <element signature="e#23281#23282#0" expanded="true" />
+                <element signature="e#23335#23336#0" expanded="true" />
+                <element signature="e#23374#23375#0" expanded="true" />
+                <element signature="e#23415#23416#0" expanded="true" />
+                <element signature="e#23450#23451#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Milestones.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
+      <file leaf-file-name="ConfigUtil.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/ConfigUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="719">
-              <caret line="217" column="27" lean-forward="false" selection-start-line="217" selection-start-column="27" selection-end-line="217" selection-end-column="27" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#9677#9678#0" expanded="true" />
-                <element signature="e#9711#9712#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="14" lean-forward="false" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+            <state relative-caret-position="391">
+              <caret line="33" column="5" lean-forward="false" selection-start-line="33" selection-start-column="5" selection-end-line="33" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Database.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java">
+      <file leaf-file-name="LootTable.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="765">
-              <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+            <state relative-caret-position="1071">
+              <caret line="68" column="31" lean-forward="false" selection-start-line="68" selection-start-column="31" selection-end-line="68" selection-end-column="31" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Test.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/Test.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="23" lean-forward="false" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="U.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/U.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/U.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-              <folding>
-                <element signature="e#377#378#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="493">
+              <caret line="42" column="9" lean-forward="false" selection-start-line="42" selection-start-column="9" selection-end-line="42" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CC.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/CC.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2006">
+              <caret line="118" column="87" lean-forward="false" selection-start-line="118" selection-start-column="87" selection-end-line="118" selection-end-column="87" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="6" lean-forward="false" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="6" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -194,39 +228,41 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>check</find>
-      <find>join</find>
-      <find>loader</find>
-      <find>de</find>
-      <find>commandMan</find>
-      <find>game</find>
-      <find>exec</find>
-      <find>executeComm</find>
-      <find>rootNode</find>
-      <find>commands</find>
-      <find>List&lt;String</find>
-      <find>onplayer</find>
-      <find>giveVote</find>
-      <find>givevot</find>
-      <find>offline</find>
-      <find>shutdown</find>
-      <find>attempting to conn</find>
-      <find>more days</find>
       <find>isonline</find>
       <find>reload</find>
       <find>shutdon</find>
       <find>reloadConfigs</find>
       <find>milestones</find>
       <find>Database</find>
-      <find>saveOff</find>
       <find>loadOff</find>
       <find>cast</find>
-      <find>userStorage</find>
       <find>userSt</find>
       <find>566</find>
+      <find>chec</find>
+      <find>userStorage</find>
+      <find>isOnline.</find>
+      <find>isOnline</find>
+      <find>game</find>
+      <find>intValue</find>
+      <find>storedV</find>
+      <find>saveOff</find>
+      <find>storedVotes</find>
+      <find>command</find>
+      <find>roll()</find>
+      <find>roll</find>
+      <find>get(name)</find>
+      <find>milestonesUsed</find>
+      <find>milestonesEnabled</find>
+      <find>there are</find>
+      <find>there are no</find>
+      <find>loaded</find>
+      <find>imported</find>
+      <find>Plugin</find>
     </findStrings>
     <replaceStrings>
       <replace>dailies</replace>
+      <replace>sv.getStoredVotes()</replace>
+      <replace>U.roll(chanceMax)</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -456,8 +492,8 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4544548516891" />
-        <entry key="$PROJECT_DIR$/build.gradle" value="647839626" />
+        <entry key="$PROJECT_DIR$" value="4545251564950" />
+        <entry key="$PROJECT_DIR$/build.gradle" value="3618141696" />
         <entry key="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" value="528695444" />
       </map>
     </option>
@@ -661,11 +697,24 @@
         <option value="$PROJECT_DIR$/src/test/java/Test.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java" />
-        <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/CheckVoteCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/ReloadCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/VoteCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/CommandHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/U.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/GiveVoteCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Database.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/PlayerRecord.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Milestones.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/U.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/ConsoleColors.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/CC.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -679,7 +728,7 @@
     <option name="LAST_EDITED_MODULE_NAME" />
     <option name="LAST_EDITED_TAB_NAME" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
@@ -719,22 +768,6 @@
             <path>
               <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
               <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
-              <item name="libs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="gradle" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -742,62 +775,15 @@
               <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="net" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="net" type="462c0819:PsiDirectoryNode" />
-              <item name="adamsanchez" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="net" type="462c0819:PsiDirectoryNode" />
-              <item name="adamsanchez" type="462c0819:PsiDirectoryNode" />
-              <item name="seriousvote" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="seriousvote" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SeriousVote" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="AndroidView" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1188,7 +1174,7 @@
     </recent_temporary>
   </component>
   <component name="SbtLocalSettings">
-    <option name="lastUpdateTimestamp" value="1522873633771" />
+    <option name="lastUpdateTimestamp" value="1523669325060" />
     <option name="externalProjectsViewState">
       <projects_view />
     </option>
@@ -1220,7 +1206,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1229,13 +1216,13 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47128928" sideWeight="0.5063966" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0069296374" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.019565217" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.019565217" sideWeight="0.4936034" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28602383" sideWeight="0.48933902" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.125" sideWeight="0.49520257" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29744136" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10660981" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26066098" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14658849" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1250,7 +1237,7 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1307,7 +1294,7 @@
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="7" />
+      <option name="time" value="10" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1316,69 +1303,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Metrics.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/ConfigUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/U.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="44" column="55" lean-forward="false" selection-start-line="44" selection-start-column="55" selection-end-line="44" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="12" lean-forward="false" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1717">
-          <caret line="117" column="19" lean-forward="false" selection-start-line="117" selection-start-column="15" selection-end-line="117" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#9677#9678#0" expanded="true" />
-            <element signature="e#9711#9712#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="32" column="35" lean-forward="false" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="50" lean-forward="false" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/assets/seriousvote/seriousvote.conf">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2346">
@@ -1392,13 +1316,34 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2829#2830#0" expanded="true" />
-            <element signature="e#2953#2954#0" expanded="true" />
-            <element signature="e#6839#6840#0" expanded="true" />
-            <element signature="e#29319#29320#0" expanded="true" />
-            <element signature="e#31461#31462#0" expanded="true" />
-            <element signature="e#31559#31560#0" expanded="true" />
-            <element signature="e#31628#31629#0" expanded="true" />
+            <element signature="method#getRewardsNumber#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#generateRandomRewardNumber#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#onVote#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#processVotes#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#reloadDB#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#onPlayerJoin#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#executeCommands#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#giveReward#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#chooseTable#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#giveVote#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#broadCastMessage#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#broadCastMessage#1;class#SeriousVote#0" expanded="false" />
+            <element signature="method#convertLink#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#parseVariables#1;class#SeriousVote#0" expanded="false" />
+            <element signature="method#isOnline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#saveOffline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#loadOffline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="e#22973#22974#0" expanded="true" />
+            <element signature="e#23010#23011#0" expanded="true" />
+            <element signature="method#usingMilestones#0;class#SeriousVote#0" expanded="false" />
+            <element signature="e#23167#23168#0" expanded="true" />
+            <element signature="e#23207#23208#0" expanded="true" />
+            <element signature="e#23248#23249#0" expanded="true" />
+            <element signature="e#23281#23282#0" expanded="true" />
+            <element signature="e#23335#23336#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23415#23416#0" expanded="true" />
+            <element signature="e#23450#23451#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1411,7 +1356,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/U.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/U.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
           <caret line="44" column="55" lean-forward="false" selection-start-line="44" selection-start-column="55" selection-end-line="44" selection-end-column="55" />
@@ -1425,23 +1370,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Database.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Milestones.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1717">
           <caret line="117" column="19" lean-forward="false" selection-start-line="117" selection-start-column="15" selection-end-line="117" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#9677#9678#0" expanded="true" />
-            <element signature="e#9711#9712#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1472,13 +1411,34 @@
           <caret line="68" column="3" lean-forward="false" selection-start-line="68" selection-start-column="3" selection-end-line="68" selection-end-column="3" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2829#2830#0" expanded="true" />
-            <element signature="e#2953#2954#0" expanded="true" />
-            <element signature="e#6839#6840#0" expanded="true" />
-            <element signature="e#29319#29320#0" expanded="true" />
-            <element signature="e#31461#31462#0" expanded="true" />
-            <element signature="e#31559#31560#0" expanded="true" />
-            <element signature="e#31628#31629#0" expanded="true" />
+            <element signature="method#getRewardsNumber#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#generateRandomRewardNumber#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#onVote#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#processVotes#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#reloadDB#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#onPlayerJoin#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#executeCommands#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#giveReward#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#chooseTable#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#giveVote#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#broadCastMessage#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#broadCastMessage#1;class#SeriousVote#0" expanded="false" />
+            <element signature="method#convertLink#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#parseVariables#1;class#SeriousVote#0" expanded="false" />
+            <element signature="method#isOnline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#saveOffline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#loadOffline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="e#22973#22974#0" expanded="true" />
+            <element signature="e#23010#23011#0" expanded="true" />
+            <element signature="method#usingMilestones#0;class#SeriousVote#0" expanded="false" />
+            <element signature="e#23167#23168#0" expanded="true" />
+            <element signature="e#23207#23208#0" expanded="true" />
+            <element signature="e#23248#23249#0" expanded="true" />
+            <element signature="e#23281#23282#0" expanded="true" />
+            <element signature="e#23335#23336#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23415#23416#0" expanded="true" />
+            <element signature="e#23450#23451#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1491,7 +1451,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/U.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/U.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
           <caret line="44" column="55" lean-forward="false" selection-start-line="44" selection-start-column="55" selection-end-line="44" selection-end-column="55" />
@@ -1505,23 +1465,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Database.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Milestones.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#9677#9678#0" expanded="true" />
-            <element signature="e#9711#9712#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1552,13 +1506,34 @@
           <caret line="68" column="3" lean-forward="false" selection-start-line="68" selection-start-column="3" selection-end-line="68" selection-end-column="3" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2829#2830#0" expanded="true" />
-            <element signature="e#2953#2954#0" expanded="true" />
-            <element signature="e#6839#6840#0" expanded="true" />
-            <element signature="e#29319#29320#0" expanded="true" />
-            <element signature="e#31461#31462#0" expanded="true" />
-            <element signature="e#31559#31560#0" expanded="true" />
-            <element signature="e#31628#31629#0" expanded="true" />
+            <element signature="method#getRewardsNumber#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#generateRandomRewardNumber#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#onVote#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#processVotes#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#reloadDB#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#onPlayerJoin#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#executeCommands#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#giveReward#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#chooseTable#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#giveVote#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#broadCastMessage#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#broadCastMessage#1;class#SeriousVote#0" expanded="false" />
+            <element signature="method#convertLink#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#parseVariables#1;class#SeriousVote#0" expanded="false" />
+            <element signature="method#isOnline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#saveOffline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#loadOffline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="e#22973#22974#0" expanded="true" />
+            <element signature="e#23010#23011#0" expanded="true" />
+            <element signature="method#usingMilestones#0;class#SeriousVote#0" expanded="false" />
+            <element signature="e#23167#23168#0" expanded="true" />
+            <element signature="e#23207#23208#0" expanded="true" />
+            <element signature="e#23248#23249#0" expanded="true" />
+            <element signature="e#23281#23282#0" expanded="true" />
+            <element signature="e#23335#23336#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23415#23416#0" expanded="true" />
+            <element signature="e#23450#23451#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1571,7 +1546,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/U.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/U.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
           <caret line="44" column="55" lean-forward="false" selection-start-line="44" selection-start-column="55" selection-end-line="44" selection-end-column="55" />
@@ -1585,23 +1560,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Database.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Milestones.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="969">
           <caret line="73" column="34" lean-forward="false" selection-start-line="73" selection-start-column="34" selection-end-line="73" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#9677#9678#0" expanded="true" />
-            <element signature="e#9711#9712#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1626,13 +1595,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="32" column="35" lean-forward="false" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/TableManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -1644,14 +1606,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="507">
           <caret line="154" column="18" lean-forward="false" selection-start-line="154" selection-start-column="18" selection-end-line="154" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/ConfigUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1676,30 +1630,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/PlayerRecord.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/U.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="e#377#378#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/Test.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" column="23" lean-forward="false" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1707,27 +1641,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="298">
           <caret line="360" column="15" lean-forward="false" selection-start-line="360" selection-start-column="15" selection-end-line="360" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Database.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Milestones.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="719">
-          <caret line="217" column="27" lean-forward="false" selection-start-line="217" selection-start-column="27" selection-end-line="217" selection-end-column="27" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#9677#9678#0" expanded="true" />
-            <element signature="e#9711#9712#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1739,20 +1652,138 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/ReloadCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="8" lean-forward="false" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/CheckVoteCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="3" lean-forward="true" selection-start-line="16" selection-start-column="3" selection-end-line="16" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/VoteCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/CommandHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="531">
+          <caret line="34" column="54" lean-forward="false" selection-start-line="34" selection-start-column="54" selection-end-line="34" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/commands/GiveVoteCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="582">
+          <caret line="44" column="17" lean-forward="true" selection-start-line="44" selection-start-column="17" selection-end-line="44" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Database.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/PlayerRecord.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Data/Milestones.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3247">
+          <caret line="193" column="0" lean-forward="true" selection-start-line="193" selection-start-column="0" selection-end-line="193" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/Utils.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/ConfigUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="33" column="5" lean-forward="false" selection-start-line="33" selection-start-column="5" selection-end-line="33" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/LootTable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1071">
+          <caret line="68" column="31" lean-forward="false" selection-start-line="68" selection-start-column="31" selection-end-line="68" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/U.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="42" column="9" lean-forward="false" selection-start-line="42" selection-start-column="9" selection-end-line="42" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/SeriousVote.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="72" column="66" lean-forward="false" selection-start-line="72" selection-start-column="66" selection-end-line="72" selection-end-column="66" />
+        <state relative-caret-position="1445">
+          <caret line="144" column="66" lean-forward="false" selection-start-line="144" selection-start-column="66" selection-end-line="144" selection-end-column="66" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2829#2830#0" expanded="true" />
-            <element signature="e#2953#2954#0" expanded="true" />
-            <element signature="e#6839#6840#0" expanded="true" />
-            <element signature="e#29319#29320#0" expanded="true" />
-            <element signature="e#31461#31462#0" expanded="true" />
-            <element signature="e#31559#31560#0" expanded="true" />
-            <element signature="e#31628#31629#0" expanded="true" />
+            <element signature="method#getRewardsNumber#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#generateRandomRewardNumber#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#onVote#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#processVotes#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#reloadDB#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#onPlayerJoin#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#executeCommands#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#giveReward#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#chooseTable#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#giveVote#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#broadCastMessage#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#broadCastMessage#1;class#SeriousVote#0" expanded="false" />
+            <element signature="method#convertLink#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#parseVariables#1;class#SeriousVote#0" expanded="false" />
+            <element signature="method#isOnline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#saveOffline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="method#loadOffline#0;class#SeriousVote#0" expanded="false" />
+            <element signature="e#22973#22974#0" expanded="true" />
+            <element signature="e#23010#23011#0" expanded="true" />
+            <element signature="method#usingMilestones#0;class#SeriousVote#0" expanded="false" />
+            <element signature="e#23167#23168#0" expanded="true" />
+            <element signature="e#23207#23208#0" expanded="true" />
+            <element signature="e#23248#23249#0" expanded="true" />
+            <element signature="e#23281#23282#0" expanded="true" />
+            <element signature="e#23335#23336#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23415#23416#0" expanded="true" />
+            <element signature="e#23450#23451#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/adamsanchez/seriousvote/utils/CC.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2006">
+          <caret line="118" column="87" lean-forward="false" selection-start-line="118" selection-start-column="87" selection-end-line="118" selection-end-column="87" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="6" lean-forward="false" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>

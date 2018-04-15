@@ -7,10 +7,13 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 import net.adamsanchez.seriousvote.Data.Milestones;
 import net.adamsanchez.seriousvote.commands.*;
+import net.adamsanchez.seriousvote.utils.CC;
+import net.adamsanchez.seriousvote.utils.U;
 import ninja.leaping.configurate.ConfigurationNode;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
+import org.spongepowered.api.Platform;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
 
@@ -138,9 +141,15 @@ public class SeriousVote {
     public void onInitialization(GamePreInitializationEvent event) {
         instance = this;
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
-
-        getLogger().info("Serious Vote loading...");
-        getLogger().info("Trying To setup Config Loader");
+        getLogger().info(CC.logo());
+        getLogger().info(CC.YELLOW_BOLD + "Serious Vote Version: "
+                + CC.PURPLE_BOLD + plugin.getVersion().get()
+                + CC.YELLOW_BOLD + " MC-Version: "
+                + CC.PURPLE_BOLD + Sponge.getPlatform().getMinecraftVersion().getName()
+                + CC.YELLOW_BOLD + " Sponge-Version: "
+                + CC.PURPLE_BOLD + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getName() + "-"
+                + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown"));
+        getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
 
         Asset configAsset = plugin.getAsset("seriousvote.conf").orElse(null);
         Asset offlineVoteAsset = plugin.getAsset("offlinevotes.dat").orElse(null);
@@ -190,7 +199,7 @@ public class SeriousVote {
     public void onServerStart(GameInitializationEvent event) {
         seriousVotePlugin = this;
         CommandHandler.registerCommands();
-        getLogger().info("Serious Vote Has Loaded\n\n\n\n");
+        getLogger().info(CC.YELLOW + "Serious Vote Has Loaded");
 
         if (milestonesEnabled == true | dailiesEnabled == true) {
             milestones = new Milestones(rootNode);
@@ -223,7 +232,7 @@ public class SeriousVote {
         try {
             rootNode = loader.load();
         } catch (IOException e) {
-            U.error("There was an error while reloading your configs");
+            U.error(CC.RED + "There was an error while reloading your configs");
             U.error(e.toString());
             return false;
         }
@@ -240,13 +249,13 @@ public class SeriousVote {
 
 
         //Load Offline votes
-        U.info("Trying to load offline player votes from ... " + offlineVotes.toString());
+        U.info(CC.YELLOW + "Trying to load offline player votes from ... " + offlineVotes.toString());
         try {
             loadOffline();
         } catch (IOException e) {
-            U.error("ahahahahaha We Couldn't load up the stored offline player votes", e);
+            U.error(CC.RED + "ahahahahaha We Couldn't load up the stored offline player votes", e);
         } catch (ClassNotFoundException e) {
-            U.error("Well crap that is noooot a hash map! GO slap the dev!");
+            U.error(CC.RED + "Well crap that is noooot a hash map! GO slap the dev!");
         }
 
         //Reload DB configuration
@@ -315,7 +324,7 @@ public class SeriousVote {
             //Create a new Array of the proper size x*2 to hold the tables for choosing later
             String[][] table = new String[2][inputLootSource.length / 2];
             chanceMap = new int[inputLootSource.length / 2];
-            U.info(inputLootSource.length / 2 + " Tables Imported for Rewards");
+            U.info(CC.PURPLE + inputLootSource.length / 2 + CC.YELLOW + " Tables Imported for Rewards");
 
             for (int ix = 0; ix < inputLootSource.length; ix += 2) {
                 table[0][ix / 2] = inputLootSource[ix];
@@ -336,6 +345,7 @@ public class SeriousVote {
         }
 
     }
+
     ///////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////LISTENERS///////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -587,28 +597,28 @@ public class SeriousVote {
         return this.getGame();
     }
 
-    public boolean isDailiesEnabled(){
+    public boolean isDailiesEnabled() {
         return dailiesEnabled;
     }
 
-    public boolean usingMilestones(){
-        if(milestones != null) return true;
+    public boolean usingMilestones() {
+        if (milestones != null) return true;
         return false;
     }
 
-    public boolean isMilestonesEnabled(){
+    public boolean isMilestonesEnabled() {
         return milestonesEnabled;
     }
 
-    public Milestones getMilestones(){
+    public Milestones getMilestones() {
         return milestones;
     }
 
-    public HashMap<UUID,Integer> getStoredVotes(){
+    public HashMap<UUID, Integer> getStoredVotes() {
         return getStoredVotes();
     }
 
-    public void resetCurrentRewards(){
+    public void resetCurrentRewards() {
         currentRewards = "";
     }
 

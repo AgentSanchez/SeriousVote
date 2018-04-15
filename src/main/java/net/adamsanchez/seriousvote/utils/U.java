@@ -1,8 +1,6 @@
-package net.adamsanchez.seriousvote;
+package net.adamsanchez.seriousvote.utils;
 
-import org.slf4j.Logger;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.entity.living.player.User;
+import net.adamsanchez.seriousvote.SeriousVote;
 import org.spongepowered.api.service.user.UserStorageService;
 
 import java.util.Optional;
@@ -15,19 +13,19 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class U {
     public static void info(String info){
-        SeriousVote.getInstance().getLogger().info(info);
+        SeriousVote.getInstance().getLogger().info(info + CC.RESET);
     }
     public static void debug(String debug){
-        SeriousVote.getInstance().getLogger().debug(debug);
+        SeriousVote.getInstance().getLogger().debug(debug + CC.RESET);
     }
     public static void error(String error) {
-        SeriousVote.getInstance().getLogger().error(error);
+        SeriousVote.getInstance().getLogger().error(error + CC.RESET);
     }
     public static void error(String error, Exception e){
-        SeriousVote.getInstance().getLogger().error(error,e);
+        SeriousVote.getInstance().getLogger().error(error + CC.RESET,e);
     }
     public static void warn(String warn){
-        SeriousVote.getInstance().getLogger().warn(warn);
+        SeriousVote.getInstance().getLogger().warn(warn + CC.RESET);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

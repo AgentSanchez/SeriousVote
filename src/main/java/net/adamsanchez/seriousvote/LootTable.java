@@ -1,6 +1,6 @@
 package net.adamsanchez.seriousvote;
 
-import javafx.scene.control.Tab;
+import net.adamsanchez.seriousvote.utils.U;
 import ninja.leaping.configurate.ConfigurationNode;
 
 import java.util.List;

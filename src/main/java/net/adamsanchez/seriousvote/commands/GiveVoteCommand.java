@@ -1,7 +1,7 @@
 package net.adamsanchez.seriousvote.commands;
 
 import net.adamsanchez.seriousvote.SeriousVote;
-import net.adamsanchez.seriousvote.U;
+import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
