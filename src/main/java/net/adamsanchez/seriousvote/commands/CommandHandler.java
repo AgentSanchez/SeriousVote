@@ -38,10 +38,18 @@ public class CommandHandler {
                 .executor(new CheckVoteCommand())
                 .build();
 
+        CommandSpec version = CommandSpec.builder()
+                .description(Text.of("SeriousVote Version"))
+                .permission("seriousvote.commands.admin.check")
+                .executor(new VersionCommand())
+                .build();
+
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
         Sponge.getCommandManager().register(SeriousVote.getInstance(), vote, "vote");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), reload, "svreload", "seriousvotereload");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), giveVote, "givevote");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), checkVote, "checkvote");
+        Sponge.getCommandManager().register(SeriousVote.getInstance(), version, "svversion","seriousvoteversion", "version");
+
     }
 }
