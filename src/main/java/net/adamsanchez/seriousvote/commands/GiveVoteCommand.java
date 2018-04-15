@@ -1,5 +1,6 @@
 package net.adamsanchez.seriousvote.commands;
 
+import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.command.CommandException;
@@ -38,7 +39,7 @@ public class GiveVoteCommand implements CommandExecutor {
                     sv.getStoredVotes().put(playerID, new Integer(1));
                 }
                 try {
-                    sv.saveOffline();
+                    OfflineHandler.saveOffline();
                     src.sendMessage(Text.of("You have successfully given " + username + " an offline vote"));
                 } catch (IOException e) {
                     U.error("Woah did that just happen? I couldn't save that offline player's vote!", e);
