@@ -7,3 +7,5 @@ out
 lib
 *.iws
 *.ipr
+gradlew
+gradlew.bat
