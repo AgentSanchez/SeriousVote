@@ -154,11 +154,12 @@ public class SeriousVote {
                 + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown"));
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
 
-        Asset configAsset = plugin.getAsset("seriousvote.conf").orElse(null);
+
         Asset offlineVoteAsset = plugin.getAsset("offlinevotes.dat").orElse(null);
-
         offlineVotes = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
+        OfflineHandler.initOfflineStorage();
 
+        Asset configAsset = plugin.getAsset("seriousvote.conf").orElse(null);
         if (Files.notExists(defaultConfig)) {
             if (configAsset != null) {
                 try {
