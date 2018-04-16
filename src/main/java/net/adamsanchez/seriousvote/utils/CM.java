@@ -98,6 +98,10 @@ public class CM {
         return node.getNode("config","broadcast-message").getString();
     }
 
+    public static String getOfflineMessage(ConfigurationNode node){
+        return node.getNode("config","broadcast-message-offline").getString();
+    }
+
     public static String getVoteSiteMessage(ConfigurationNode node){
         return node.getNode("config","vote-sites-message").getString();
     }

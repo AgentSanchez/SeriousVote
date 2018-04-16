@@ -127,6 +127,7 @@ public class SeriousVote {
     List<String> setCommands;
     String currentRewards;
     String publicMessage;
+    String publicOfflineMessage;
     boolean debug = false;
     boolean hasLoot = false;
     boolean isNoRandom = false;
@@ -152,7 +153,7 @@ public class SeriousVote {
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getName() + "-"
                 + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown"));
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
-
+        storedVotes = new HashMap<UUID, Integer>();
         offlineVotes = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
         OfflineHandler.initOfflineStorage();
         CM.initConfig(defaultConfig);
@@ -177,20 +178,18 @@ public class SeriousVote {
         } else {
             milestones = null;
         }
-    }
 
-    @Listener
-    public void onPostInit(GamePostInitializationEvent event) {
         Scheduler scheduler = Sponge.getScheduler();
         Task.Builder taskBuilder = scheduler.createTaskBuilder();
         Task task = taskBuilder.execute(() -> processVotes())
                 .interval(700, TimeUnit.MILLISECONDS)
                 .name("SeriousVote-CommandRewardExecutor")
                 .submit(plugin);
-        Task task2 = taskBuilder.execute(() -> reloadDB())
-                .interval(60, TimeUnit.MINUTES)
-                .name("SeriousVote-DataBaseReloadExecutor")
-                .submit(plugin);
+    }
+
+    @Listener
+    public void onPostInit(GamePostInitializationEvent event) {
+
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -208,6 +207,7 @@ public class SeriousVote {
 
         //update variables and other instantiations
         publicMessage = CM.getPublicMessage(rootNode);
+        publicOfflineMessage = CM.getOfflineMessage(rootNode);
         bypassOffline = CM.getBypassOffline(rootNode);
         messageOffline = CM.getMessageOffline(rootNode);
         randomRewardsNumber = getRewardsNumber(rootNode);
@@ -223,6 +223,14 @@ public class SeriousVote {
         U.info(CC.YELLOW + "Trying to load offline player votes from ... " + offlineVotes.toString());
         try {
             storedVotes = OfflineHandler.loadOffline();
+        } catch (EOFException e){
+            storedVotes = new HashMap<>();
+            try {
+                U.debug("Trying to save corrected Map.");
+                OfflineHandler.saveOffline();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         } catch (IOException e) {
             U.error(CC.RED + "ahahahahaha We Couldn't load up the stored offline player votes", e);
         } catch (ClassNotFoundException e) {
@@ -339,10 +347,12 @@ public class SeriousVote {
 
             for (Vote vote : localQueue) {
                 String username = vote.getUsername();
-                U.info("Vote Registered From " + vote.getServiceName() + " for " + username);
+                U.debug("Vote Registered From " + vote.getServiceName() + " for " + username);
                 String currentRewards = giveVote(username);
-                if (!currentRewards.equals("offline") || messageOffline) {
+                if (!currentRewards.equals("offline")) {
                     broadCastMessage(publicMessage, username, currentRewards);
+                } else if (messageOffline && !bypassOffline){
+                    broadCastMessage(publicOfflineMessage, username);
                 }
 
 
@@ -504,6 +514,7 @@ public class SeriousVote {
     }
 
     public boolean broadCastMessage(String message, String username, String currentRewards) {
+        if(!isOnline(username))
         if (message.isEmpty()) return false;
         game.getServer().getBroadcastChannel().send(
                 TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username, currentRewards)));
@@ -583,7 +594,7 @@ public class SeriousVote {
     }
 
     public HashMap<UUID, Integer> getStoredVotes() {
-        return getStoredVotes();
+        return storedVotes;
     }
 
     public Path getOfflineVotes(){

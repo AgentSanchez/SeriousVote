@@ -1,6 +1,7 @@
 package net.adamsanchez.seriousvote.Data;
 
 import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.asset.Asset;
 
 import java.io.*;
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class OfflineHandler {
 
     public  static void initOfflineStorage(){
+        U.info("Attempting to load in offline player votes....");
         if (Files.notExists(SeriousVote.getInstance().getOfflineVotes())) {
             try {
                 OfflineHandler.saveOffline();
