@@ -440,7 +440,7 @@ public class SeriousVote {
             if (hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
                 for (int i = 0; i < randomRewardsNumber; i++) {
                     mainLoot = new LootTable(chooseTable(), rootNode);
-                    U.info("Choosing a random reward.");
+                    U.debug("Choosing a random reward.");
                     String chosenReward = mainLoot.chooseReward();
 
                     currentRewards = currentRewards + rootNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
@@ -453,7 +453,7 @@ public class SeriousVote {
                 randomRewardsGen = generateRandomRewardNumber();
                 for (int i = 0; i < randomRewardsGen; i++) {
                     mainLoot = new LootTable(chooseTable(), rootNode);
-                    U.info("Choosing a random reward.");
+                    U.debug("Choosing a random reward.");
 
                     String chosenReward = mainLoot.chooseReward();
                     currentRewards = currentRewards + rootNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
@@ -467,8 +467,10 @@ public class SeriousVote {
 
             }
             //Get Set Rewards
+            U.debug("Adding SetCommands to the process queue");
             for (String setCommand : setCommands) {
                 commandQueue.add(parseVariables(setCommand, username, currentRewards));
+                U.debug("----- Will process " + setCommand);
             }
             this.commandQueue.addAll(commandQueue);
 
