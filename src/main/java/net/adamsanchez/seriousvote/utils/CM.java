@@ -102,6 +102,13 @@ public class CM {
         return node.getNode("config","vote-sites-message").getString();
     }
 
+    public static boolean getBypassOffline(CommentedConfigurationNode node) {
+        return node.getNode("config","bypass-offline").getBoolean();
+    }
+    public static boolean getMessageOffline(CommentedConfigurationNode node) {
+        return node.getNode("config","broadcast-offline").getBoolean();
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////////
     public static void initConfig(Path pluginDirectory){
         Asset configAsset = SeriousVote.getInstance().getPlugin().getAsset("seriousvote.conf").orElse(null);

@@ -131,6 +131,7 @@ public class SeriousVote {
     boolean hasLoot = false;
     boolean isNoRandom = false;
     boolean bypassOffline = false;
+    boolean messageOffline = false;
     private static Optional<UserStorageService> userStorage;
     //////////////////////////////////////////////////////////////////
 
@@ -207,6 +208,8 @@ public class SeriousVote {
 
         //update variables and other instantiations
         publicMessage = CM.getPublicMessage(rootNode);
+        bypassOffline = CM.getBypassOffline(rootNode);
+        messageOffline = CM.getMessageOffline(rootNode);
         randomRewardsNumber = getRewardsNumber(rootNode);
         updateLoot(rootNode);
         setCommands = CM.getSetCommands(rootNode);
@@ -338,7 +341,7 @@ public class SeriousVote {
                 String username = vote.getUsername();
                 U.info("Vote Registered From " + vote.getServiceName() + " for " + username);
                 String currentRewards = giveVote(username);
-                if (!currentRewards.equals("offline") || bypassOffline) {
+                if (!currentRewards.equals("offline") || messageOffline) {
                     broadCastMessage(publicMessage, username, currentRewards);
                 }
 
@@ -430,7 +433,7 @@ public class SeriousVote {
 
     public String giveVote(String username) {
 
-        if (isOnline(username)) {
+        if (isOnline(username) || bypassOffline) {
             LootTable mainLoot;
             currentRewards = "";
             ArrayList<String> commandQueue = new ArrayList<String>();
