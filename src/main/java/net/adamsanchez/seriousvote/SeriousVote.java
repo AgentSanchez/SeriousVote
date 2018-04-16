@@ -161,7 +161,7 @@ public class SeriousVote {
     }
 
     @Listener
-    public void onPostInitalization(GamePostInitializationEvent event) {
+    public void onPostInitialization(GamePostInitializationEvent event) {
         instance = this;
     }
 

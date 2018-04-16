@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.U;
+import net.adamsanchez.seriousvote.Data.PlayerRecord;
 
 import java.sql.*;
 import java.util.*;

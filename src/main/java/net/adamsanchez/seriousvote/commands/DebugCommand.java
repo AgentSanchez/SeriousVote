@@ -12,10 +12,12 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 /**
  * Created by Adam Sanchez on 4/15/2018.
  */
-public class DebugCommand implements CommandExecutor{
+public class DebugCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        U.info("Debug Mode: " + (SeriousVote.getInstance().toggleDebug() ? CC.GREEN + "ON" : CC.RED + "OFF"));
+        U.info(CC.YELLOW + "Debug Mode: "
+                + (SeriousVote.getInstance().toggleDebug()
+                ? CC.GREEN + "ON" : CC.RED + "OFF"));
         return CommandResult.success();
     }
 }

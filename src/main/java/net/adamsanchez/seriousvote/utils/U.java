@@ -17,7 +17,7 @@ public class U {
     }
     public static void debug(String debug){
         if(SeriousVote.getInstance().isDebug()) {
-            SeriousVote.getInstance().getLogger().debug(debug + CC.RESET);
+            SeriousVote.getInstance().getLogger().info(debug + CC.RESET);
         }
     }
     public static void error(String error) {
