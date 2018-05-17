@@ -111,7 +111,7 @@ public class SeriousVote {
     public List<String> monthlySet, yearlySet, weeklySet;
     int[] milestonesUsed;
     ///////////////////////////////////////////////////////
-    public String databaseName, databaseHostname, databasePort, databasePrefix, databaseUsername, databasePassword;
+    public String databaseName, databaseHostname, databasePort, databasePrefix, databaseUsername, databasePassword, minIdleConnections, maxActiveConnections;
     ///////////////////////////////////////////////////////
     private LinkedList<String> commandQueue = new LinkedList<String>();
     private LinkedList<String> executingQueue = new LinkedList<String>();
@@ -244,6 +244,9 @@ public class SeriousVote {
         databasePrefix = CM.getDatabasePrefix(rootNode);
         databaseUsername = CM.getDatabaseUsername(rootNode);
         databasePort = CM.getDatabasePort(rootNode);
+        minIdleConnections = CM.getMinIdleConnections(rootNode);
+        maxActiveConnections = CM.getMaxActiveConnections(rootNode);
+
         milestonesEnabled = CM.getMilestonesEnabled(rootNode);
         dailiesEnabled = CM.getDailiesEnabled(rootNode);
 

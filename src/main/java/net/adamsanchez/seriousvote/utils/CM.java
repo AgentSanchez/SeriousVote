@@ -69,6 +69,13 @@ public class CM {
         return node.getNode("config","database","password").getString();
     }
 
+    public static String getMaxActiveConnections(ConfigurationNode node){
+        return node.getNode("config","database","maximum-active-connections").getString();
+    }
+    public static String getMinIdleConnections(ConfigurationNode node){
+        return node.getNode("config","database","minimum-idle-connections").getString();
+    }
+
     public static boolean getMilestonesEnabled(CommentedConfigurationNode node) {
         return node.getNode("config","milestones","enabled").getBoolean();
     }

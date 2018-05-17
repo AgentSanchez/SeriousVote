@@ -23,6 +23,8 @@ public class Database {
     private String table_prefix = "SV";
     private String playerTable = "players";
     private String url = "jdbc:mysql://test.com:3306/testdata?useSSL=false";
+    private int minIdleConnections = 5;
+    private int maxActiveConnections = 10;
     private String timezoneFix = "&useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     HikariConfig config = new HikariConfig();
     HikariDataSource ds;
@@ -39,6 +41,8 @@ public class Database {
         this.table_prefix = sv.databasePrefix;
         this.username = sv.databaseUsername;
         this.password = sv.databasePassword;
+        this.minIdleConnections = Integer.parseInt(sv.minIdleConnections);
+        this.maxActiveConnections = Integer.parseInt(sv.maxActiveConnections);
         playerTable = table_prefix + "players";
 
         url = "jdbc:mysql://"+ host + ":" + port + "/" + dbname + "?useSSL=false";
@@ -46,8 +50,8 @@ public class Database {
         config.setJdbcUrl(url + timezoneFix);
         config.setUsername(username);
         config.setPassword(password);
-        config.setMaximumPoolSize(20);
-        config.setMinimumIdle(20);
+        config.setMaximumPoolSize(maxActiveConnections);
+        config.setMinimumIdle(minIdleConnections);
         config.setConnectionTimeout(10000);
         config.setMaxLifetime(1770000);
         config.setPoolName("SeriousVote-SQL");
@@ -61,8 +65,8 @@ public class Database {
         config.setJdbcUrl(url + timezoneFix);
         config.setUsername(username);
         config.setPassword(password);
-        config.setMaximumPoolSize(20);
-        config.setMinimumIdle(20);
+        config.setMaximumPoolSize(10);
+        config.setMinimumIdle(5);
         config.setConnectionTimeout(10000);
         config.setMaxLifetime(1770000);
         config.setPoolName("SeriousVote-SQL");
@@ -86,28 +90,14 @@ public class Database {
     }
 
     public Connection getConnection() throws SQLException {
-        Connection connection = null;
         return ds.getConnection();
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    public Statement statement(){
-        Statement statement = null;
-        try{
-            Connection con = getConnection();
-            statement = con.createStatement();
 
-        } catch (SQLException e) {
-            U.error("Unable to connect --- ", e);
-        }
-        return statement;
-    }
-
-    public PreparedStatement preparedStatement(String string){
+    public PreparedStatement preparedStatement(Connection con, String string){
         PreparedStatement statement = null;
         try{
-            statement = getConnection().prepareStatement(string);
+            statement = con.prepareStatement(string);
 
         } catch (SQLException e) {
             U.error("Error in DB Connection");
@@ -115,11 +105,10 @@ public class Database {
         return statement;
     }
 
-    private ResultSet genericQuery(String query){
+    private ResultSet genericQuery(Connection con, String query){
         ResultSet results = null;
         try {
-            results = statement().executeQuery(query);
-            results.getStatement().getConnection().close();
+            results = con.createStatement().executeQuery(query);
         } catch (SQLException e) {
             U.error("Error running query!", e);
         }
@@ -127,9 +116,9 @@ public class Database {
     }
 
 
-    public ResultSet genericSelectQuery(String table, String field, String value){
+    public ResultSet genericSelectQuery(Connection con, String table, String field, String value){
         String initial = "SELECT * FROM %s WHERE %s='%s'";
-        ResultSet results = genericQuery(String.format(initial,table,field,value));
+        ResultSet results = genericQuery(con, String.format(initial,table,field,value));
         return  results;
     }
 
@@ -140,8 +129,9 @@ public class Database {
     //////////////////////////////////////////////////////////////////////////////////////////
 
     public PlayerRecord getPlayer(UUID uuid){
-        ResultSet results = genericSelectQuery(playerTable, "player", uuid.toString());
-        try {
+        ResultSet results = null;
+        try(Connection con = getConnection()){
+             results = genericSelectQuery(con, playerTable, "player", uuid.toString());
             if(results.first()){
                 int sequentialVotes = results.getInt("voteSpree");
                 Date lastVote = results.getDate("lastVote");
@@ -162,13 +152,13 @@ public class Database {
     public void playerUpdateQuery(String table, String uuid, int totalVotes, int voteSpree, Date lastVote){
         String initial = "REPLACE INTO %s(player, totalVotes, voteSpree, lastVote) VALUES(?,?,?,?)";
 
-        try(PreparedStatement statement = preparedStatement(String.format(initial,table))){
+        try(Connection con = getConnection()){
+            PreparedStatement statement = preparedStatement(con, String.format(initial,table));
             statement.setString(1, uuid);
             statement.setInt(2, totalVotes);
             statement.setInt(3, voteSpree);
             statement.setDate(4, lastVote);
             statement.execute();
-            statement.getConnection().close();
         } catch (SQLException e) {
             U.error("Error in trying to update player vote record!");
         }
@@ -182,9 +172,8 @@ public class Database {
                 "voteSpree		INT" +
                 ")", playerTable);
 
-        try {
-            statement().executeUpdate(table);
-            statement().getConnection().close();
+        try(Connection con = getConnection()){
+            con.createStatement().executeUpdate(table);
         } catch (SQLException e) {
             U.error("Error Creating SQL TABLE-- CHECK YOUR DATA CONFIG", e);
         }
