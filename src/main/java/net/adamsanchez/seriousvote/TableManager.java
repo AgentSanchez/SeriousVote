@@ -14,10 +14,12 @@ public class TableManager {
 
     public static String[][] makeTableSet(ConfigurationNode node){
         List<String> nodeStrings = node.getChildrenList().stream().map(ConfigurationNode::getString).collect(Collectors.toList());
-        if(nodeStrings.size()%2!= 0 || nodeStrings.size() < 1){
+        if(nodeStrings.size()%2 != 0){
             U.error("Please check the Config for errors.");
             return null;
         }
+        if (nodeStrings.size() < 1) return null;
+
             String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
             //Create a new Array of the proper size x*2 to hold the tables for choosing later
             String[][] table = new String[2][inputLootSource.length / 2];
