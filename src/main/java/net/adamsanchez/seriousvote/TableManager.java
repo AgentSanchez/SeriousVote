@@ -16,6 +16,7 @@ public class TableManager {
         List<String> nodeStrings = node.getChildrenList().stream().map(ConfigurationNode::getString).collect(Collectors.toList());
         if(nodeStrings.size()%2!= 0 || nodeStrings.size() < 1){
             U.error("Please check the Config for errors.");
+            return null;
         }
             String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
             //Create a new Array of the proper size x*2 to hold the tables for choosing later
@@ -31,9 +32,10 @@ public class TableManager {
 
     }
     public static String chooseTable(ConfigurationNode node){
-        return chooseTable(makeTableSet(node));
+        String[][] rewardTable = makeTableSet(node);
+        return rewardTable != null ? chooseTable(rewardTable) : "";
     }
-    public static String chooseTable(String [][] rewardTable){
+    private static String chooseTable(String [][] rewardTable){
 
         int[] chanceMap = new int[rewardTable[0].length];
 

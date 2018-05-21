@@ -34,62 +34,72 @@ public class Milestones {
     //check number of sequential votes
     //If more than or equal to the milestone give reward
     Database db;
-    public Milestones(ConfigurationNode node){
+
+    public Milestones(ConfigurationNode node) {
         sv = SeriousVote.getInstance();
         db = new Database();
         db.createPlayerTable();
         rootNode = node;
     }
 
-    public boolean updateRecord(UUID player, int totalVotes, int voteSpree, Date lastVote){
+    public boolean updateRecord(UUID player, int totalVotes, int voteSpree, Date lastVote) {
         PlayerRecord record = new PlayerRecord(player, totalVotes, voteSpree, lastVote);
         db.updatePlayer(record);
         return true;
     }
-    public boolean updateRecord(PlayerRecord record){
+
+    public boolean updateRecord(PlayerRecord record) {
         db.updatePlayer(record);
         return true;
     }
 
-    public PlayerRecord getRecord(UUID player){
+    public PlayerRecord getRecord(UUID player) {
 
-        PlayerRecord record =  db.getPlayer(player);
-        if (record == null){
+        PlayerRecord record = db.getPlayer(player);
+        if (record == null) {
             return createRecord(player);
         }
         return record;
     }
 
 
-    public void checkForMilestones(PlayerRecord record, String playerName){
+    public void checkForMilestones(PlayerRecord record, String playerName) {
         //Check based on amount of votes given.
         U.info("Player has " + record.getTotalVotes() + " votes currently.");
         List<String> commandList = new ArrayList<String>();
-        if(CM.getEnabledMilestones(rootNode).length <1)U.error("You have no enabled custom milestones or your config is broken :(");
-        if(IntStream.of(CM.getEnabledMilestones(rootNode)).anyMatch(x -> x == record.getTotalVotes())){
-            LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config","milestones","records", ""+ record.getTotalVotes(), "random" )),rootNode);
+        if (CM.getEnabledMilestones(rootNode).length < 1)
+            U.error("You have no enabled custom milestones or your config is broken :(");
+
+        if (IntStream.of(CM.getEnabledMilestones(rootNode)).anyMatch(x -> x == record.getTotalVotes())) {
+            String chosenRewardTable = TableManager.chooseTable(rootNode.getNode("config", "milestones", "records", "" + record.getTotalVotes(), "random"));
+            //TODO Check to see if that specific number provides any random rewards before trying to give them out.
+
             //Choose The Random Rewards from the chosen table
-            for(String command: rootNode.getNode("config","Rewards",chosenTable.chooseReward(),"rewards").getChildrenList().stream()
-                    .map(ConfigurationNode::getString).collect(Collectors.toList())){
-                commandList.add(sv.parseVariables(command, playerName));
+            if (chosenRewardTable != "") {
+                LootTable chosenTable = new LootTable(chosenRewardTable, rootNode);
+                for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
+                        .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+                    commandList.add(sv.parseVariables(command, playerName));
+                }
             }
             //Add The Set Commands
-            for(String command: rootNode.getNode("config","milestones","records", ""+ record.getTotalVotes(),"set").getChildrenList().stream()
-                    .map(ConfigurationNode::getString).collect(Collectors.toList())){
+            for (String command : rootNode.getNode("config", "milestones", "records", "" + record.getTotalVotes(), "set").getChildrenList().stream()
+                    .map(ConfigurationNode::getString).collect(Collectors.toList())) {
                 commandList.add(sv.parseVariables(command, playerName));
             }
             //Send the Commands to Be Run
             sv.giveReward(commandList);
             //Now Send a Public Message
-            U.bcast(rootNode.getNode("config","milestones","records", ""+ record.getTotalVotes(),"message").getString(),playerName);
+            U.bcast(rootNode.getNode("config", "milestones", "records", "" + record.getTotalVotes(), "message").getString(), playerName);
 
         }
 
     }
-    public void checkForDailies(PlayerRecord record, String playerName){
+
+    public void checkForDailies(PlayerRecord record, String playerName) {
         List<String> commandList = new ArrayList<String>();
-            //yearly
-        if(sv.isOnline(playerName)) {
+        //yearly
+        if (sv.isOnline(playerName)) {
             if (record.getVoteSpree() >= 365 && record.getVoteSpree() % 365 == 0) {
                 LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", "yearly", "random")), rootNode);
                 //Choose The Random Rewards from the chosen table
@@ -138,13 +148,12 @@ public class Milestones {
         }
 
 
-
     }
 
-    public void addVote(UUID player){
+    public void addVote(UUID player) {
 
         PlayerRecord record = getRecord(player);
-        if(record == null){
+        if (record == null) {
             U.info("Creating a new record for " + player.toString() + ".");
             record = PlayerRecord.getBlankRecord(player);
             record.setLastVote(new Date(new java.util.Date().getTime()));
@@ -154,9 +163,9 @@ public class Milestones {
 
         } else {
             // If it's been a day since the last vote, increase the vote spree and change the lastvote
-            if(new java.util.Date().getTime() - record.getLastVote().getTime() >= 86400000 ) {
+            if (new java.util.Date().getTime() - record.getLastVote().getTime() >= 86400000) {
                 //if it's been longer than a day then reset the voteSpree
-                if(new java.util.Date().getTime() - record.getLastVote().getTime() >= 172800000 ){
+                if (new java.util.Date().getTime() - record.getLastVote().getTime() >= 172800000) {
                     record.setVoteSpree(1);
                     record.setLastVote(new Date(new java.util.Date().getTime()));
                     record.setTotalVotes(record.getTotalVotes() + 1);
@@ -169,30 +178,30 @@ public class Milestones {
                 record.setTotalVotes(record.getTotalVotes() + 1);
                 updateRecord(record);
 
-                if(sv.isDailiesEnabled()) checkForDailies(record, U.getName(player));
-                if(sv.isMilestonesEnabled())checkForMilestones(record, U.getName(player));
+                if (sv.isDailiesEnabled()) checkForDailies(record, U.getName(player));
+                if (sv.isMilestonesEnabled()) checkForMilestones(record, U.getName(player));
                 return;
             }
             record.setTotalVotes(record.getTotalVotes() + 1);
-            if(sv.isMilestonesEnabled())checkForMilestones(record, U.getName(player));
+            if (sv.isMilestonesEnabled()) checkForMilestones(record, U.getName(player));
 
             updateRecord(record);
 
         }
     }
 
-    public PlayerRecord createRecord(UUID player){
+    public PlayerRecord createRecord(UUID player) {
         U.info("Creating a new record for " + player.toString() + ".");
         PlayerRecord record;
-            record = PlayerRecord.getBlankRecord(player);
-            record.setLastVote(new Date(new java.util.Date().getTime()));
-            record.setTotalVotes(0);
-            record.setVoteSpree(0);
-            updateRecord(record);
-            return record;
+        record = PlayerRecord.getBlankRecord(player);
+        record.setLastVote(new Date(new java.util.Date().getTime()));
+        record.setTotalVotes(0);
+        record.setVoteSpree(0);
+        updateRecord(record);
+        return record;
     }
 
-    public static int getRemainingDays(int currentSpree){
+    public static int getRemainingDays(int currentSpree) {
         //System.out.println("INPUT: " + CC.BLUE + currentSpree + CC.RESET);
         int a = 365 * (currentSpree / 365 + 1) - currentSpree;
         int b = 30 * (currentSpree / 30 + 1) - currentSpree;
@@ -214,7 +223,7 @@ public class Milestones {
     }
 
 
-    public void reloadDB(){
+    public void reloadDB() {
         this.db = new Database();
     }
 
