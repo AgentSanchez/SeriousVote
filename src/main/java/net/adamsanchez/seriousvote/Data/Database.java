@@ -41,8 +41,14 @@ public class Database {
         this.table_prefix = sv.databasePrefix;
         this.username = sv.databaseUsername;
         this.password = sv.databasePassword;
-        this.minIdleConnections = Integer.parseInt(sv.minIdleConnections);
-        this.maxActiveConnections = Integer.parseInt(sv.maxActiveConnections);
+        try {
+            this.minIdleConnections = Integer.parseInt(sv.minIdleConnections);
+            this.maxActiveConnections = Integer.parseInt(sv.maxActiveConnections);
+        } catch(Exception e) {
+            U.info("Incorrect values given for connection pool, reverting to default");
+            U.info("Max Active: " + maxActiveConnections);
+            U.info("Min Idle: " + minIdleConnections);
+        }
         playerTable = table_prefix + "players";
 
         url = "jdbc:mysql://"+ host + ":" + port + "/" + dbname + "?useSSL=false";
