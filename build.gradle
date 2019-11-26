@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'SeriousVote'
-version '4.8.6'
+version '4.8.7'
 description 'Seriously We Have TO VOTE'
 
 
@@ -13,6 +13,7 @@ repositories {
     maven {
         name = 'sponge'
         url = 'http://repo.spongepowered.org/maven'
+        url 'https://jitpack.io'
     }
     flatDir {
         dirs 'lib'
@@ -23,6 +24,7 @@ dependencies {
     compile 'org.spongepowered:spongeapi:5.0.0'
     compile 'org.spongepowered:spongeapi:6.0.0'
     compile 'com.zaxxer:HikariCP:2.7.2'
+    compile 'com.github.rojo8399:PlaceholderAPI:master-SNAPSHOT'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.8-dmr'
     compile fileTree(dir: 'lib', include: '*.jar')
     testCompile 'junit:junit:4.12'

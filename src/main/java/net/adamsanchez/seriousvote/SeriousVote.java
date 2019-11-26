@@ -8,6 +8,7 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 import net.adamsanchez.seriousvote.Data.Milestones;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
+import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.utils.CC;
 import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.utils.U;
@@ -21,6 +22,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.event.Listener;
 
@@ -59,7 +61,11 @@ import java.util.stream.Collectors;
  * Created by adam_ on 12/08/16.
  */
 @SuppressWarnings("unused")
-@Plugin(id = "seriousvote", name = "SeriousVote", version = "4.8.6", description = "This plugin enables server admins to give players rewards for voting for their server.", dependencies = @Dependency(id = "nuvotifier", version = "1.0", optional = false))
+@Plugin(id = "seriousvote",
+        name = "SeriousVote",
+        version = "4.8.7",
+        description = "This plugin enables server admins to give players rewards for voting for their server.",
+        dependencies = { @Dependency(id = "nuvotifier", version = "1.0", optional = false), @Dependency(id = "placeholderapi",optional = true) })
 public class SeriousVote {
 
     @Inject
@@ -190,6 +196,11 @@ public class SeriousVote {
     @Listener
     public void onPostInit(GamePostInitializationEvent event) {
 
+    }
+
+    @Listener
+    public void onServerStart(GameStartingServerEvent event) {
+        PlaceHolders.initialize(Sponge.getPluginManager().fromInstance(this).get());
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
