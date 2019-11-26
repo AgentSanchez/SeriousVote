@@ -18,7 +18,7 @@ Oh....So you still need help? Check out the discord, I'll help you figure it out
 
 **Requirements**
 [SpongeForge/Vanilla](https://www.spongepowered.org/downloads)
-[NuVotifier - Official!](https://github.com/NuVotifier/NuVotifier/releases/tag/v2.3.4) <-- If this is not set up right...SV will not work :frowning: You can also use one of the custom versions below.
+[NuVotifier - Official!](https://github.com/NuVotifier/NuVotifier/releases) <-- If this is not set up right...SV will not work :frowning: You can also use one of the custom versions below.
 
 [Serious-Nuvotifer (Unofficial)](https://drive.google.com/file/d/0B2LjecPmLjo0ZmtDUm4xRm9KUEU/view?usp=sharing) 
 Allows for the use of /nvreload, You no longer need to restart your server Server to make changes. 
