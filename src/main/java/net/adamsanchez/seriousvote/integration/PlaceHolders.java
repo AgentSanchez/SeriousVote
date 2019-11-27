@@ -40,6 +40,7 @@ public class PlaceHolders {
     public String player_votes(@Source CommandSource sender) {
         if (sender != null){
             String.valueOf(SeriousVoteAPI.getPlayerTotalVotes(sender.getName()));
+            return;
         }
         return String.valueOf(0);
     }
