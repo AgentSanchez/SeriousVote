@@ -3,6 +3,7 @@ package net.adamsanchez.seriousvote.integration;
 import me.rojo8399.placeholderapi.Placeholder;
 import me.rojo8399.placeholderapi.PlaceholderService;
 import me.rojo8399.placeholderapi.Source;
+import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.api.SeriousVoteAPI;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
@@ -24,7 +25,7 @@ public class PlaceHolders {
                 .stream()
                 .map(builder -> builder.author("seriousvote")
                         .plugin(instance)
-                        .version("4.8.7")
+                        .version(SeriousVote.getInstance().getPlugin().getVersion().get())
                 )
                 .forEach(builder -> {
                     try {
@@ -39,8 +40,7 @@ public class PlaceHolders {
     @Placeholder(id = "player-votes")
     public String player_votes(@Source CommandSource sender) {
         if (sender != null){
-            String.valueOf(SeriousVoteAPI.getPlayerTotalVotes(sender.getName()));
-            return;
+            return String.valueOf(SeriousVoteAPI.getPlayerTotalVotes(sender.getName()));
         }
         return String.valueOf(0);
     }
