@@ -65,7 +65,7 @@ import java.util.stream.Collectors;
         name = "SeriousVote",
         version = "4.8.7",
         description = "This plugin enables server admins to give players rewards for voting for their server.",
-        dependencies = { @Dependency(id = "nuvotifier", version = "1.0", optional = false), @Dependency(id = "placeholderapi",optional = true) })
+        dependencies = { @Dependency(id = "nuvotifier", optional = false), @Dependency(id = "placeholderapi",optional = true) })
 public class SeriousVote {
 
     @Inject
