@@ -237,4 +237,24 @@ public class Database {
 
     }
 
+    /**
+     * Returns the number of players in the table
+     */
+    public int getCount(){
+        ResultSet results = null;
+        int count = 0;
+        String query = String.format("SELECT COUNT(*) FROM %s;",playerTable);
+        try(Connection con = getConnection()){
+            results = con.createStatement().executeQuery(query);
+            while(results.next()){
+                count = results.getInt(1);
+                U.debug("Table has " + count + "players.");
+                return count;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
 }
