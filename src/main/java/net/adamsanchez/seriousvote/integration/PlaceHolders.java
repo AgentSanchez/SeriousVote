@@ -55,11 +55,11 @@ public class PlaceHolders {
         if(!SeriousVote.getInstance().usingMilestones()) return "MILESTONES NOT ENABLED";
 
         if(rank == null){
-            return U.getName(SeriousVoteAPI.getRecordByRank(1).getUuid());
+            return U.getName(SeriousVoteAPI.getRecordByRank(0).getUuid());
         }
         else
         {
-            return U.getName(SeriousVoteAPI.getRecordByRank(rank).getUuid());
+            return U.getName(SeriousVoteAPI.getRecordByRank(rank-1).getUuid());
         }
     }
 
@@ -68,11 +68,11 @@ public class PlaceHolders {
         if(!SeriousVote.getInstance().usingMilestones()) return "MILESTONES NOT ENABLED";
 
         if(rank == null){
-            return SeriousVoteAPI.getRecordByRank(1).getTotalVotes() + "";
+            return SeriousVoteAPI.getRecordByRank(0).getTotalVotes() + "";
         }
         else
         {
-            return SeriousVoteAPI.getRecordByRank(rank).getUuid() + "";
+            return SeriousVoteAPI.getRecordByRank(rank-1).getTotalVotes() + "";
         }
     }
 
