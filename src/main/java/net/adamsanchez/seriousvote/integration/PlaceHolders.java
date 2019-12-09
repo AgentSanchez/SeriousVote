@@ -54,8 +54,9 @@ public class PlaceHolders {
     public String rankPlayerName(@Token @Nullable Integer rank){
         if(!SeriousVote.getInstance().usingMilestones()) return "MILESTONES NOT ENABLED";
 
-        if(rank == null){
-            return U.getName(SeriousVoteAPI.getRecordByRank(0).getUuid());
+        if(rank == null || rank > SeriousVote.getInstance().getMilestones().getNumberOfVoters()){
+            //return U.getName(SeriousVoteAPI.getRecordByRank(0).getUuid());
+            return "_EMPTY_";
         }
         else
         {
@@ -67,8 +68,9 @@ public class PlaceHolders {
     public String rankPlayerVotes(@Token @Nullable Integer rank){
         if(!SeriousVote.getInstance().usingMilestones()) return "MILESTONES NOT ENABLED";
 
-        if(rank == null){
-            return SeriousVoteAPI.getRecordByRank(0).getTotalVotes() + "";
+        if(rank == null || rank > SeriousVote.getInstance().getMilestones().getNumberOfVoters()){
+            //return SeriousVoteAPI.getRecordByRank(0).getTotalVotes() + "";
+            return "_EMPTY_";
         }
         else
         {

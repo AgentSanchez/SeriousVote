@@ -233,6 +233,10 @@ public class Milestones {
     public void resetPlayerVotes(){
         db.resetPlayers();
     }
+
+    public int getNumberOfVoters(){
+        return db.getCount();
+    }
     public void reloadDB() {
         this.db = new Database();
     }
