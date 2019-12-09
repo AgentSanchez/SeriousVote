@@ -125,6 +125,8 @@ public class SeriousVote {
 
 
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String, String>>>();
+
+    //Stored Offline Votes
     HashMap<UUID, Integer> storedVotes = new HashMap<UUID, Integer>();
     int randomRewardsNumber;
     int rewardsMin;

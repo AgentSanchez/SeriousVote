@@ -62,6 +62,11 @@ public class Milestones {
         return record;
     }
 
+    public PlayerRecord getRecordByRank(int rank){
+        PlayerRecord record = db.getRecordByRank(rank);
+        return record == null ? null : record;
+    }
+
 
     public void checkForMilestones(PlayerRecord record, String playerName) {
         //Check based on amount of votes given.

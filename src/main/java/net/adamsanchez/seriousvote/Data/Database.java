@@ -128,6 +128,20 @@ public class Database {
         return  results;
     }
 
+    /**
+     * Gets an ordered list of records starting at the nth record (offset)
+     * @param con
+     * @param table
+     * @param orderByField
+     * @param offset
+     * @return
+     */
+    public ResultSet orderedSelectQuery(Connection con, String table, String orderByField, int offset){
+        String initial = "SELECT * FROM %s ORDER BY %s DESC LIMIT 1 OFFSET %s";
+        ResultSet results = genericQuery(con, String.format(initial,table,orderByField,offset));
+        return  results;
+    }
+
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -143,6 +157,30 @@ public class Database {
                 Date lastVote = results.getDate("lastVote");
                 int totalVote = results.getInt("totalVotes");
                 return new PlayerRecord(uuid, totalVote,sequentialVotes,lastVote);
+            }
+        } catch (SQLException e) {
+            U.error("Trouble getting information from the database");
+        }
+        return null;
+    }
+
+    /**
+     * Retrieves the nth row from the database if it exists
+     * @param rank The n'th record
+     * @return
+     */
+    public PlayerRecord getRecordByRank(int rank){
+        ResultSet results = null;
+        try(Connection con = getConnection()){
+
+            results = orderedSelectQuery(con,playerTable, "totalVotes", rank);
+
+            if(results.first()){
+                int sequentialVotes = results.getInt("voteSpree");
+                Date lastVote = results.getDate("lastVote");
+                int totalVote = results.getInt("totalVotes");
+                String uuid = results.getString("player");
+                return new PlayerRecord(UUID.fromString(uuid), totalVote,sequentialVotes,lastVote);
             }
         } catch (SQLException e) {
             U.error("Trouble getting information from the database");
@@ -185,4 +223,5 @@ public class Database {
         }
 
     }
+
 }
