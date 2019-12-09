@@ -16,12 +16,13 @@ public class ResetVotesCommand implements CommandExecutor {
 
     public CommandResult execute(CommandSource src, CommandContext args) throws
             CommandException {
-        if (SeriousVote.getInstance().reloadConfigs()) {
-            src.sendMessage(Text.of("All vote records reset to 0"));
+        if(SeriousVote.getInstance().usingMilestones()){
+            SeriousVote.getInstance().getMilestones().resetPlayerVotes();
+            src.sendMessage(Text.of("All votes reset to 0"));
         } else {
-            src.sendMessage(Text.of("Could not execute the reset command.").toBuilder().color(TextColors.RED).build());
-        }
+            src.sendMessage(Text.of("You are not using a database...."));
 
+        }
         return CommandResult.success();
 
     }
