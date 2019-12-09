@@ -193,6 +193,12 @@ public class SeriousVote {
                 .interval(700, TimeUnit.MILLISECONDS)
                 .name("SeriousVote-CommandRewardExecutor")
                 .submit(plugin);
+        if(CM.getMonthlyResetEnabled(rootNode)){
+            Task checkForResets = taskBuilder.execute(() -> checkForReset())
+                    .interval(10, TimeUnit.MINUTES)
+                    .name("SeriousVote-MonthlyResetService")
+                    .submit(plugin);
+        }
     }
 
     @Listener
@@ -208,6 +214,15 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////CONFIGURATION METHODS//////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
+
+    public void checkForReset(){
+        Calendar c = Calendar.getInstance();
+        if (c.get(Calendar.DAY_OF_MONTH) == CM.getMonthlyResetDay(rootNode)){
+            getMilestones().resetPlayerVotes();
+        }
+
+    }
+
     public boolean reloadConfigs() {
         //try loading from file
         try {

@@ -84,6 +84,14 @@ public class CM {
         return node.getNode("config","dailies","enabled").getBoolean();
     }
 
+    public static boolean getMonthlyResetEnabled(CommentedConfigurationNode node) {
+        return node.getNode("config","monthly-reset-enabled").getBoolean();
+    }
+
+    public static int getMonthlyResetDay(CommentedConfigurationNode node) {
+        return node.getNode("config", "monthly-reset-day").getInt();
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////
 
     public static List<String> getSetCommands(ConfigurationNode node) {
