@@ -78,6 +78,11 @@ public class PlaceHolders {
         }
     }
 
+    @Placeholder(id = "sv-total-voters")
+    public int numberOfVoters(){
+        return SeriousVoteAPI.getTotalNumberOfVoters();
+    }
+
     @Placeholder(id = "sv-version")
     public String rankPlayerVotes(){
         return SeriousVote.getInstance().getPlugin().getVersion().get();
