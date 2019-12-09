@@ -15,7 +15,13 @@ public class SeriousVoteAPI {
     }
 
     public static PlayerRecord getRecordByRank(int rank){
+        if(!SeriousVote.getInstance().usingMilestones()) return null;
         return SeriousVote.getInstance().getMilestones().getRecordByRank(rank);
+    }
+
+    public static int getTotalNumberOfVoters(){
+        if(!SeriousVote.getInstance().usingMilestones()) return 0;
+        return SeriousVote.getInstance().getMilestones().getNumberOfVoters();
     }
 
 }
