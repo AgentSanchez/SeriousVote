@@ -524,7 +524,7 @@ public class SeriousVote {
 
     public boolean broadCastMessage(String message, String username) {
 
-        if (message.isEmpty() || message == null || message == "" ) return false;
+        if (message == null || message.isEmpty() || message == "" ) return false;
         game.getServer().getBroadcastChannel().send(
                 TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username)));
         return true;
@@ -533,7 +533,7 @@ public class SeriousVote {
     public boolean broadCastMessage(String message, String username, String currentRewards) {
 
         if(!isOnline(username)) return false;
-        if (message.isEmpty() || message == null) return false;
+        if (message == null || message.isEmpty() || message == "" ) return false;
         game.getServer().getBroadcastChannel().send(
                 TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username, currentRewards)));
         return true;
