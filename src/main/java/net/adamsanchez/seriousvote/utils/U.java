@@ -45,7 +45,7 @@ public class U {
         }
     }
 
-    public static int roll(int chanceMax){
+    public static int roll(int chanceMax) {
         //Returns a number within the chance pool bound is lower inclusive upper exclusive
         int nextInt;
         if (chanceMax > 0) {
@@ -56,7 +56,6 @@ public class U {
         }
         return 0;
     }
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 

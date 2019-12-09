@@ -51,6 +51,8 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -101,6 +103,7 @@ public class SeriousVote {
     @DefaultConfig(sharedRoot = false)
     private Path defaultConfig;
     private Path offlineVotes;
+    private Path resetDatePath;
 
     @Inject
     @DefaultConfig(sharedRoot = false)
@@ -163,6 +166,7 @@ public class SeriousVote {
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
         storedVotes = new HashMap<UUID, Integer>();
         offlineVotes = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
+        resetDatePath = Paths.get(privateConfigDir.toString(),"", "lastReset");
         OfflineHandler.initOfflineStorage();
         CM.initConfig(defaultConfig);
         currentRewards = "";
@@ -193,9 +197,11 @@ public class SeriousVote {
                 .interval(700, TimeUnit.MILLISECONDS)
                 .name("SeriousVote-CommandRewardExecutor")
                 .submit(plugin);
-        if(CM.getMonthlyResetEnabled(rootNode)){
+
+        if(milestonesEnabled && CM.getMonthlyResetEnabled(rootNode)){
+            U.info("Setting up monthly reset...");
             Task checkForResets = taskBuilder.execute(() -> checkForReset())
-                    .interval(10, TimeUnit.MINUTES)
+                    .interval(30, TimeUnit.MINUTES)
                     .name("SeriousVote-MonthlyResetService")
                     .submit(plugin);
         }
@@ -216,10 +222,20 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     public void checkForReset(){
-        Calendar c = Calendar.getInstance();
-        if (c.get(Calendar.DAY_OF_MONTH) == CM.getMonthlyResetDay(rootNode)){
-            getMilestones().resetPlayerVotes();
+        U.debug("Checking for reset.....");
+        if(new java.util.Date().getTime() - OfflineHandler.retrieveLastReset().getTime() >= 86400001){
+            Calendar c = Calendar.getInstance();
+
+            if (c.get(Calendar.DAY_OF_MONTH) == CM.getMonthlyResetDay(rootNode)){
+                U.info("It's the #" + CM.getMonthlyResetDay(rootNode) + " day of the month. Resetting all vote totals to 0!");
+                getMilestones().resetPlayerVotes();
+                OfflineHandler.storeLastReset(new java.util.Date());
+            }
+        } else
+        {
+            U.debug("Too soon since last reset....");
         }
+
 
     }
 
@@ -632,6 +648,10 @@ public class SeriousVote {
 
     public Path getOfflineVotes(){
         return offlineVotes;
+    }
+
+    public Path getResetDatePath(){
+        return resetDatePath;
     }
 
     public void resetCurrentRewards() {

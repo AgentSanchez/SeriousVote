@@ -6,7 +6,11 @@ import org.spongepowered.api.asset.Asset;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -43,5 +47,30 @@ public class OfflineHandler {
         return  storedVotes;
     }
 
+    public static void storeLastReset(Date date){
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(SeriousVote.getInstance().getResetDatePath().toFile()));
+            writer.write(date.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static Date retrieveLastReset(){
+        U.debug("Loading date file...");
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(SeriousVote.getInstance().getResetDatePath().toFile()));
+            String s = br.readLine();
+            br.close();
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
+            Date d = sdf.parse(s);
+            U.debug("returning date - " + d.toString());
+            return d;
+        } catch (Exception e) {
+            U.debug("Date file loading failed!!");
+            return new Date(0);
+        }
+    }
 }
