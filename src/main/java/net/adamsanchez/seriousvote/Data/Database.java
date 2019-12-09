@@ -190,7 +190,20 @@ public class Database {
 
     public void updatePlayer(PlayerRecord player){
         playerUpdateQuery(this.playerTable, player.uuid.toString(), player.totalVotes, player.voteSpree, player.lastVote);
+    }
 
+    /**
+     * Sets all player votes to 0
+     */
+    public void resetPlayers(){
+        String query = String.format("UPDATE %s SET totalVotes = 0", playerTable);
+
+        try(Connection con = getConnection()){
+            PreparedStatement statement = preparedStatement(con, query);
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void playerUpdateQuery(String table, String uuid, int totalVotes, int voteSpree, Date lastVote){

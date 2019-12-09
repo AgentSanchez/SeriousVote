@@ -48,6 +48,11 @@ public class CommandHandler {
                 .permission("seriousvote.commands.admin.debug")
                 .executor(new DebugCommand())
                 .build();
+        CommandSpec resetVotes = CommandSpec.builder()
+                .description(Text.of("Resets all player votes to 0"))
+                .permission("seriousvote.commands.admin.resetallvotes")
+                .executor(new ResetVotesCommand())
+                .build();
 
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
         Sponge.getCommandManager().register(SeriousVote.getInstance(), vote, "vote");
@@ -56,6 +61,6 @@ public class CommandHandler {
         Sponge.getCommandManager().register(SeriousVote.getInstance(), checkVote, "checkvote");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), version, "svversion","seriousvoteversion", "version");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), debugMode, "svdebug","seriousvotedebug");
-
+        Sponge.getCommandManager().register(SeriousVote.getInstance(), resetVotes, "svresetall");
     }
 }

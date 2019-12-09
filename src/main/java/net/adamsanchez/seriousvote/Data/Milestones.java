@@ -227,7 +227,12 @@ public class Milestones {
         return leastDays;
     }
 
-
+    /**
+     * Resets all player votes to 0;
+     */
+    public void resetPlayerVotes(){
+        db.resetPlayers();
+    }
     public void reloadDB() {
         this.db = new Database();
     }
