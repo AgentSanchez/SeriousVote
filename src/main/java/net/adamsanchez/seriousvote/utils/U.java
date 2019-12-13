@@ -34,13 +34,25 @@ public class U {
 
     public static String getName(UUID player){
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
-        return userStorage.get().get(player).get().getName();
+        U.debug("Attempting to get name from UUID...");
+        String name = userStorage.get().get(player).get().getName();
+        if(name == "" || name == null){
+            U.debug("System was unable to retrieve name from UUID: " + player.toString());
+            return "UNKNOWN";
+        } else {
+            U.debug("System was able to retrieve name from UUID for: " + name);
+            return name;
+        }
+
+
     }
     public static UUID getIdFromName(String name){
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
         if((userStorage.get().get(name).isPresent())){
+            U.debug("returning ID from name");
             return userStorage.get().get(name).get().getUniqueId();
         } else {
+            U.debug("Unable to get ID from name...");
             return null;
         }
     }
