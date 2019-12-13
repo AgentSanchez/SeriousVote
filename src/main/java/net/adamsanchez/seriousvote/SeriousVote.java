@@ -119,7 +119,7 @@ public class SeriousVote {
 
     //Stored Offline Votes
     HashMap<UUID, Integer> storedVotes = new HashMap<UUID, Integer>();
-    int randomRewardsNumber;
+    int numOfRandomRewards;
     int rewardsMin;
     int rewardsMax;
     int randomRewardsGen;
@@ -205,7 +205,7 @@ public class SeriousVote {
         publicOfflineMessage = CM.getOfflineMessage(mainCfgNode);
         bypassOffline = CM.getBypassOffline(mainCfgNode);
         messageOffline = CM.getMessageOffline(mainCfgNode);
-        randomRewardsNumber = getRewardsNumber(mainCfgNode);
+        numOfRandomRewards = getRewardsNumber(mainCfgNode);
         updateLoot(mainCfgNode);
         setCommands = CM.getSetCommands(mainCfgNode);
         U.debug("Here's your commands");
@@ -268,7 +268,7 @@ public class SeriousVote {
 
     public int generateRandomRewardNumber() {
         int nextInt;
-        if (randomRewardsNumber < 0) {
+        if (numOfRandomRewards < 0) {
             //Inclusive
             if (rewardsMin < 0) rewardsMin = 0;
             if (rewardsMax > rewardsMin) {
@@ -280,12 +280,16 @@ public class SeriousVote {
 
             U.info("Giving out " + nextInt + " random rewards.");
             return nextInt;
-        } else if (randomRewardsNumber < 0) {
+        } else if (numOfRandomRewards < 0) {
             return 0;
         }
         return 0;
     }
 
+    /**
+     * Checks for and imports the random loot settings from the config. It creates chanceMaps of tables.
+     * @param node The base config node used for checking for loot.
+     */
     public void updateLoot(ConfigurationNode node) {
         List<String> nodeStrings = node.getNode("config", "vote-reward", "random").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
@@ -445,8 +449,8 @@ public class SeriousVote {
             LootTable mainLoot;
             currentRewards = "";
             ArrayList<String> commandQueue = new ArrayList<String>();
-            if (hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
-                for (int i = 0; i < randomRewardsNumber; i++) {
+            if (hasLoot && !isNoRandom && numOfRandomRewards >= 1) {
+                for (int i = 0; i < numOfRandomRewards; i++) {
                     mainLoot = new LootTable(chooseTable(), mainCfgNode);
                     U.debug("Choosing a random reward.");
                     String chosenReward = mainLoot.chooseReward();
