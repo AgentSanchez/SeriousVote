@@ -11,6 +11,7 @@ import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.utils.CC;
 import net.adamsanchez.seriousvote.utils.CM;
+import net.adamsanchez.seriousvote.utils.ScheduleManager;
 import net.adamsanchez.seriousvote.utils.U;
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -34,8 +35,6 @@ import org.spongepowered.api.config.DefaultConfig;
 
 import org.spongepowered.api.plugin.PluginContainer;
 
-import org.spongepowered.api.scheduler.Scheduler;
-import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 
@@ -53,7 +52,6 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -123,7 +121,7 @@ public class SeriousVote {
     private LinkedList<String> commandQueue = new LinkedList<String>();
     private LinkedList<String> executingQueue = new LinkedList<String>();
     private LinkedList<Vote> voteQueue = new LinkedList<Vote>();
-
+    private ScheduleManager scheduleManager;
 
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String, String>>>();
 
@@ -189,20 +187,8 @@ public class SeriousVote {
             milestones = null;
         }
 
-        Scheduler scheduler = Sponge.getScheduler();
-        Task.Builder taskBuilder = scheduler.createTaskBuilder();
-        Task task = taskBuilder.execute(() -> processVotes())
-                .interval(700, TimeUnit.MILLISECONDS)
-                .name("SeriousVote-CommandRewardExecutor")
-                .submit(plugin);
-
-        if(milestonesEnabled && CM.getMonthlyResetEnabled(mainCfgNode)){
-            U.info("Setting up monthly reset...");
-            Task checkForResets = taskBuilder.execute(() -> checkForReset())
-                    .interval(2, TimeUnit.HOURS)
-                    .name("SeriousVote-MonthlyResetService")
-                    .submit(plugin);
-        }
+        //begin any scheduled tasks
+        scheduleManager = new ScheduleManager().run();
     }
 
     @Listener
@@ -218,24 +204,6 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////CONFIGURATION METHODS//////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
-
-    public void checkForReset(){
-        U.debug("Checking for reset.....");
-        if(new java.util.Date().getTime() - OfflineHandler.retrieveLastReset().getTime() >= 86400001){
-            Calendar c = Calendar.getInstance();
-
-            if (c.get(Calendar.DAY_OF_MONTH) == CM.getMonthlyResetDay(mainCfgNode)){
-                U.info("It's the #" + CM.getMonthlyResetDay(mainCfgNode) + " day of the month. Resetting all vote totals to 0!");
-                getMilestones().resetPlayerVotes();
-                OfflineHandler.storeLastReset(new java.util.Date());
-            }
-        } else
-        {
-            U.debug("Too soon since last reset....");
-        }
-
-
-    }
 
     public boolean reloadConfigs() {
         //try loading from file
@@ -384,31 +352,30 @@ public class SeriousVote {
     }
 
     public void processVotes() {
-        if (!voteQueue.isEmpty()) {
-            LinkedList<Vote> localQueue = new LinkedList<>();
-            synchronized (voteQueue) {
-                localQueue.addAll(voteQueue);
-                voteQueue.clear();
+        LinkedList<Vote> localQueue = new LinkedList<>();
+        synchronized (voteQueue) {
+            localQueue.addAll(voteQueue);
+            voteQueue.clear();
+        }
+
+        for (Vote vote : localQueue) {
+
+            String username = vote.getUsername();
+            U.debug("Vote Registered From " + vote.getServiceName() + " for " + username);
+            String currentRewards = giveVote(username);
+            if (!currentRewards.equals("offline")) {
+                broadCastMessage(publicMessage, username, currentRewards);
+            } else if (messageOffline && !bypassOffline){
+                broadCastMessage(publicOfflineMessage, username);
             }
 
-            for (Vote vote : localQueue) {
-                String username = vote.getUsername();
-                U.debug("Vote Registered From " + vote.getServiceName() + " for " + username);
-                String currentRewards = giveVote(username);
-                if (!currentRewards.equals("offline")) {
-                    broadCastMessage(publicMessage, username, currentRewards);
-                } else if (messageOffline && !bypassOffline){
-                    broadCastMessage(publicOfflineMessage, username);
-                }
 
-
-                if (milestones != null) {
-                    if (isOnline(username)) {
-                        milestones.addVote(game.getServer().getPlayer(username).get().getUniqueId());
-                    } else {
-                        if (userStorage.get().get(username).isPresent()) {
-                            milestones.addVote(userStorage.get().get(username).get().getUniqueId());
-                        }
+            if (milestones != null) {
+                if (isOnline(username)) {
+                    milestones.addVote(game.getServer().getPlayer(username).get().getUniqueId());
+                } else {
+                    if (userStorage.get().get(username).isPresent()) {
+                        milestones.addVote(userStorage.get().get(username).get().getUniqueId());
                     }
                 }
             }
@@ -657,7 +624,10 @@ public class SeriousVote {
         currentRewards = "";
     }
 
-    public ConfigurationNode getMainCfgNode() {
+    public boolean hasUnprocessedVotes(){
+        return !voteQueue.isEmpty();
+    }
+    public CommentedConfigurationNode getMainCfgNode() {
         return mainCfgNode;
     }
 
