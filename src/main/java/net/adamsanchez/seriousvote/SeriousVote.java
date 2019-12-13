@@ -391,31 +391,6 @@ public class SeriousVote {
             game.getCommandManager().process(game.getServer().getConsole(), command);
         }
         commandQueue.clear();
-
-    }
-
-    public boolean giveReward(List<String> commands) {
-        //Execute Commands
-        for (String command : commands) {
-            game.getCommandManager().process(game.getServer().getConsole(), command);
-        }
-        return true;
-    }
-
-    public String chooseTable() {
-        //compare
-        int roll = LootTools.roll(chanceMax);
-        int currentChoice = -1;
-        for (int ix = 0; ix < chanceMap.length; ix++) {
-            if (roll <= chanceMap[ix]) {
-                currentChoice = ix;
-                break;
-            }
-        }
-
-        if (currentChoice < 0) U.error("There was a problem while rolling something might be broken");
-        String chosenReward = mainRewardTables[1][currentChoice];
-        return chosenReward;
     }
 
     public String giveVote(String username) {
@@ -426,7 +401,7 @@ public class SeriousVote {
             ArrayList<String> commandQueue = new ArrayList<String>();
             if (hasLoot && !isNoRandom && numRandRewards >= 1) {
                 for (int i = 0; i < numRandRewards; i++) {
-                    mainLoot = new LootTable(chooseTable(), mainCfgNode);
+                    mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
                     U.debug("Choosing a random reward.");
                     String chosenReward = mainLoot.chooseReward();
 
@@ -439,7 +414,7 @@ public class SeriousVote {
             } else if (hasLoot && !isNoRandom) {
 
                 for (int i = 0; i < LootTools.genNumRandRewards(numRandRewards,minRandRewards,maxRandRewards); i++) {
-                    mainLoot = new LootTable(chooseTable(), mainCfgNode);
+                    mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
                     U.debug("Choosing a random reward.");
 
                     String chosenReward = mainLoot.chooseReward();
@@ -484,7 +459,7 @@ public class SeriousVote {
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////Utilities/////////////////////////////////////////////////////
+    ///////////////////////////Accessors and Modifiers/////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     public static SeriousVote getInstance() {

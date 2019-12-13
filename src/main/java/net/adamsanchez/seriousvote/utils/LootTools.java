@@ -1,5 +1,8 @@
 package net.adamsanchez.seriousvote.utils;
 
+import net.adamsanchez.seriousvote.SeriousVote;
+
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LootTools {
@@ -42,5 +45,42 @@ public class LootTools {
             return nextInt;
         }
         return 0;
+    }
+
+    /**
+     * Runs a command given
+     * @param commands
+     * @return
+     */
+    public static boolean runRewardCommands(List<String> commands) {
+        //Execute Commands
+        for (String command : commands) {
+            SeriousVote.getPublicGame().getCommandManager().process(SeriousVote.getPublicGame().getServer().getConsole(), command);
+        }
+        return true;
+    }
+
+    public static boolean giveReward(List<String> commands) {
+        //Execute Commands
+        for (String command : commands) {
+            SeriousVote.getPublicGame().getCommandManager().process(SeriousVote.getPublicGame().getServer().getConsole(), command);
+        }
+        return true;
+    }
+
+    public static String chooseTable(int[] chanceMap, String[][] rewardTables) {
+        //compare
+        int roll = LootTools.roll(chanceMap[chanceMap.length-1]);
+        int currentChoice = -1;
+        for (int ix = 0; ix < chanceMap.length; ix++) {
+            if (roll <= chanceMap[ix]) {
+                currentChoice = ix;
+                break;
+            }
+        }
+
+        if (currentChoice < 0) U.error("There was a problem while rolling something might be broken");
+        String chosenReward = rewardTables[1][currentChoice];
+        return chosenReward;
     }
 }
