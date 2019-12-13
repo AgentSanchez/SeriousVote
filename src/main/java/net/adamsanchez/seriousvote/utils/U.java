@@ -67,18 +67,6 @@ public class U {
         }
     }
 
-    public static int roll(int chanceMax) {
-        //Returns a number within the chance pool bound is lower inclusive upper exclusive
-        int nextInt;
-        if (chanceMax > 0) {
-
-            nextInt = ThreadLocalRandom.current().nextInt(0, chanceMax + 1);
-            U.debug("Rolled a " + nextInt + " out of" + chanceMax + "for table.");
-            return nextInt;
-        }
-        return 0;
-    }
-
     public static Text convertStringToLink(String link) {
         Text textLink = TextSerializers.FORMATTING_CODE.deserialize(link);
         try {

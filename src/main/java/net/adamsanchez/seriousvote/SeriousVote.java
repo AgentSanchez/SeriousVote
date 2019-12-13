@@ -9,10 +9,7 @@ import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
-import net.adamsanchez.seriousvote.utils.CC;
-import net.adamsanchez.seriousvote.utils.CM;
-import net.adamsanchez.seriousvote.utils.ScheduleManager;
-import net.adamsanchez.seriousvote.utils.U;
+import net.adamsanchez.seriousvote.utils.*;
 import ninja.leaping.configurate.ConfigurationNode;
 
 import org.slf4j.Logger;
@@ -46,7 +43,6 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 
@@ -119,10 +115,9 @@ public class SeriousVote {
 
     //Stored Offline Votes
     HashMap<UUID, Integer> storedVotes = new HashMap<UUID, Integer>();
-    int numOfRandomRewards;
-    int rewardsMin;
-    int rewardsMax;
-    int randomRewardsGen;
+    int numRandRewards;
+    int minRandRewards;
+    int maxRandRewards;
     List<String> setCommands;
     String currentRewards;
     String publicMessage;
@@ -205,7 +200,7 @@ public class SeriousVote {
         publicOfflineMessage = CM.getOfflineMessage(mainCfgNode);
         bypassOffline = CM.getBypassOffline(mainCfgNode);
         messageOffline = CM.getMessageOffline(mainCfgNode);
-        numOfRandomRewards = getRewardsNumber(mainCfgNode);
+        numRandRewards = getRewardsNumber(mainCfgNode);
         updateLoot(mainCfgNode);
         setCommands = CM.getSetCommands(mainCfgNode);
         U.debug("Here's your commands");
@@ -261,30 +256,11 @@ public class SeriousVote {
     private int getRewardsNumber(ConfigurationNode node) {
         int number = node.getNode("config", "random-rewards-number").getInt();
         isNoRandom = number == 0 ? true : false;
-        rewardsMin = node.getNode("config", "rewards-min").getInt();
-        rewardsMax = node.getNode("config", "rewards-max").getInt() + 1;
+        minRandRewards = node.getNode("config", "rewards-min").getInt();
+        maxRandRewards = node.getNode("config", "rewards-max").getInt() + 1;
         return number;
     }
 
-    public int generateRandomRewardNumber() {
-        int nextInt;
-        if (numOfRandomRewards < 0) {
-            //Inclusive
-            if (rewardsMin < 0) rewardsMin = 0;
-            if (rewardsMax > rewardsMin) {
-                nextInt = ThreadLocalRandom.current().nextInt(rewardsMin, rewardsMax);
-            } else {
-                nextInt = 0;
-                U.warn("There seems to be an error in your min/max setting in your configs.");
-            }
-
-            U.info("Giving out " + nextInt + " random rewards.");
-            return nextInt;
-        } else if (numOfRandomRewards < 0) {
-            return 0;
-        }
-        return 0;
-    }
 
     /**
      * Checks for and imports the random loot settings from the config. It creates chanceMaps of tables.
@@ -429,7 +405,7 @@ public class SeriousVote {
 
     public String chooseTable() {
         //compare
-        int roll = U.roll(chanceMax);
+        int roll = LootTools.roll(chanceMax);
         int currentChoice = -1;
         for (int ix = 0; ix < chanceMap.length; ix++) {
             if (roll <= chanceMap[ix]) {
@@ -449,8 +425,8 @@ public class SeriousVote {
             LootTable mainLoot;
             currentRewards = "";
             ArrayList<String> commandQueue = new ArrayList<String>();
-            if (hasLoot && !isNoRandom && numOfRandomRewards >= 1) {
-                for (int i = 0; i < numOfRandomRewards; i++) {
+            if (hasLoot && !isNoRandom && numRandRewards >= 1) {
+                for (int i = 0; i < numRandRewards; i++) {
                     mainLoot = new LootTable(chooseTable(), mainCfgNode);
                     U.debug("Choosing a random reward.");
                     String chosenReward = mainLoot.chooseReward();
@@ -462,8 +438,8 @@ public class SeriousVote {
                     }
                 }
             } else if (hasLoot && !isNoRandom) {
-                randomRewardsGen = generateRandomRewardNumber();
-                for (int i = 0; i < randomRewardsGen; i++) {
+
+                for (int i = 0; i < LootTools.genNumRandRewards(numRandRewards,minRandRewards,maxRandRewards); i++) {
                     mainLoot = new LootTable(chooseTable(), mainCfgNode);
                     U.debug("Choosing a random reward.");
 
