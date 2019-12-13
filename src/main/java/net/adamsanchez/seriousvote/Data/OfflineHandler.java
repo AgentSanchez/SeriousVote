@@ -66,7 +66,7 @@ public class OfflineHandler {
             br.close();
             SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
             Date d = sdf.parse(s);
-            U.debug("returning date - " + d.toString());
+            U.debug("Last Reset- " + d.toString());
             return d;
         } catch (Exception e) {
             U.debug("Date file loading failed!!");

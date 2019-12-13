@@ -43,7 +43,11 @@ public class PlaceHolders {
 
     @Placeholder(id = "sv-player-votes")
     public String playerTotalVotes(@Token String playerName) {
-        if(!SeriousVote.getInstance().usingMilestones()) return "MILESTONES NOT ENABLED";
+        U.debug("Attempting to retrieve player " + playerName + "'s record...");
+        if(!SeriousVote.getInstance().usingMilestones()) {
+            U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
+            return "MILESTONES NOT ENABLED";
+        }
         if (playerName != null){
             return String.valueOf(SeriousVoteAPI.getPlayerTotalVotes(playerName));
         }
@@ -52,34 +56,53 @@ public class PlaceHolders {
 
     @Placeholder(id = "sv-top-name")
     public String rankPlayerName(@Token @Nullable Integer rank){
-        if(!SeriousVote.getInstance().usingMilestones()) return "MILESTONES NOT ENABLED";
+        U.debug("Attempting to retrieve #" + rank + " player's record... ");
+        if(!SeriousVote.getInstance().usingMilestones()) {
+            U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
+            return "MILESTONES NOT ENABLED";
+        }
 
         if(rank == null || rank > SeriousVote.getInstance().getMilestones().getNumberOfVoters()){
+            U.debug("Requested number out of range!!!");
             //return U.getName(SeriousVoteAPI.getRecordByRank(0).getUuid());
             return "_EMPTY_";
         }
         else
         {
+            String playerName = U.getName(SeriousVoteAPI.getRecordByRank(rank-1).getUuid());
+            U.debug("Returning Player Name - " + playerName);
             return U.getName(SeriousVoteAPI.getRecordByRank(rank-1).getUuid());
         }
     }
 
     @Placeholder(id = "sv-top-votes")
     public String rankPlayerVotes(@Token @Nullable Integer rank){
-        if(!SeriousVote.getInstance().usingMilestones()) return "MILESTONES NOT ENABLED";
+        U.debug("Attempting to retrieve #" + rank + " player's record... ");
+        if(!SeriousVote.getInstance().usingMilestones()) {
+            U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
+            return "MILESTONES NOT ENABLED";
+        }
 
         if(rank == null || rank > SeriousVote.getInstance().getMilestones().getNumberOfVoters()){
             //return SeriousVoteAPI.getRecordByRank(0).getTotalVotes() + "";
+            U.debug("Requested number out of range!!!");
             return "_EMPTY_";
         }
         else
         {
-            return SeriousVoteAPI.getRecordByRank(rank-1).getTotalVotes() + "";
+            Integer totalVotes = SeriousVoteAPI.getRecordByRank(rank-1).getTotalVotes();
+            U.debug("Returning totalVotes ---: " + totalVotes);
+            return totalVotes + "";
         }
     }
 
     @Placeholder(id = "sv-total-voters")
     public int numberOfVoters(){
+        if(!SeriousVote.getInstance().usingMilestones()) {
+            U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
+            return 0;
+        }
+
         return SeriousVoteAPI.getTotalNumberOfVoters();
     }
 

@@ -64,6 +64,7 @@ public class Milestones {
 
     public PlayerRecord getRecordByRank(int rank){
         PlayerRecord record = db.getRecordByRank(rank);
+        U.debug("Request record for player in rank " + rank + ". UUID: " + record.getUuid().toString() + " Votes: " + record.getTotalVotes());
         return record == null ? null : record;
     }
 

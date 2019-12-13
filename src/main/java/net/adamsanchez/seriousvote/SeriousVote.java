@@ -201,7 +201,7 @@ public class SeriousVote {
         if(milestonesEnabled && CM.getMonthlyResetEnabled(rootNode)){
             U.info("Setting up monthly reset...");
             Task checkForResets = taskBuilder.execute(() -> checkForReset())
-                    .interval(30, TimeUnit.MINUTES)
+                    .interval(2, TimeUnit.HOURS)
                     .name("SeriousVote-MonthlyResetService")
                     .submit(plugin);
         }
@@ -527,7 +527,7 @@ public class SeriousVote {
             U.debug("Adding SetCommands to the process queue");
             for (String setCommand : setCommands) {
                 commandQueue.add(parseVariables(setCommand, username, currentRewards));
-                U.debug("----- Will process " + setCommand);
+                U.debug("Will process the following commands: " + setCommand);
             }
             this.commandQueue.addAll(commandQueue);
 
