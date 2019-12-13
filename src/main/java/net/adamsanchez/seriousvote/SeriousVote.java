@@ -359,7 +359,7 @@ public class SeriousVote {
 
 
             if (voteSpreeSystem != null) {
-                if (U.U.isOnline(username)) {
+                if (U.isOnline(username)) {
                     voteSpreeSystem.addVote(game.getServer().getPlayer(username).get().getUniqueId());
                 } else {
                     if (userStorage.get().get(username).isPresent()) {
