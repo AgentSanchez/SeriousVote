@@ -24,7 +24,7 @@ public class GiveVoteCommand implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         SeriousVote sv = SeriousVote.getInstance();
         String username = args.<String>getOne("player").get();
-        if (sv.isOnline(username)) {
+        if (U.isOnline(username)) {
             Player player = sv.getPublicGame().getServer().getPlayer(username).get();
             player.sendMessage(Text.of("An administrator has awarded you a vote!"));
             sv.giveVote(username);

@@ -524,7 +524,7 @@ public class SeriousVote {
                 TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username, currentRewards)));
         return true;
     }
-    
+
     public String parseVariables(String string, String username) {
         return string.replace("{player}", username);
     }
