@@ -2,7 +2,12 @@ package net.adamsanchez.seriousvote.utils;
 
 import net.adamsanchez.seriousvote.SeriousVote;
 import org.spongepowered.api.service.user.UserStorageService;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -74,6 +79,16 @@ public class U {
         return 0;
     }
 
+    public static Text convertStringToLink(String link) {
+        Text textLink = TextSerializers.FORMATTING_CODE.deserialize(link);
+        try {
+            return textLink.toBuilder().onClick(TextActions.openUrl(new URL(textLink.toPlain()))).build();
+        } catch (MalformedURLException e) {
+            U.error("Malformed URL");
+            U.error(e.toString());
+        }
+        return Text.of("Malformed URL - Inform Administrator");
+    }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static void bcast(String msg, String username){

@@ -524,18 +524,7 @@ public class SeriousVote {
                 TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username, currentRewards)));
         return true;
     }
-
-    public Text convertLink(String link) {
-        Text textLink = TextSerializers.FORMATTING_CODE.deserialize(link);
-        try {
-            return textLink.toBuilder().onClick(TextActions.openUrl(new URL(textLink.toPlain()))).build();
-        } catch (MalformedURLException e) {
-            U.error("Malformed URL");
-            U.error(e.toString());
-        }
-        return Text.of("Malformed URL - Inform Administrator");
-    }
-
+    
     public String parseVariables(String string, String username) {
         return string.replace("{player}", username);
     }

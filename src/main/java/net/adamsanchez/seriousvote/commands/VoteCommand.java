@@ -3,6 +3,7 @@ package net.adamsanchez.seriousvote.commands;
 import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.Data.PlayerRecord;
 import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -26,7 +27,7 @@ public class VoteCommand implements CommandExecutor {
                 TextSerializers.FORMATTING_CODE.deserialize(CM.getVoteSiteMessage(sv.getMainCfgNode()))
         );
         CM.getVoteSites(sv.getMainCfgNode()).forEach(site -> {
-            src.sendMessage(sv.convertLink(site));
+            src.sendMessage(U.convertStringToLink(site));
         });
 
         if (sv.usingMilestones() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
