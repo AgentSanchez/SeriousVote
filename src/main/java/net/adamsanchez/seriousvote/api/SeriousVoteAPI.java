@@ -11,17 +11,17 @@ public class SeriousVoteAPI {
     //Return the player's total vote amout
     public static int getPlayerTotalVotes(String playerName){
         UUID userID = U.getIdFromName(playerName);
-        return SeriousVote.getInstance().getMilestones().getRecord(userID).getTotalVotes();
+        return SeriousVote.getInstance().getVoteSpreeSystem().getRecord(userID).getTotalVotes();
     }
 
     public static PlayerRecord getRecordByRank(int rank){
         if(!SeriousVote.getInstance().usingMilestones()) return null;
-        return SeriousVote.getInstance().getMilestones().getRecordByRank(rank);
+        return SeriousVote.getInstance().getVoteSpreeSystem().getRecordByRank(rank);
     }
 
     public static int getTotalNumberOfVoters(){
         if(!SeriousVote.getInstance().usingMilestones()) return 0;
-        return SeriousVote.getInstance().getMilestones().getNumberOfVoters();
+        return SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters();
     }
 
 }

@@ -22,7 +22,7 @@ public class CheckVoteCommand implements CommandExecutor {
         String username = args.<String>getOne("player").get();
         UUID playerID = sv.getUserStorage().get().get(username).get().getUniqueId();
         if (sv.usingMilestones() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
-            PlayerRecord record = sv.getMilestones().getRecord(playerID);
+            PlayerRecord record = sv.getVoteSpreeSystem().getRecord(playerID);
             if (record != null) {
                 src.sendMessage(Text.of(username + " has a total of " + record.getTotalVotes()
                         + " votes. They have currently voted " + record.getVoteSpree()

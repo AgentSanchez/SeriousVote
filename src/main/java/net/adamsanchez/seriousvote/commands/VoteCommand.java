@@ -32,7 +32,7 @@ public class VoteCommand implements CommandExecutor {
         if (sv.usingMilestones() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
             if (sv.getUserStorage().get().get(src.getName()).isPresent()) {
                 UUID playerID = sv.getUserStorage().get().get(src.getName()).get().getUniqueId();
-                PlayerRecord record = sv.getMilestones().getRecord(playerID);
+                PlayerRecord record = sv.getVoteSpreeSystem().getRecord(playerID);
                 if (record != null) {
                     src.sendMessage(Text.of("You have a total of " + record.getTotalVotes()
                             + " votes. You have currently voted " + record.getVoteSpree()

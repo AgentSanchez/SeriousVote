@@ -2,13 +2,11 @@ package net.adamsanchez.seriousvote.integration;
 
 import me.rojo8399.placeholderapi.Placeholder;
 import me.rojo8399.placeholderapi.PlaceholderService;
-import me.rojo8399.placeholderapi.Source;
 import me.rojo8399.placeholderapi.Token;
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.api.SeriousVoteAPI;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.plugin.PluginContainer;
 
 import javax.annotation.Nullable;
@@ -62,7 +60,7 @@ public class PlaceHolders {
             return "MILESTONES NOT ENABLED";
         }
 
-        if(rank == null || rank > SeriousVote.getInstance().getMilestones().getNumberOfVoters()){
+        if(rank == null || rank > SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters()){
             U.debug("Requested number out of range!!!");
             //return U.getName(SeriousVoteAPI.getRecordByRank(0).getUuid());
             return "_EMPTY_";
@@ -83,7 +81,7 @@ public class PlaceHolders {
             return "MILESTONES NOT ENABLED";
         }
 
-        if(rank == null || rank > SeriousVote.getInstance().getMilestones().getNumberOfVoters()){
+        if(rank == null || rank > SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters()){
             //return SeriousVoteAPI.getRecordByRank(0).getTotalVotes() + "";
             U.debug("Requested number out of range!!!");
             return "_EMPTY_";

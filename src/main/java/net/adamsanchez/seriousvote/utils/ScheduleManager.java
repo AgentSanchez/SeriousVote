@@ -45,7 +45,7 @@ public class ScheduleManager {
 
             if (c.get(Calendar.DAY_OF_MONTH) == CM.getMonthlyResetDay(sv.getMainCfgNode())){
                 U.info("It's the #" + CM.getMonthlyResetDay(sv.getMainCfgNode()) + " day of the month. Resetting all vote totals to 0!");
-                sv.getMilestones().resetPlayerVotes();
+                sv.getVoteSpreeSystem().resetPlayerVotes();
                 OfflineHandler.storeLastReset(new java.util.Date());
             }
         } else

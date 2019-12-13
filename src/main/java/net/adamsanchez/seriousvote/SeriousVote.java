@@ -17,7 +17,6 @@ import ninja.leaping.configurate.ConfigurationNode;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
-import org.spongepowered.api.Platform;
 import org.spongepowered.api.Sponge;
 
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
@@ -109,7 +108,7 @@ public class SeriousVote {
 
     ///////////////////////////////////////////////////////
     boolean milestonesEnabled = false, dailiesEnabled = false;
-    private Milestones milestones;
+    private Milestones voteSpreeSystem;
     public List<String> monthlySet, yearlySet, weeklySet;
     int[] milestonesUsed;
     ///////////////////////////////////////////////////////
@@ -171,9 +170,9 @@ public class SeriousVote {
         getLogger().info(CC.YELLOW + "Serious Vote Has Loaded");
 
         if (milestonesEnabled == true | dailiesEnabled == true) {
-            milestones = new Milestones(mainCfgNode);
+            voteSpreeSystem = new Milestones(mainCfgNode);
         } else {
-            milestones = null;
+            voteSpreeSystem = null;
         }
 
         //begin any scheduled tasks
@@ -359,12 +358,12 @@ public class SeriousVote {
             }
 
 
-            if (milestones != null) {
-                if (isOnline(username)) {
-                    milestones.addVote(game.getServer().getPlayer(username).get().getUniqueId());
+            if (voteSpreeSystem != null) {
+                if (U.U.isOnline(username)) {
+                    voteSpreeSystem.addVote(game.getServer().getPlayer(username).get().getUniqueId());
                 } else {
                     if (userStorage.get().get(username).isPresent()) {
-                        milestones.addVote(userStorage.get().get(username).get().getUniqueId());
+                        voteSpreeSystem.addVote(userStorage.get().get(username).get().getUniqueId());
                     }
                 }
             }
@@ -375,11 +374,12 @@ public class SeriousVote {
     public void reloadDB() {
         if (dailiesEnabled || milestonesEnabled) {
             U.info("Attempting to reload database...");
-            if (milestones != null) {
-                milestones.shutdown();
+            if (voteSpreeSystem != null) {
+                voteSpreeSystem.shutdown();
             }
-            milestones = new Milestones(mainCfgNode);
+            voteSpreeSystem = new Milestones(mainCfgNode);
         }
+        U.info("Attempting to reload database, but it is not enabled!");
     }
 
     @Listener
@@ -445,7 +445,7 @@ public class SeriousVote {
 
     public String giveVote(String username) {
 
-        if (isOnline(username) || bypassOffline) {
+        if (U.isOnline(username) || bypassOffline) {
             LootTable mainLoot;
             currentRewards = "";
             ArrayList<String> commandQueue = new ArrayList<String>();
@@ -518,7 +518,7 @@ public class SeriousVote {
 
     public boolean broadCastMessage(String message, String username, String currentRewards) {
 
-        if(!isOnline(username)) return false;
+        if(!U.isOnline(username)) return false;
         if (message == null || message.isEmpty() || message == "" ) return false;
         game.getServer().getBroadcastChannel().send(
                 TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username, currentRewards)));
@@ -553,9 +553,7 @@ public class SeriousVote {
     //////////////////////////////Utilities/////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
     //returns weather a player is online
-    public boolean isOnline(String username) {
-        return getGame().getServer().getPlayer(username).isPresent() ? true : false;
-    }
+
 
 
 
@@ -576,7 +574,7 @@ public class SeriousVote {
     }
 
     public boolean usingMilestones() {
-        if (milestones != null) return true;
+        if (voteSpreeSystem != null) return true;
         return false;
     }
 
@@ -593,8 +591,8 @@ public class SeriousVote {
         return debug;
     }
 
-    public Milestones getMilestones() {
-        return milestones;
+    public Milestones getVoteSpreeSystem() {
+        return voteSpreeSystem;
     }
 
     public HashMap<UUID, Integer> getStoredVotes() {

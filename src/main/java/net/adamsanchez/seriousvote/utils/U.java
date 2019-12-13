@@ -46,6 +46,11 @@ public class U {
 
 
     }
+
+    public static boolean isOnline(String username) {
+        return SeriousVote.getInstance().getPublicGame().getServer().getPlayer(username).isPresent() ? true : false;
+    }
+
     public static UUID getIdFromName(String name){
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
         if((userStorage.get().get(name).isPresent())){
@@ -74,6 +79,8 @@ public class U {
     public static void bcast(String msg, String username){
         SeriousVote.getInstance().broadCastMessage(msg,username);
     }
+
+
 
 
 }
