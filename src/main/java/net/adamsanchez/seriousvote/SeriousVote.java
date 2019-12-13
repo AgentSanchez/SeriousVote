@@ -5,7 +5,7 @@ import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 
-import net.adamsanchez.seriousvote.Data.Milestones;
+import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
@@ -35,16 +35,12 @@ import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.plugin.PluginContainer;
 
 import org.spongepowered.api.service.user.UserStorageService;
-import org.spongepowered.api.text.Text;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Path;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 
@@ -108,7 +104,7 @@ public class SeriousVote {
 
     ///////////////////////////////////////////////////////
     boolean milestonesEnabled = false, dailiesEnabled = false;
-    private Milestones voteSpreeSystem;
+    private VoteSpreeSystem voteSpreeSystem;
     public List<String> monthlySet, yearlySet, weeklySet;
     int[] milestonesUsed;
     ///////////////////////////////////////////////////////
@@ -170,7 +166,7 @@ public class SeriousVote {
         getLogger().info(CC.YELLOW + "Serious Vote Has Loaded");
 
         if (milestonesEnabled == true | dailiesEnabled == true) {
-            voteSpreeSystem = new Milestones(mainCfgNode);
+            voteSpreeSystem = new VoteSpreeSystem(mainCfgNode);
         } else {
             voteSpreeSystem = null;
         }
@@ -251,7 +247,7 @@ public class SeriousVote {
 
         reloadDB();
 
-        /////////Load Up Milestones/////////
+        /////////Load Up VoteSpreeSystem/////////
         monthlySet = CM.getMonthlySetCommands(mainCfgNode);
         yearlySet = CM.getYearlySetCommands(mainCfgNode);
         weeklySet = CM.getWeeklySetCommands(mainCfgNode);
@@ -377,7 +373,7 @@ public class SeriousVote {
             if (voteSpreeSystem != null) {
                 voteSpreeSystem.shutdown();
             }
-            voteSpreeSystem = new Milestones(mainCfgNode);
+            voteSpreeSystem = new VoteSpreeSystem(mainCfgNode);
         }
         U.info("Attempting to reload database, but it is not enabled!");
     }
@@ -580,7 +576,7 @@ public class SeriousVote {
         return debug;
     }
 
-    public Milestones getVoteSpreeSystem() {
+    public VoteSpreeSystem getVoteSpreeSystem() {
         return voteSpreeSystem;
     }
 

@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 /**
  * Created by adam_ on 01/22/17.
  */
-public class Milestones {
+public class VoteSpreeSystem {
 
     String msgYear = "{player} Has voted for a year straight!!! He's earned a prize!";
     String msgMonth = "{player} Has voted for a month straight!!! He's earned a prize!";
@@ -35,7 +35,7 @@ public class Milestones {
     //If more than or equal to the milestone give reward
     Database db;
 
-    public Milestones(ConfigurationNode node) {
+    public VoteSpreeSystem(ConfigurationNode node) {
         sv = SeriousVote.getInstance();
         db = new Database();
         db.createPlayerTable();
