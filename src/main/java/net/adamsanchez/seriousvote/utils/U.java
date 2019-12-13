@@ -10,7 +10,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -80,7 +79,7 @@ public class U {
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static void bcast(String msg, String username){
-        SeriousVote.getInstance().broadCastMessage(msg,username);
+        OutputHelper.broadCastMessage(msg,username);
     }
 
 

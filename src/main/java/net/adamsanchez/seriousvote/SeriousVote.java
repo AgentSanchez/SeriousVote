@@ -38,7 +38,6 @@ import java.nio.file.Path;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
 
 import java.nio.file.Paths;
@@ -200,7 +199,7 @@ public class SeriousVote {
         publicOfflineMessage = CM.getOfflineMessage(mainCfgNode);
         bypassOffline = CM.getBypassOffline(mainCfgNode);
         messageOffline = CM.getMessageOffline(mainCfgNode);
-        numRandRewards = getRewardsNumber(mainCfgNode);
+        numRandRewards = updateRewardsNumbers(mainCfgNode);
         updateLoot(mainCfgNode);
         setCommands = CM.getSetCommands(mainCfgNode);
         U.debug("Here's your commands");
@@ -253,7 +252,7 @@ public class SeriousVote {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
-    private int getRewardsNumber(ConfigurationNode node) {
+    private int updateRewardsNumbers(ConfigurationNode node) {
         int number = node.getNode("config", "random-rewards-number").getInt();
         isNoRandom = number == 0 ? true : false;
         minRandRewards = node.getNode("config", "rewards-min").getInt();
@@ -328,9 +327,9 @@ public class SeriousVote {
             U.debug("Vote Registered From " + vote.getServiceName() + " for " + username);
             String currentRewards = giveVote(username);
             if (!currentRewards.equals("offline")) {
-                broadCastMessage(publicMessage, username, currentRewards);
+                OutputHelper.broadCastMessage(publicMessage, username, currentRewards);
             } else if (messageOffline && !bypassOffline){
-                broadCastMessage(publicOfflineMessage, username);
+                OutputHelper.broadCastMessage(publicOfflineMessage, username);
             }
 
 
@@ -370,7 +369,7 @@ public class SeriousVote {
                 rewardString = giveVote(username);
             }
 
-            broadCastMessage(publicMessage, username, rewardString);
+            OutputHelper.broadCastMessage(publicMessage, username, rewardString);
             currentRewards = "";
 
             storedVotes.remove(playerID);
@@ -434,7 +433,7 @@ public class SeriousVote {
                     currentRewards = currentRewards + mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
                     for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
                             .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                        commandQueue.add(parseVariables(ix, username));
+                        commandQueue.add(OutputHelper.parseVariables(ix, username));
                     }
                 }
             } else if (hasLoot && !isNoRandom) {
@@ -447,7 +446,7 @@ public class SeriousVote {
                     currentRewards = currentRewards + mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
                     for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
                             .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                        commandQueue.add(parseVariables(ix, username));
+                        commandQueue.add(OutputHelper.parseVariables(ix, username));
 
 
                     }
@@ -457,7 +456,7 @@ public class SeriousVote {
             //Get Set Rewards
             U.debug("Adding SetCommands to the process queue");
             for (String setCommand : setCommands) {
-                commandQueue.add(parseVariables(setCommand, username, currentRewards));
+                commandQueue.add(OutputHelper.parseVariables(setCommand, username, currentRewards));
                 U.debug("Will process the following commands: " + setCommand);
             }
             this.commandQueue.addAll(commandQueue);
@@ -484,43 +483,9 @@ public class SeriousVote {
     }
 
 
-    public boolean broadCastMessage(String message, String username) {
-
-        if (message == null || message.isEmpty() || message == "" ) return false;
-        game.getServer().getBroadcastChannel().send(
-                TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username)));
-        return true;
-    }
-
-    public boolean broadCastMessage(String message, String username, String currentRewards) {
-
-        if(!U.isOnline(username)) return false;
-        if (message == null || message.isEmpty() || message == "" ) return false;
-        game.getServer().getBroadcastChannel().send(
-                TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username, currentRewards)));
-        return true;
-    }
-
-    public String parseVariables(String string, String username) {
-        return string.replace("{player}", username);
-    }
-
-    public String parseVariables(String string, String username, String currentRewards) {
-        if (isNoRandom) {
-            return parseVariables(string, username);
-        } else if (currentRewards == "") {
-            return string.replace("{player}", username).replace("{rewards}", "No Random Rewards");
-        }
-        return string.replace("{player}", username).replace("{rewards}", currentRewards.substring(0, currentRewards.length() - 2));
-    }
-
     ///////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////Utilities/////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
-    //returns weather a player is online
-
-
-
 
     public static SeriousVote getInstance() {
         return instance;
@@ -530,8 +495,8 @@ public class SeriousVote {
         return userStorage;
     }
 
-    public Game getPublicGame() {
-        return this.getGame();
+    public static Game getPublicGame() {
+        return getInstance().getGame();
     }
 
     public boolean isDailiesEnabled() {

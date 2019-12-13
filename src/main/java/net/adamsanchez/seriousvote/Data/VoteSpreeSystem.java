@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote.Data;
 
 import net.adamsanchez.seriousvote.*;
 import net.adamsanchez.seriousvote.utils.CM;
+import net.adamsanchez.seriousvote.utils.OutputHelper;
 import net.adamsanchez.seriousvote.utils.U;
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -85,13 +86,13 @@ public class VoteSpreeSystem {
                 LootTable chosenTable = new LootTable(chosenRewardTable, rootNode);
                 for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                    commandList.add(sv.parseVariables(command, playerName));
+                    commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
             }
             //Add The Set Commands
             for (String command : rootNode.getNode("config", "milestones", "records", "" + record.getTotalVotes(), "set").getChildrenList().stream()
                     .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                commandList.add(sv.parseVariables(command, playerName));
+                commandList.add(OutputHelper.parseVariables(command, playerName));
             }
             //Send the Commands to Be Run
             sv.giveReward(commandList);
@@ -111,10 +112,10 @@ public class VoteSpreeSystem {
                 //Choose The Random Rewards from the chosen table
                 for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                    commandList.add(sv.parseVariables(command, playerName));
+                    commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 for (String command : sv.yearlySet) {
-                    commandList.add(sv.parseVariables(command, playerName));
+                    commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 sv.giveReward(commandList);
                 U.bcast(rootNode.getNode("config", "dailies", "yearly", "message").getString(), playerName);
@@ -125,10 +126,10 @@ public class VoteSpreeSystem {
                 //Choose The Random Rewards from the chosen table
                 for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                    commandList.add(sv.parseVariables(command, playerName));
+                    commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 for (String command : sv.monthlySet) {
-                    commandList.add(sv.parseVariables(command, playerName));
+                    commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 sv.giveReward(commandList);
                 U.bcast(rootNode.getNode("config", "dailies", "monthly", "message").getString(), playerName);
@@ -139,10 +140,10 @@ public class VoteSpreeSystem {
                 //Choose The Random Rewards from the chosen table
                 for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                    commandList.add(sv.parseVariables(command, playerName));
+                    commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 for (String command : sv.weeklySet) {
-                    commandList.add(sv.parseVariables(command, playerName));
+                    commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 sv.giveReward(commandList);
                 U.bcast(rootNode.getNode("config", "dailies", "weekly", "message").getString(), playerName);
