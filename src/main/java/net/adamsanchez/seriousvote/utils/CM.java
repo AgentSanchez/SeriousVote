@@ -25,6 +25,10 @@ public class CM {
 
     public static ConfigurationNode RootNode;
 
+    public static boolean getDebugMode(ConfigurationNode node){
+        return node.getNode("config","debug-mode").getBoolean();
+    }
+
     public static List<String> getWeeklySetCommands(ConfigurationNode node){
         return node.getNode("config","dailies","weekly","set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());

@@ -51,8 +51,6 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 
 import java.nio.file.Paths;
-import java.time.Instant;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -112,7 +110,7 @@ public class SeriousVote {
     @Inject
     @ConfigDir(sharedRoot = false)
     private Path privateConfigDir;
-    private CommentedConfigurationNode rootNode;
+    private CommentedConfigurationNode mainCfgNode;
 
     ///////////////////////////////////////////////////////
     boolean milestonesEnabled = false, dailiesEnabled = false;
@@ -186,7 +184,7 @@ public class SeriousVote {
         getLogger().info(CC.YELLOW + "Serious Vote Has Loaded");
 
         if (milestonesEnabled == true | dailiesEnabled == true) {
-            milestones = new Milestones(rootNode);
+            milestones = new Milestones(mainCfgNode);
         } else {
             milestones = null;
         }
@@ -198,7 +196,7 @@ public class SeriousVote {
                 .name("SeriousVote-CommandRewardExecutor")
                 .submit(plugin);
 
-        if(milestonesEnabled && CM.getMonthlyResetEnabled(rootNode)){
+        if(milestonesEnabled && CM.getMonthlyResetEnabled(mainCfgNode)){
             U.info("Setting up monthly reset...");
             Task checkForResets = taskBuilder.execute(() -> checkForReset())
                     .interval(2, TimeUnit.HOURS)
@@ -226,8 +224,8 @@ public class SeriousVote {
         if(new java.util.Date().getTime() - OfflineHandler.retrieveLastReset().getTime() >= 86400001){
             Calendar c = Calendar.getInstance();
 
-            if (c.get(Calendar.DAY_OF_MONTH) == CM.getMonthlyResetDay(rootNode)){
-                U.info("It's the #" + CM.getMonthlyResetDay(rootNode) + " day of the month. Resetting all vote totals to 0!");
+            if (c.get(Calendar.DAY_OF_MONTH) == CM.getMonthlyResetDay(mainCfgNode)){
+                U.info("It's the #" + CM.getMonthlyResetDay(mainCfgNode) + " day of the month. Resetting all vote totals to 0!");
                 getMilestones().resetPlayerVotes();
                 OfflineHandler.storeLastReset(new java.util.Date());
             }
@@ -242,7 +240,7 @@ public class SeriousVote {
     public boolean reloadConfigs() {
         //try loading from file
         try {
-            rootNode = loader.load();
+            mainCfgNode = loader.load();
         } catch (IOException e) {
             U.error(CC.RED + "There was an error while reloading your configs");
             U.error(e.toString());
@@ -250,15 +248,16 @@ public class SeriousVote {
         }
 
         //update variables and other instantiations
-        publicMessage = CM.getPublicMessage(rootNode);
-        publicOfflineMessage = CM.getOfflineMessage(rootNode);
-        bypassOffline = CM.getBypassOffline(rootNode);
-        messageOffline = CM.getMessageOffline(rootNode);
-        randomRewardsNumber = getRewardsNumber(rootNode);
-        updateLoot(rootNode);
-        setCommands = CM.getSetCommands(rootNode);
+        debug = CM.getDebugMode(mainCfgNode);
+        publicMessage = CM.getPublicMessage(mainCfgNode);
+        publicOfflineMessage = CM.getOfflineMessage(mainCfgNode);
+        bypassOffline = CM.getBypassOffline(mainCfgNode);
+        messageOffline = CM.getMessageOffline(mainCfgNode);
+        randomRewardsNumber = getRewardsNumber(mainCfgNode);
+        updateLoot(mainCfgNode);
+        setCommands = CM.getSetCommands(mainCfgNode);
         U.debug("Here's your commands");
-        for (String ix : CM.getRandomCommands(rootNode)) {
+        for (String ix : CM.getRandomCommands(mainCfgNode)) {
             U.debug(ix);
         }
 
@@ -282,25 +281,25 @@ public class SeriousVote {
         }
 
         //Reload DB configuration
-        databaseHostname = CM.getDatabaseHostname(rootNode);
-        databaseName = CM.getDatabaseName(rootNode);
-        databasePassword = CM.getDatabasePassword(rootNode);
-        databasePrefix = CM.getDatabasePrefix(rootNode);
-        databaseUsername = CM.getDatabaseUsername(rootNode);
-        databasePort = CM.getDatabasePort(rootNode);
-        minIdleConnections = CM.getMinIdleConnections(rootNode);
-        maxActiveConnections = CM.getMaxActiveConnections(rootNode);
+        databaseHostname = CM.getDatabaseHostname(mainCfgNode);
+        databaseName = CM.getDatabaseName(mainCfgNode);
+        databasePassword = CM.getDatabasePassword(mainCfgNode);
+        databasePrefix = CM.getDatabasePrefix(mainCfgNode);
+        databaseUsername = CM.getDatabaseUsername(mainCfgNode);
+        databasePort = CM.getDatabasePort(mainCfgNode);
+        minIdleConnections = CM.getMinIdleConnections(mainCfgNode);
+        maxActiveConnections = CM.getMaxActiveConnections(mainCfgNode);
 
-        milestonesEnabled = CM.getMilestonesEnabled(rootNode);
-        dailiesEnabled = CM.getDailiesEnabled(rootNode);
+        milestonesEnabled = CM.getMilestonesEnabled(mainCfgNode);
+        dailiesEnabled = CM.getDailiesEnabled(mainCfgNode);
 
         reloadDB();
 
         /////////Load Up Milestones/////////
-        monthlySet = CM.getMonthlySetCommands(rootNode);
-        yearlySet = CM.getYearlySetCommands(rootNode);
-        weeklySet = CM.getWeeklySetCommands(rootNode);
-        milestonesUsed = CM.getEnabledMilestones(rootNode);
+        monthlySet = CM.getMonthlySetCommands(mainCfgNode);
+        yearlySet = CM.getYearlySetCommands(mainCfgNode);
+        weeklySet = CM.getWeeklySetCommands(mainCfgNode);
+        milestonesUsed = CM.getEnabledMilestones(mainCfgNode);
 
 
         return true;
@@ -423,7 +422,7 @@ public class SeriousVote {
             if (milestones != null) {
                 milestones.shutdown();
             }
-            milestones = new Milestones(rootNode);
+            milestones = new Milestones(mainCfgNode);
         }
     }
 
@@ -496,12 +495,12 @@ public class SeriousVote {
             ArrayList<String> commandQueue = new ArrayList<String>();
             if (hasLoot && !isNoRandom && randomRewardsNumber >= 1) {
                 for (int i = 0; i < randomRewardsNumber; i++) {
-                    mainLoot = new LootTable(chooseTable(), rootNode);
+                    mainLoot = new LootTable(chooseTable(), mainCfgNode);
                     U.debug("Choosing a random reward.");
                     String chosenReward = mainLoot.chooseReward();
 
-                    currentRewards = currentRewards + rootNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
-                    for (String ix : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
+                    currentRewards = currentRewards + mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
+                    for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
                             .map(ConfigurationNode::getString).collect(Collectors.toList())) {
                         commandQueue.add(parseVariables(ix, username));
                     }
@@ -509,12 +508,12 @@ public class SeriousVote {
             } else if (hasLoot && !isNoRandom) {
                 randomRewardsGen = generateRandomRewardNumber();
                 for (int i = 0; i < randomRewardsGen; i++) {
-                    mainLoot = new LootTable(chooseTable(), rootNode);
+                    mainLoot = new LootTable(chooseTable(), mainCfgNode);
                     U.debug("Choosing a random reward.");
 
                     String chosenReward = mainLoot.chooseReward();
-                    currentRewards = currentRewards + rootNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
-                    for (String ix : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
+                    currentRewards = currentRewards + mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
+                    for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
                             .map(ConfigurationNode::getString).collect(Collectors.toList())) {
                         commandQueue.add(parseVariables(ix, username));
 
@@ -658,8 +657,8 @@ public class SeriousVote {
         currentRewards = "";
     }
 
-    public ConfigurationNode getRootNode() {
-        return rootNode;
+    public ConfigurationNode getMainCfgNode() {
+        return mainCfgNode;
     }
 
 }

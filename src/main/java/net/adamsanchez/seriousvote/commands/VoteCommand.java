@@ -23,9 +23,9 @@ public class VoteCommand implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws
             CommandException {
         src.sendMessage(
-                TextSerializers.FORMATTING_CODE.deserialize(CM.getVoteSiteMessage(sv.getRootNode()))
+                TextSerializers.FORMATTING_CODE.deserialize(CM.getVoteSiteMessage(sv.getMainCfgNode()))
         );
-        CM.getVoteSites(sv.getRootNode()).forEach(site -> {
+        CM.getVoteSites(sv.getMainCfgNode()).forEach(site -> {
             src.sendMessage(sv.convertLink(site));
         });
 

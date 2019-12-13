@@ -248,7 +248,7 @@ public class Database {
             results = con.createStatement().executeQuery(query);
             while(results.next()){
                 count = results.getInt(1);
-                U.debug("Table has " + count + "players.");
+                U.debug("Table has " + count + " players.");
                 return count;
             }
         } catch (SQLException e) {
