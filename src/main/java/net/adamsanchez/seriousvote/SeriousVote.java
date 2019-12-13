@@ -84,9 +84,6 @@ public class SeriousVote {
     private Metrics metrics;
     private static SeriousVote instance;
 
-    private static SeriousVote seriousVotePlugin;
-
-
     @Inject
     Logger logger;
 
@@ -151,14 +148,7 @@ public class SeriousVote {
     public void onInitialization(GamePreInitializationEvent event) {
         instance = this;
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
-        getLogger().info(CC.logo());
-        getLogger().info(CC.YELLOW_BOLD + "Serious Vote Version: "
-                + CC.PURPLE_BOLD + plugin.getVersion().get()
-                + CC.YELLOW_BOLD + " MC-Version: "
-                + CC.PURPLE_BOLD + Sponge.getPlatform().getMinecraftVersion().getName()
-                + CC.YELLOW_BOLD + " Sponge-Version: "
-                + CC.PURPLE_BOLD + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getName() + "-"
-                + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown"));
+        CC.printSVInfo();
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
         storedVotes = new HashMap<UUID, Integer>();
         offlineVotes = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
@@ -177,7 +167,6 @@ public class SeriousVote {
 
     @Listener
     public void onServerStart(GameInitializationEvent event) {
-        seriousVotePlugin = this;
         CommandHandler.registerCommands();
         getLogger().info(CC.YELLOW + "Serious Vote Has Loaded");
 

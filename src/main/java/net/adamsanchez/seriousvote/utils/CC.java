@@ -1,5 +1,10 @@
 package net.adamsanchez.seriousvote.utils;
 
+import net.adamsanchez.seriousvote.SeriousVote;
+import org.spongepowered.api.Platform;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.service.user.UserStorageService;
+
 /**
  * Created by Adam Sanchez on 4/14/2018.
  */
@@ -77,9 +82,16 @@ public class CC {
     public static final String CYAN_BACKGROUND_BRIGHT = "\033[0;106m";  // CYAN
     public static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m";   // WHITE
 
-
-
-
+    public static void printSVInfo(){
+        SeriousVote.getInstance().getLogger().info(CC.logo());
+        SeriousVote.getInstance().getLogger().info(CC.YELLOW_BOLD + "Serious Vote Version: "
+                + CC.PURPLE_BOLD + SeriousVote.getInstance().getPlugin().getVersion().get()
+                + CC.YELLOW_BOLD + " MC-Version: "
+                + CC.PURPLE_BOLD + Sponge.getPlatform().getMinecraftVersion().getName()
+                + CC.YELLOW_BOLD + " Sponge-Version: "
+                + CC.PURPLE_BOLD + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getName() + "-"
+                + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown"));
+    }
 
     public static String logo(){
         return  "                                                                                                    \n" +
