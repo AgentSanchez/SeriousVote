@@ -121,7 +121,6 @@ public class SeriousVote {
     String currentRewards;
     String publicMessage;
     String publicOfflineMessage;
-    boolean serverOfflineMode = false;
     boolean debug = false;
     boolean hasLoot = false;
     boolean isNoRandom = false;
@@ -494,7 +493,8 @@ public class SeriousVote {
         return debug;
     }
     public boolean isServerOffline(){
-        return serverOfflineMode;
+        U.info("Server is online: " + Sponge.getGame().getServer().getOnlineMode());
+        return !Sponge.getGame().getServer().getOnlineMode();
     }
     public VoteSpreeSystem getVoteSpreeSystem() {
         return voteSpreeSystem;
