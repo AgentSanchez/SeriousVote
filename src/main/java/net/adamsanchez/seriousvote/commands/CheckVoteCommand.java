@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote.commands;
 
 import net.adamsanchez.seriousvote.Data.PlayerRecord;
 import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -20,9 +21,9 @@ public class CheckVoteCommand implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         SeriousVote sv = SeriousVote.getInstance();
         String username = args.<String>getOne("player").get();
-        UUID playerID = sv.getUserStorage().get().get(username).get().getUniqueId();
+        String playerIdentifier = U.getPlayerIdentifier(username);
         if (sv.usingMilestones() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
-            PlayerRecord record = sv.getVoteSpreeSystem().getRecord(playerID);
+            PlayerRecord record = sv.getVoteSpreeSystem().getRecord(playerIdentifier);
             if (record != null) {
                 src.sendMessage(Text.of(username + " has a total of " + record.getTotalVotes()
                         + " votes. They have currently voted " + record.getVoteSpree()

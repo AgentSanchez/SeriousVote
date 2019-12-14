@@ -67,9 +67,9 @@ public class PlaceHolders {
         }
         else
         {
-            String playerName = U.getName(SeriousVoteAPI.getRecordByRank(rank-1).getUuid());
+            String playerName = U.getName(SeriousVoteAPI.getRecordByRank(rank-1).getPlayerIdentifier());
             U.debug("Returning Player Name - " + playerName);
-            return U.getName(SeriousVoteAPI.getRecordByRank(rank-1).getUuid());
+            return U.getName(SeriousVoteAPI.getRecordByRank(rank-1).getPlayerIdentifier());
         }
     }
 

@@ -1,6 +1,7 @@
 package net.adamsanchez.seriousvote.utils;
 
 import net.adamsanchez.seriousvote.SeriousVote;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
@@ -21,7 +22,7 @@ public class U {
     }
     public static void debug(String debug){
         if(SeriousVote.getInstance().isDebug()) {
-            SeriousVote.getInstance().getLogger().info(debug + CC.RESET);
+            SeriousVote.getInstance().getLogger().info("[DEBUG]: " + debug + CC.RESET);
         }
     }
     public static void error(String error) {
@@ -35,31 +36,46 @@ public class U {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public static String getName(UUID player){
+    //TODO Update with IF for offline / online
+    public static String getName(String playerIdentifier){
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
         U.debug("Attempting to get name from UUID...");
-        String name = userStorage.get().get(player).get().getName();
+        String name = userStorage.get().get(playerIdentifier).get().getName();
         if(name == "" || name == null){
-            U.debug("System was unable to retrieve name from UUID: " + player.toString());
+            U.debug("System was unable to retrieve name from UUID: " + playerIdentifier.toString());
             return "UNKNOWN";
         } else {
             U.debug("System was able to retrieve name from UUID for: " + name);
             return name;
         }
+    }
 
-
+    /**
+     * Returns a systemwide playerIdentifier depending on if the game is in online or offline mode
+     * @param nameOrID
+     * @return
+     */
+    public static String getPlayerIdentifier(String nameOrID){
+        U.debug("Retrieving playerIdentifier for input + \"" + nameOrID + "\"." );
+        String result = nameOrID;
+        if(SeriousVote.getInstance().isServerOffline()){
+            result = nameOrID;
+        } else {
+            result = U.getIdFromName(nameOrID).toString();
+        }
+        U.debug("Player Identifier returned as \"" + result + "\"");
+        return result;
     }
 
     public static boolean isOnline(String username) {
         return SeriousVote.getInstance().getPublicGame().getServer().getPlayer(username).isPresent() ? true : false;
     }
 
-    public static UUID getIdFromName(String name){
+    public static String getIdFromName(String name){
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
         if((userStorage.get().get(name).isPresent())){
             U.debug("returning ID from name");
-            return userStorage.get().get(name).get().getUniqueId();
+            return userStorage.get().get(name).get().getUniqueId().toString();
         } else {
             U.debug("Unable to get ID from name...");
             return null;

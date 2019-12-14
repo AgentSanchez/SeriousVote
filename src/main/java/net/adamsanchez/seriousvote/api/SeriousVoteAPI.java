@@ -10,8 +10,8 @@ public class SeriousVoteAPI {
 
     //Return the player's total vote amout
     public static int getPlayerTotalVotes(String playerName){
-        UUID userID = U.getIdFromName(playerName);
-        return SeriousVote.getInstance().getVoteSpreeSystem().getRecord(userID).getTotalVotes();
+        String playerIdentifier = U.getPlayerIdentifier(playerName);
+        return SeriousVote.getInstance().getVoteSpreeSystem().getRecord(playerIdentifier).getTotalVotes();
     }
 
     public static PlayerRecord getRecordByRank(int rank){

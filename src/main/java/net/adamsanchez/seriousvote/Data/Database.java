@@ -148,15 +148,15 @@ public class Database {
     //////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    public PlayerRecord getPlayer(UUID uuid){
+    public PlayerRecord getPlayer(String playerIdentifier){
         ResultSet results = null;
         try(Connection con = getConnection()){
-             results = genericSelectQuery(con, playerTable, "player", uuid.toString());
+             results = genericSelectQuery(con, playerTable, "player", playerIdentifier.toString());
             if(results.first()){
                 int sequentialVotes = results.getInt("voteSpree");
                 Date lastVote = results.getDate("lastVote");
                 int totalVote = results.getInt("totalVotes");
-                return new PlayerRecord(uuid, totalVote,sequentialVotes,lastVote);
+                return new PlayerRecord(playerIdentifier, totalVote,sequentialVotes,lastVote);
             }
         } catch (SQLException e) {
             U.error("Trouble getting information from the database");
@@ -179,8 +179,8 @@ public class Database {
                 int sequentialVotes = results.getInt("voteSpree");
                 Date lastVote = results.getDate("lastVote");
                 int totalVote = results.getInt("totalVotes");
-                String uuid = results.getString("player");
-                return new PlayerRecord(UUID.fromString(uuid), totalVote,sequentialVotes,lastVote);
+                String playerIdentifier = results.getString("player");
+                return new PlayerRecord(playerIdentifier, totalVote,sequentialVotes,lastVote);
             }
         } catch (SQLException e) {
             U.error("Trouble getting information from the database");
@@ -189,7 +189,7 @@ public class Database {
     }
 
     public void updatePlayer(PlayerRecord player){
-        playerUpdateQuery(this.playerTable, player.uuid.toString(), player.totalVotes, player.voteSpree, player.lastVote);
+        playerUpdateQuery(this.playerTable, player.getPlayerIdentifier(), player.getTotalVotes(), player.getVoteSpree(), player.getLastVote());
     }
 
     /**
@@ -206,12 +206,12 @@ public class Database {
         }
     }
 
-    public void playerUpdateQuery(String table, String uuid, int totalVotes, int voteSpree, Date lastVote){
+    public void playerUpdateQuery(String table, String playerIdentifier, int totalVotes, int voteSpree, Date lastVote){
         String initial = "REPLACE INTO %s(player, totalVotes, voteSpree, lastVote) VALUES(?,?,?,?)";
 
         try(Connection con = getConnection()){
             PreparedStatement statement = preparedStatement(con, String.format(initial,table));
-            statement.setString(1, uuid);
+            statement.setString(1, playerIdentifier);
             statement.setInt(2, totalVotes);
             statement.setInt(3, voteSpree);
             statement.setDate(4, lastVote);

@@ -113,7 +113,7 @@ public class SeriousVote {
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String, String>>>();
 
     //Stored Offline Votes
-    HashMap<UUID, Integer> storedVotes = new HashMap<UUID, Integer>();
+    HashMap<String, Integer> storedVotes = new HashMap<String, Integer>();
     int numRandRewards;
     int minRandRewards;
     int maxRandRewards;
@@ -121,6 +121,7 @@ public class SeriousVote {
     String currentRewards;
     String publicMessage;
     String publicOfflineMessage;
+    boolean serverOfflineMode = false;
     boolean debug = false;
     boolean hasLoot = false;
     boolean isNoRandom = false;
@@ -139,7 +140,7 @@ public class SeriousVote {
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
         CC.printSVInfo();
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
-        storedVotes = new HashMap<UUID, Integer>();
+        storedVotes = new HashMap<String, Integer>();
         offlineVotes = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
         resetDatePath = Paths.get(privateConfigDir.toString(),"", "lastReset");
         OfflineHandler.initOfflineStorage();
@@ -335,10 +336,10 @@ public class SeriousVote {
 
             if (voteSpreeSystem != null) {
                 if (U.isOnline(username)) {
-                    voteSpreeSystem.addVote(game.getServer().getPlayer(username).get().getUniqueId());
+                    voteSpreeSystem.addVote(U.getPlayerIdentifier(username));
                 } else {
                     if (userStorage.get().get(username).isPresent()) {
-                        voteSpreeSystem.addVote(userStorage.get().get(username).get().getUniqueId());
+                        voteSpreeSystem.addVote(U.getPlayerIdentifier(username));
                     }
                 }
             }
@@ -422,11 +423,8 @@ public class SeriousVote {
                     for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
                             .map(ConfigurationNode::getString).collect(Collectors.toList())) {
                         commandQueue.add(OutputHelper.parseVariables(ix, username));
-
-
                     }
                 }
-
             }
             //Get Set Rewards
             U.debug("Adding SetCommands to the process queue");
@@ -435,17 +433,17 @@ public class SeriousVote {
                 U.debug("Will process the following commands: " + setCommand);
             }
             this.commandQueue.addAll(commandQueue);
-
             return currentRewards;
+
         } else {
-            UUID playerID = U.getIdFromName(username);
-            if (playerID != null) {
+            String playerIdentifier = U.getPlayerIdentifier(username);
+            if (playerIdentifier != null) {
                 //Write to File
-                if (storedVotes.containsKey(playerID)) {
-                    storedVotes.put(playerID, storedVotes.get(playerID).intValue() + 1);
+                if (storedVotes.containsKey(playerIdentifier)) {
+                    storedVotes.put(playerIdentifier, storedVotes.get(playerIdentifier).intValue() + 1);
 
                 } else {
-                    storedVotes.put(playerID, new Integer(1));
+                    storedVotes.put(playerIdentifier, new Integer(1));
                 }
                 try {
                     OfflineHandler.saveOffline();
@@ -495,12 +493,14 @@ public class SeriousVote {
         debug = !debug;
         return debug;
     }
-
+    public boolean isServerOffline(){
+        return serverOfflineMode;
+    }
     public VoteSpreeSystem getVoteSpreeSystem() {
         return voteSpreeSystem;
     }
 
-    public HashMap<UUID, Integer> getStoredVotes() {
+    public HashMap<String, Integer> getStoredVotes() {
         return storedVotes;
     }
 

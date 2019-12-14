@@ -15,7 +15,6 @@ import org.spongepowered.api.text.format.TextColors;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -44,8 +43,8 @@ public class VoteSpreeSystem {
         rootNode = node;
     }
 
-    public boolean updateRecord(UUID player, int totalVotes, int voteSpree, Date lastVote) {
-        PlayerRecord record = new PlayerRecord(player, totalVotes, voteSpree, lastVote);
+    public boolean updateRecord(String playerIdentifier, int totalVotes, int voteSpree, Date lastVote) {
+        PlayerRecord record = new PlayerRecord(playerIdentifier, totalVotes, voteSpree, lastVote);
         db.updatePlayer(record);
         return true;
     }
@@ -55,18 +54,18 @@ public class VoteSpreeSystem {
         return true;
     }
 
-    public PlayerRecord getRecord(UUID player) {
+    public PlayerRecord getRecord(String playerIdentifier) {
 
-        PlayerRecord record = db.getPlayer(player);
+        PlayerRecord record = db.getPlayer(playerIdentifier);
         if (record == null) {
-            return createRecord(player);
+            return createRecord(playerIdentifier);
         }
         return record;
     }
 
     public PlayerRecord getRecordByRank(int rank){
         PlayerRecord record = db.getRecordByRank(rank);
-        U.debug("Request record for player in rank " + rank + ". UUID: " + record.getUuid().toString() + " Votes: " + record.getTotalVotes());
+        U.debug("Request record for player in rank " + rank + ". Identifier: " + record.getPlayerIdentifier() + " Votes: " + record.getTotalVotes());
         return record == null ? null : record;
     }
 
@@ -158,12 +157,12 @@ public class VoteSpreeSystem {
 
     }
 
-    public void addVote(UUID player) {
+    public void addVote(String playerIdentifier) {
 
-        PlayerRecord record = getRecord(player);
+        PlayerRecord record = getRecord(playerIdentifier);
         if (record == null) {
-            U.info("Creating a new record for " + player.toString() + ".");
-            record = PlayerRecord.getBlankRecord(player);
+            U.info("Creating a new record for " + playerIdentifier.toString() + ".");
+            record = PlayerRecord.getBlankRecord(playerIdentifier);
             record.setLastVote(new Date(new java.util.Date().getTime()));
             record.setTotalVotes(1);
             record.setVoteSpree(1);
@@ -186,22 +185,22 @@ public class VoteSpreeSystem {
                 record.setTotalVotes(record.getTotalVotes() + 1);
                 updateRecord(record);
 
-                if (sv.isDailiesEnabled()) checkForDailies(record, U.getName(player));
-                if (sv.isMilestonesEnabled()) checkForMilestones(record, U.getName(player));
+                if (sv.isDailiesEnabled()) checkForDailies(record, U.getName(playerIdentifier));
+                if (sv.isMilestonesEnabled()) checkForMilestones(record, U.getName(playerIdentifier));
                 return;
             }
             record.setTotalVotes(record.getTotalVotes() + 1);
-            if (sv.isMilestonesEnabled()) checkForMilestones(record, U.getName(player));
+            if (sv.isMilestonesEnabled()) checkForMilestones(record, U.getName(playerIdentifier));
 
             updateRecord(record);
 
         }
     }
 
-    public PlayerRecord createRecord(UUID player) {
-        U.info("Creating a new record for " + player.toString() + ".");
+    public PlayerRecord createRecord(String playerIdentifier) {
+        U.info("Creating a new record for " + playerIdentifier.toString() + ".");
         PlayerRecord record;
-        record = PlayerRecord.getBlankRecord(player);
+        record = PlayerRecord.getBlankRecord(playerIdentifier);
         record.setLastVote(new Date(new java.util.Date().getTime()));
         record.setTotalVotes(0);
         record.setVoteSpree(0);

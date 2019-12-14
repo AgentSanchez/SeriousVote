@@ -2,16 +2,13 @@ package net.adamsanchez.seriousvote.Data;
 
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.U;
-import org.spongepowered.api.asset.Asset;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.UUID;
 
 /**
  * Created by Adam Sanchez on 4/15/2018.
@@ -38,11 +35,11 @@ public class OfflineHandler {
 
     }
 
-    public static HashMap<UUID,Integer> loadOffline() throws IOException, ClassNotFoundException {
+    public static HashMap<String,Integer> loadOffline() throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream = new FileInputStream(SeriousVote.getInstance().getOfflineVotes().toFile());
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-        HashMap<UUID,Integer> storedVotes = (HashMap<UUID, Integer>) objectInputStream.readObject();
+        HashMap<String,Integer> storedVotes = (HashMap<String, Integer>) objectInputStream.readObject();
         objectInputStream.close();
         return  storedVotes;
     }

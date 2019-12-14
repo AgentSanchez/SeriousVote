@@ -30,13 +30,13 @@ public class GiveVoteCommand implements CommandExecutor {
             sv.giveVote(username);
             src.sendMessage(Text.of("You have successfully given " + username + " a vote"));
         } else {
-            UUID playerID = U.getIdFromName(username);
-            if (playerID != null) {
+            String playerIdentifier = U.getPlayerIdentifier(username);
+            if (playerIdentifier != null) {
                 //Write to File
-                if (sv.getStoredVotes().containsKey(playerID)) {
-                    sv.getStoredVotes().put(playerID, sv.getStoredVotes().get(playerID).intValue() + 1);
+                if (sv.getStoredVotes().containsKey(playerIdentifier)) {
+                    sv.getStoredVotes().put(playerIdentifier, sv.getStoredVotes().get(playerIdentifier).intValue() + 1);
                 } else {
-                    sv.getStoredVotes().put(playerID, new Integer(1));
+                    sv.getStoredVotes().put(playerIdentifier, new Integer(1));
                 }
                 try {
                     OfflineHandler.saveOffline();
