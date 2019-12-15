@@ -54,8 +54,17 @@ public class CommandHandler {
                 .executor(new ResetVotesCommand())
                 .build();
         CommandSpec migrateFromOnline = CommandSpec.builder()
-                .description(Text.of("Resets all player votes to 0"))
-                .permission("seriousvote.commands.admin.super.migrateFromOnline")
+                .description(Text.of("Changes All Player record IDs from UUIDs to Usernames."))
+                .permission("seriousvote.commands.admin.super.migratefromonline")
+                .executor(new MigrateFromOnlineCommand())
+                .build();
+        CommandSpec changePlayerID = CommandSpec.builder()
+                .description(Text.of("Change a player record's ID from one to another."))
+                .permission("seriousvote.commands.admin.changeplayerid")
+                .arguments(
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("OldPlayerID"))),
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("NewPlayerID")))
+                )
                 .executor(new MigrateFromOnlineCommand())
                 .build();
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
@@ -67,5 +76,6 @@ public class CommandHandler {
         Sponge.getCommandManager().register(SeriousVote.getInstance(), debugMode, "svdebug","seriousvotedebug");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), resetVotes, "svresetall");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), migrateFromOnline, "svmigratefromonline");
+        Sponge.getCommandManager().register(SeriousVote.getInstance(), changePlayerID, "svswapid");
     }
 }

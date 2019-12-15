@@ -78,15 +78,33 @@ public class VoteSpreeSystem {
             String newID = U.convertIDToName(record.getPlayerIdentifier());
             if(newID != null && newID != ""){
                 PlayerRecord newRecord = new PlayerRecord(newID, record.getTotalVotes(), record.getVoteSpree(), record.getLastVote());
-                db.deletePlayer(record.getPlayerIdentifier());
-                U.debug("Old player " + record.getPlayerIdentifier() + " deleted.");
                 db.updatePlayer(newRecord);
                 U.debug("New player with new ID " + newID + " added...");
+
+                db.deletePlayer(record.getPlayerIdentifier());
+                U.debug("Old player " + record.getPlayerIdentifier() + " deleted.");
+
                 numRecordsUpdated += 1;
             }
         }
         U.debug(CC.LINE);
         U.debug(CC.CYAN + "Updated " + numRecordsUpdated  + "/" + recordList.size() + " records. " + numAlreadyUpdated + " already updated.");
+    }
+
+    public void changePlayerID(PlayerRecord oldRecord, PlayerRecord newRecord){
+        db.updatePlayer(newRecord);
+        U.debug(CC.GREEN + "Record with ID " + newRecord.getPlayerIdentifier() + " added...");
+        db.deletePlayer(oldRecord.getPlayerIdentifier());
+        U.debug(CC.RED + "Old record with ID " + oldRecord.getPlayerIdentifier() + " deleted.");
+    }
+
+    public void changePlayerID(String oldPlayerIdentifier, String newPlayerIdentifier){
+        PlayerRecord oldRecord, newRecord;
+        oldRecord = db.getPlayer(oldPlayerIdentifier);
+        if(oldRecord != null){
+            newRecord = new PlayerRecord(newPlayerIdentifier, oldRecord.getTotalVotes(), oldRecord.getVoteSpree(), oldRecord.getLastVote());
+            changePlayerID(oldRecord, newRecord);
+        }
     }
 
     public PlayerRecord getRecordByRank(int rank){
