@@ -492,10 +492,7 @@ public class SeriousVote {
         debug = !debug;
         return debug;
     }
-    public boolean isServerOffline(){
-        U.info("Server is online: " + Sponge.getGame().getServer().getOnlineMode());
-        return !Sponge.getGame().getServer().getOnlineMode();
-    }
+
     public VoteSpreeSystem getVoteSpreeSystem() {
         return voteSpreeSystem;
     }
@@ -503,7 +500,9 @@ public class SeriousVote {
     public HashMap<String, Integer> getStoredVotes() {
         return storedVotes;
     }
-
+    public static boolean isServerOnline(){
+        return getPublicGame().getServer().getOnlineMode();
+    }
     public Path getOfflineVotes(){
         return offlineVotes;
     }
