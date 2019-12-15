@@ -353,6 +353,7 @@ public class SeriousVote {
                 voteSpreeSystem.shutdown();
             }
             voteSpreeSystem = new VoteSpreeSystem(mainCfgNode);
+            return;
         }
         U.info("Attempting to reload database, but it is not enabled!");
     }
