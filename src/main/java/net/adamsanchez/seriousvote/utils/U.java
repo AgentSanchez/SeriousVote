@@ -46,7 +46,7 @@ public class U {
         String name = userStorage.get().get(playerIdentifier).get().getName();
         if(name == "" || name == null){
             U.debug("System was unable to retrieve name from UUID: " + playerIdentifier.toString());
-            return "UNKNOWN";
+            return "";
         } else {
             U.debug("System was able to retrieve name from UUID for: " + name);
             return name;
