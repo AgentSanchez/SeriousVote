@@ -41,10 +41,15 @@ public class U {
     }
     public static String getName(String playerIdentifier, boolean bypass){
         if(bypass == false && SeriousVote.isServerOnline() == false) return playerIdentifier;
+
+        //id getname returns and if identifier are equal return identifier
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
         U.debug("Attempting to get name from UUID...");
-        String name = userStorage.get().get(playerIdentifier).get().getName();
+        String name = userStorage.get().get(UUID.fromString(playerIdentifier)).get().getName();
         if(name == "" || name == null){
+            if(userStorage.get().get(playerIdentifier).isPresent()){
+
+            }
             U.debug("System was unable to retrieve name from UUID: " + playerIdentifier.toString());
             return "";
         } else {
@@ -105,6 +110,15 @@ public class U {
         String s = getName(playerIdentifier, true);
         U.debug("convertIDToName returns: " + s);
         return s;
+    }
+
+    public static boolean isUUID(String id){
+        try{
+            UUID.fromString(id);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
 

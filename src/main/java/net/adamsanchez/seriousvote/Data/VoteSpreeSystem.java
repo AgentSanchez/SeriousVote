@@ -60,13 +60,20 @@ public class VoteSpreeSystem {
         }
         return record;
     }
-    //TODO What if it's already a name?
+
     public void updateAllPlayerID(){
         int totalVoters = db.getCount();
         ArrayList<PlayerRecord> recordList = db.getAllRecords();
         U.debug("Retrieved " + recordList.size() + " records from storage....");
         U.debug(CC.LINE);
+        int numRecordsUpdated = 0, numAlreadyUpdated = 0;
         for(PlayerRecord record : recordList) {
+            //If already name...
+            if(!U.isUUID(record.getPlayerIdentifier())){
+                U.debug(CC.YELLOW + "Skipping record for player: " + record.getPlayerIdentifier() + ". Already Converted.");
+                numAlreadyUpdated += 1;
+                continue;
+            }
             U.debug("Converting player with ID: " + record.getPlayerIdentifier());
             String newID = U.convertIDToName(record.getPlayerIdentifier());
             if(newID != null && newID != ""){
@@ -75,8 +82,11 @@ public class VoteSpreeSystem {
                 U.debug("Old player " + record.getPlayerIdentifier() + " deleted.");
                 db.updatePlayer(newRecord);
                 U.debug("New player with new ID " + newID + " added...");
+                numRecordsUpdated += 1;
             }
         }
+        U.debug(CC.LINE);
+        U.debug(CC.CYAN + "Updated " + numRecordsUpdated  + "/" + recordList.size() + " records. " + numAlreadyUpdated + " already updated.");
     }
 
     public PlayerRecord getRecordByRank(int rank){
