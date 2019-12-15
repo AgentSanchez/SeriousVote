@@ -36,8 +36,11 @@ public class U {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    //TODO Update with IF for offline / online
     public static String getName(String playerIdentifier){
+        getName(playerIdentifier, false);
+    }
+    public static String getName(String playerIdentifier, boolean bypass){
+        if(bypass == false && SeriousVote.isServerOnline() == false) return playerIdentifier;
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
         U.debug("Attempting to get name from UUID...");
         String name = userStorage.get().get(playerIdentifier).get().getName();
@@ -58,7 +61,7 @@ public class U {
     public static String getPlayerIdentifier(String nameOrID){
         U.debug("Retrieving playerIdentifier for input + \"" + nameOrID + "\"." );
         String result = nameOrID;
-        if(SeriousVote.getInstance().isServerOffline()){
+        if(SeriousVote.isServerOnline() == false){
             result = nameOrID;
         } else {
             result = U.getIdFromName(nameOrID).toString();
@@ -96,6 +99,12 @@ public class U {
 
     public static void bcast(String msg, String username){
         OutputHelper.broadCastMessage(msg,username);
+    }
+
+    public static String convertIDToName(String playerIdentifier){
+        String s = getName(playerIdentifier, true);
+        U.debug("convertIDToName returns: " + s);
+        return s;
     }
 
 

@@ -84,7 +84,8 @@ public class CC {
 
     public static void printSVInfo(){
         SeriousVote.getInstance().getLogger().info(CC.logo());
-        SeriousVote.getInstance().getLogger().info(CC.YELLOW_BOLD + "Serious Vote Version: "
+        SeriousVote.getInstance().getLogger().info(CC.RED + "ONLINE MODE? " + Sponge.getGame().getServer().getOnlineMode() + " "
+                + CC.YELLOW_BOLD + "Serious Vote Version: "
                 + CC.PURPLE_BOLD + SeriousVote.getInstance().getPlugin().getVersion().get()
                 + CC.YELLOW_BOLD + " MC-Version: "
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getMinecraftVersion().getName()
