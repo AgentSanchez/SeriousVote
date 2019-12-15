@@ -1,5 +1,7 @@
 package net.adamsanchez.seriousvote.Data;
 
+import net.adamsanchez.seriousvote.utils.CC;
+
 import java.sql.Date;
 import java.util.UUID;
 
@@ -50,6 +52,17 @@ public class PlayerRecord {
 
     public void setLastVote(Date lastVote) {
         this.lastVote = lastVote;
+    }
+
+    @Override
+    public String toString(){
+        return new StringBuilder()
+                .append(CC.YELLOW).append("ID: ").append(CC.WHITE).append(playerIdentifier)
+                .append(CC.YELLOW).append("Votes: ").append(CC.WHITE).append(totalVotes)
+                .append(CC.YELLOW).append("VoteSpree: ").append(CC.WHITE).append(voteSpree)
+                .append(CC.YELLOW).append("LastVoted: ").append(CC.WHITE).append(lastVote)
+                .toString();
+
     }
 
 }
