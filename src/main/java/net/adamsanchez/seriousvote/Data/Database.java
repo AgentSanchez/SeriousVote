@@ -206,6 +206,16 @@ public class Database {
         }
     }
 
+    public void deletePlayer(String playerIdentifier){
+        String query = String.format("DELETE FROM %s WHERE player='%s';", playerTable, playerIdentifier);
+         try(Connection con = getConnection()){
+             PreparedStatement statement = preparedStatement(con,query);
+             statement.execute();
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+    }
+
     public void playerUpdateQuery(String table, String playerIdentifier, int totalVotes, int voteSpree, Date lastVote){
         String initial = "REPLACE INTO %s(player, totalVotes, voteSpree, lastVote) VALUES(?,?,?,?)";
 
