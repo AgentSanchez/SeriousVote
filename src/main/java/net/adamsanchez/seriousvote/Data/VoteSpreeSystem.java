@@ -1,10 +1,7 @@
 package net.adamsanchez.seriousvote.Data;
 
 import net.adamsanchez.seriousvote.*;
-import net.adamsanchez.seriousvote.utils.CM;
-import net.adamsanchez.seriousvote.utils.LootTools;
-import net.adamsanchez.seriousvote.utils.OutputHelper;
-import net.adamsanchez.seriousvote.utils.U;
+import net.adamsanchez.seriousvote.utils.*;
 import ninja.leaping.configurate.ConfigurationNode;
 
 
@@ -12,6 +9,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
+import javax.naming.Name;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +59,24 @@ public class VoteSpreeSystem {
             return createRecord(playerIdentifier);
         }
         return record;
+    }
+    //TODO What if it's already a name?
+    public void updateAllPlayerID(){
+        int totalVoters = db.getCount();
+        ArrayList<PlayerRecord> recordList = db.getAllRecords();
+        U.debug("Retrieved " + recordList.size() + " records from storage....");
+        U.debug(CC.LINE);
+        for(PlayerRecord record : recordList) {
+            U.debug("Converting player with ID: " + record.getPlayerIdentifier());
+            String newID = U.convertIDToName(record.getPlayerIdentifier());
+            if(newID != null && newID != ""){
+                PlayerRecord newRecord = new PlayerRecord(newID, record.getTotalVotes(), record.getVoteSpree(), record.getLastVote());
+                db.deletePlayer(record.getPlayerIdentifier());
+                U.debug("Old player " + record.getPlayerIdentifier() + " deleted.");
+                db.updatePlayer(newRecord);
+                U.debug("New player with new ID " + newID + " added...");
+            }
+        }
     }
 
     public PlayerRecord getRecordByRank(int rank){
