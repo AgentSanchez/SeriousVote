@@ -216,6 +216,24 @@ public class Database {
          }
     }
 
+    public ArrayList<PlayerRecord> getAllRecords(){
+        String query = String.format("SELECT * FROM %s;", playerTable);
+        ArrayList<PlayerRecord> recordList = new ArrayList<>();
+        try(Connection con = getConnection()) {
+            ResultSet results = genericQuery(con, query);
+            while(results.next()){
+                int sequentialVotes = results.getInt("voteSpree");
+                Date lastVote = results.getDate("lastVote");
+                int totalVote = results.getInt("totalVotes");
+                String playerIdentifier = results.getString("player");
+                recordList.add(new PlayerRecord(playerIdentifier, totalVote,sequentialVotes,lastVote));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return recordList;
+    }
+
     public void playerUpdateQuery(String table, String playerIdentifier, int totalVotes, int voteSpree, Date lastVote){
         String initial = "REPLACE INTO %s(player, totalVotes, voteSpree, lastVote) VALUES(?,?,?,?)";
 
