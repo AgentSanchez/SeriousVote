@@ -334,7 +334,7 @@ public class SeriousVote {
 
 
             if (voteSpreeSystem != null) {
-                if (U.isOnline(username)) {
+                if (U.isPlayerOnline(username)) {
                     voteSpreeSystem.addVote(U.getPlayerIdentifier(username));
                 } else {
                     if (userStorage.get().get(username).isPresent()) {
@@ -395,7 +395,7 @@ public class SeriousVote {
 
     public String giveVote(String username) {
 
-        if (U.isOnline(username) || bypassOffline) {
+        if (U.isPlayerOnline(username) || bypassOffline) {
             LootTable mainLoot;
             currentRewards = "";
             ArrayList<String> commandQueue = new ArrayList<String>();

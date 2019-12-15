@@ -37,7 +37,7 @@ public class U {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public static String getName(String playerIdentifier){
-        getName(playerIdentifier, false);
+        return getName(playerIdentifier, false);
     }
     public static String getName(String playerIdentifier, boolean bypass){
         if(bypass == false && SeriousVote.isServerOnline() == false) return playerIdentifier;
@@ -70,8 +70,8 @@ public class U {
         return result;
     }
 
-    public static boolean isOnline(String username) {
-        return SeriousVote.getInstance().getPublicGame().getServer().getPlayer(username).isPresent() ? true : false;
+    public static boolean isPlayerOnline(String username) {
+        return SeriousVote.getPublicGame().getServer().getPlayer(username).isPresent();
     }
 
     public static String getIdFromName(String name){

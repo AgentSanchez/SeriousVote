@@ -106,7 +106,7 @@ public class VoteSpreeSystem {
     public void checkForDailies(PlayerRecord record, String playerName) {
         List<String> commandList = new ArrayList<String>();
         //yearly
-        if (U.isOnline(playerName)) {
+        if (U.isPlayerOnline(playerName)) {
             if (record.getVoteSpree() >= 365 && record.getVoteSpree() % 365 == 0) {
                 LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", "yearly", "random")), rootNode);
                 //Choose The Random Rewards from the chosen table

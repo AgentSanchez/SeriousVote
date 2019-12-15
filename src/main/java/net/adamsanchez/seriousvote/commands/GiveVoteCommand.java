@@ -12,7 +12,6 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * Created by Adam Sanchez on 4/13/2018.
@@ -24,7 +23,7 @@ public class GiveVoteCommand implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         SeriousVote sv = SeriousVote.getInstance();
         String username = args.<String>getOne("player").get();
-        if (U.isOnline(username)) {
+        if (U.isPlayerOnline(username)) {
             Player player = sv.getPublicGame().getServer().getPlayer(username).get();
             player.sendMessage(Text.of("An administrator has awarded you a vote!"));
             sv.giveVote(username);

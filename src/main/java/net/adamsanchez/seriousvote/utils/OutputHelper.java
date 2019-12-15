@@ -15,7 +15,7 @@ public class OutputHelper {
 
     public static boolean broadCastMessage(String message, String username, String currentRewards) {
 
-        if(!U.isOnline(username)) return false;
+        if(!U.isPlayerOnline(username)) return false;
         if (message == null || message.isEmpty() || message == "" ) return false;
         SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(
                 TextSerializers.FORMATTING_CODE.deserialize(parseVariables(message, username, currentRewards)));
