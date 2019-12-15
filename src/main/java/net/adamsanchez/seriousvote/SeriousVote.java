@@ -475,7 +475,7 @@ public class SeriousVote {
         return dailiesEnabled;
     }
 
-    public boolean usingMilestones() {
+    public boolean usingVoteSpreeSystem() {
         if (voteSpreeSystem != null) return true;
         return false;
     }
@@ -491,6 +491,9 @@ public class SeriousVote {
     public boolean toggleDebug(){
         debug = !debug;
         return debug;
+    }
+    public void setDebug(boolean _debug){
+        debug = _debug;
     }
 
     public VoteSpreeSystem getVoteSpreeSystem() {

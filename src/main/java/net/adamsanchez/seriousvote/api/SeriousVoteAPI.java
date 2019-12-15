@@ -4,8 +4,6 @@ import net.adamsanchez.seriousvote.Data.PlayerRecord;
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.U;
 
-import java.util.UUID;
-
 public class SeriousVoteAPI {
 
     //Return the player's total vote amout
@@ -15,12 +13,12 @@ public class SeriousVoteAPI {
     }
 
     public static PlayerRecord getRecordByRank(int rank){
-        if(!SeriousVote.getInstance().usingMilestones()) return null;
+        if(!SeriousVote.getInstance().usingVoteSpreeSystem()) return null;
         return SeriousVote.getInstance().getVoteSpreeSystem().getRecordByRank(rank);
     }
 
     public static int getTotalNumberOfVoters(){
-        if(!SeriousVote.getInstance().usingMilestones()) return 0;
+        if(!SeriousVote.getInstance().usingVoteSpreeSystem()) return 0;
         return SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters();
     }
 

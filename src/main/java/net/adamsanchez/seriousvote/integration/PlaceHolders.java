@@ -42,7 +42,7 @@ public class PlaceHolders {
     @Placeholder(id = "sv-player-votes")
     public String playerTotalVotes(@Token String playerName) {
         U.debug("Attempting to retrieve player " + playerName + "'s record...");
-        if(!SeriousVote.getInstance().usingMilestones()) {
+        if(!SeriousVote.getInstance().usingVoteSpreeSystem()) {
             U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
             return "MILESTONES NOT ENABLED";
         }
@@ -55,7 +55,7 @@ public class PlaceHolders {
     @Placeholder(id = "sv-top-name")
     public String rankPlayerName(@Token @Nullable Integer rank){
         U.debug("Attempting to retrieve #" + rank + " player's record... ");
-        if(!SeriousVote.getInstance().usingMilestones()) {
+        if(!SeriousVote.getInstance().usingVoteSpreeSystem()) {
             U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
             return "MILESTONES NOT ENABLED";
         }
@@ -76,7 +76,7 @@ public class PlaceHolders {
     @Placeholder(id = "sv-top-votes")
     public String rankPlayerVotes(@Token @Nullable Integer rank){
         U.debug("Attempting to retrieve #" + rank + " player's record... ");
-        if(!SeriousVote.getInstance().usingMilestones()) {
+        if(!SeriousVote.getInstance().usingVoteSpreeSystem()) {
             U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
             return "MILESTONES NOT ENABLED";
         }
@@ -96,7 +96,7 @@ public class PlaceHolders {
 
     @Placeholder(id = "sv-total-voters")
     public int numberOfVoters(){
-        if(!SeriousVote.getInstance().usingMilestones()) {
+        if(!SeriousVote.getInstance().usingVoteSpreeSystem()) {
             U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
             return 0;
         }

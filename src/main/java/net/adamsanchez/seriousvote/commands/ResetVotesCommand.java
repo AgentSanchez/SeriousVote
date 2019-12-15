@@ -15,7 +15,7 @@ public class ResetVotesCommand implements CommandExecutor {
 
     public CommandResult execute(CommandSource src, CommandContext args) throws
             CommandException {
-        if(SeriousVote.getInstance().usingMilestones()){
+        if(SeriousVote.getInstance().usingVoteSpreeSystem()){
             SeriousVote.getInstance().getVoteSpreeSystem().resetPlayerVotes();
             src.sendMessage(Text.of("All votes reset to 0"));
         } else {

@@ -13,8 +13,6 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
-import java.util.UUID;
-
 /**
  * Created by Adam Sanchez on 4/13/2018.
  */
@@ -30,7 +28,7 @@ public class VoteCommand implements CommandExecutor {
             src.sendMessage(U.convertStringToLink(site));
         });
 
-        if (sv.usingMilestones() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
+        if (sv.usingVoteSpreeSystem() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
             if (sv.getUserStorage().get().get(src.getName()).isPresent()) {
                 String playerIdentifier = U.getPlayerIdentifier(src.getName());
                 PlayerRecord record = sv.getVoteSpreeSystem().getRecord(playerIdentifier);

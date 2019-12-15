@@ -11,8 +11,6 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import java.util.UUID;
-
 /**
  * Created by Adam Sanchez on 4/13/2018.
  */
@@ -22,7 +20,7 @@ public class CheckVoteCommand implements CommandExecutor {
         SeriousVote sv = SeriousVote.getInstance();
         String username = args.<String>getOne("player").get();
         String playerIdentifier = U.getPlayerIdentifier(username);
-        if (sv.usingMilestones() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
+        if (sv.usingVoteSpreeSystem() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
             PlayerRecord record = sv.getVoteSpreeSystem().getRecord(playerIdentifier);
             if (record != null) {
                 src.sendMessage(Text.of(username + " has a total of " + record.getTotalVotes()
