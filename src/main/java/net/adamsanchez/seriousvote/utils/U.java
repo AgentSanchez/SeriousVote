@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote.utils;
 
 import net.adamsanchez.seriousvote.SeriousVote;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
@@ -45,16 +46,17 @@ public class U {
         //id getname returns and if identifier are equal return identifier
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
         U.debug("Attempting to get name from UUID...");
-        String name = userStorage.get().get(UUID.fromString(playerIdentifier)).get().getName();
-        if(name == "" || name == null){
+        Optional<User> user = userStorage.get().get(UUID.fromString(playerIdentifier));
+        if(!user.isPresent()){
             if(userStorage.get().get(playerIdentifier).isPresent()){
-
+                U.debug("UUID not found, but this does appear to be a name....");
+                return playerIdentifier;
             }
             U.debug("System was unable to retrieve name from UUID: " + playerIdentifier.toString());
             return "";
         } else {
-            U.debug("System was able to retrieve name from UUID for: " + name);
-            return name;
+            U.debug("System was able to retrieve name from UUID for: " + user.get().getName());
+            return user.get().getName();
         }
     }
 
