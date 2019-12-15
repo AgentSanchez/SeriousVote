@@ -49,6 +49,7 @@ public class VoteSpreeSystem {
 
     public boolean updateRecord(PlayerRecord record) {
         db.updatePlayer(record);
+        U.debug(CC.GREEN + record.toString());
         return true;
     }
 
@@ -79,7 +80,7 @@ public class VoteSpreeSystem {
                 PlayerRecord newRecord = new PlayerRecord(newID, record.getTotalVotes(), record.getVoteSpree(), record.getLastVote());
                 db.updatePlayer(newRecord);
                 U.debug("New player with new ID " + newID + " added...");
-
+                U.debug(newRecord.toString());
                 db.deletePlayer(record.getPlayerIdentifier());
                 U.debug("Old player " + record.getPlayerIdentifier() + " deleted.");
 
@@ -91,9 +92,9 @@ public class VoteSpreeSystem {
     }
 
     public void changePlayerID(PlayerRecord oldRecord, PlayerRecord newRecord){
-        db.updatePlayer(newRecord);
+        updateRecord(newRecord);
         U.debug(CC.GREEN + "Record with ID " + newRecord.getPlayerIdentifier() + " added...");
-        db.deletePlayer(oldRecord.getPlayerIdentifier());
+        deleteRecord(oldRecord);
         U.debug(CC.RED + "Old record with ID " + oldRecord.getPlayerIdentifier() + " deleted.");
     }
 
@@ -109,6 +110,9 @@ public class VoteSpreeSystem {
 
     }
 
+    public void deleteRecord(PlayerRecord record){
+        db.deletePlayer(record.getPlayerIdentifier());
+    }
     public PlayerRecord getRecordByRank(int rank){
         PlayerRecord record = db.getRecordByRank(rank);
         U.debug("Request record for player in rank " + rank + ". Identifier: " + record.getPlayerIdentifier() + " Votes: " + record.getTotalVotes());
