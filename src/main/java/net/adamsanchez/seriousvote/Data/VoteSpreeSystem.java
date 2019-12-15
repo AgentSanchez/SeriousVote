@@ -62,7 +62,6 @@ public class VoteSpreeSystem {
     }
 
     public void updateAllPlayerID(){
-        int totalVoters = db.getCount();
         ArrayList<PlayerRecord> recordList = db.getAllRecords();
         U.debug("Retrieved " + recordList.size() + " records from storage....");
         U.debug(CC.LINE);
