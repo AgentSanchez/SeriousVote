@@ -48,7 +48,7 @@ public class U {
         U.debug("Attempting to get name from UUID...");
         Optional<User> user = userStorage.get().get(UUID.fromString(playerIdentifier));
         if(!user.isPresent()){
-            if(userStorage.get().get(playerIdentifier).isPresent()){
+            if(isUsername(playerIdentifier)){
                 U.debug("UUID not found, but this does appear to be a name....");
                 return playerIdentifier;
             }
@@ -118,6 +118,15 @@ public class U {
         try{
             UUID.fromString(id);
             return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public static boolean isUsername(String playerIdentifier){
+        try{
+            if(SeriousVote.getUserStorage().get().get(playerIdentifier).isPresent()) return true;
+            return false;
         }catch (Exception e){
             return false;
         }
