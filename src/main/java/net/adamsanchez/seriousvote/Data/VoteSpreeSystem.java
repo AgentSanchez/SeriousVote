@@ -104,7 +104,10 @@ public class VoteSpreeSystem {
         if(oldRecord != null){
             newRecord = new PlayerRecord(newPlayerIdentifier, oldRecord.getTotalVotes(), oldRecord.getVoteSpree(), oldRecord.getLastVote());
             changePlayerID(oldRecord, newRecord);
+        } else {
+            U.debug("Could not find player with id " + oldPlayerIdentifier);
         }
+
     }
 
     public PlayerRecord getRecordByRank(int rank){

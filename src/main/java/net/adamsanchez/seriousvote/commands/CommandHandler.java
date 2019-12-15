@@ -62,8 +62,8 @@ public class CommandHandler {
                 .description(Text.of("Change a player record's ID from one to another."))
                 .permission("seriousvote.commands.admin.changeplayerid")
                 .arguments(
-                        GenericArguments.onlyOne(GenericArguments.string(Text.of("OldPlayerID"))),
-                        GenericArguments.onlyOne(GenericArguments.string(Text.of("NewPlayerID")))
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("oldplayerid"))),
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("newplayerid")))
                 )
                 .executor(new ChangePlayerIDCommand())
                 .build();

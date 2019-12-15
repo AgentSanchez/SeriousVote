@@ -30,7 +30,8 @@ public class ChangePlayerIDCommand implements CommandExecutor {
             boolean debugPreCommand = sv.isDebug();
             sv.setDebug(true);
             U.debug(CC.YELLOW + "--------------------CHANGING USER ID--------------------");
-            sv.getVoteSpreeSystem().changePlayerID("","");
+            U.debug("Attempting to change from: " + oldID + " to " + newID + ".");
+            sv.getVoteSpreeSystem().changePlayerID(oldID,newID);
             U.debug(CC.YELLOW + "--------------------Ending Migration--------------------");
             sv.setDebug(debugPreCommand);
             src.sendMessage(Text.of("CHANGE COMPLETE!!!!").toBuilder().color(TextColors.GREEN).build());
