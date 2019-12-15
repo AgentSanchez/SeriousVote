@@ -65,7 +65,7 @@ public class CommandHandler {
                         GenericArguments.onlyOne(GenericArguments.string(Text.of("OldPlayerID"))),
                         GenericArguments.onlyOne(GenericArguments.string(Text.of("NewPlayerID")))
                 )
-                .executor(new MigrateFromOnlineCommand())
+                .executor(new ChangePlayerIDCommand())
                 .build();
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
         Sponge.getCommandManager().register(SeriousVote.getInstance(), vote, "vote");
