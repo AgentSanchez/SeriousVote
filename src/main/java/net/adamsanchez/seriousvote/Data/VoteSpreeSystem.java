@@ -285,6 +285,9 @@ public class VoteSpreeSystem {
     public void resetPlayerVotes(){
         db.resetPlayers();
     }
+    public ArrayList<PlayerRecord> getAllRecords(){
+        return db.getAllRecords();
+    }
 
     public int getNumberOfVoters(){
         return db.getCount();

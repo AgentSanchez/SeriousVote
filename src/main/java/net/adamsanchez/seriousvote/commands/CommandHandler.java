@@ -58,6 +58,11 @@ public class CommandHandler {
                 .permission("seriousvote.commands.admin.super.migratefromonline")
                 .executor(new MigrateFromOnlineCommand())
                 .build();
+        CommandSpec dumpSQLData = CommandSpec.builder()
+                .description(Text.of("Dumps all SQL data is vote spree system is enabled"))
+                .permission("seriousvote.commands.admin.dumpsql")
+                .executor(new DumpSQLCommand())
+                .build();
         CommandSpec changePlayerID = CommandSpec.builder()
                 .description(Text.of("Change a player record's ID from one to another."))
                 .permission("seriousvote.commands.admin.changeplayerid")
@@ -77,5 +82,6 @@ public class CommandHandler {
         Sponge.getCommandManager().register(SeriousVote.getInstance(), resetVotes, "svresetall");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), migrateFromOnline, "svmigratefromonline");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), changePlayerID, "svswapid");
+        Sponge.getCommandManager().register(SeriousVote.getInstance(), dumpSQLData, "svdumpsql");
     }
 }

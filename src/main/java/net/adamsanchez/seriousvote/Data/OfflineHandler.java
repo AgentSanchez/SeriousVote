@@ -5,7 +5,10 @@ import net.adamsanchez.seriousvote.utils.U;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -69,5 +72,35 @@ public class OfflineHandler {
             U.debug("Date file loading failed!!");
             return new Date(0);
         }
+    }
+
+    public static void dumpSQLData(ArrayList<PlayerRecord> records){
+        U.info("Attempting to request and dump all db data....");
+        if(!SeriousVote.getInstance().usingVoteSpreeSystem()){
+            U.info("can't import file... You are not using the voteSpreeSystem");
+            return;
+        }
+
+        try {
+            File f = new File(SeriousVote.getInstance().getSQLDumpPath().toString());
+            f.delete();
+            BufferedWriter br = new BufferedWriter(new FileWriter(SeriousVote.getInstance().getSQLDumpPath().toString()));
+
+            for(PlayerRecord r : records){
+                U.debug("Writing Player:" + r.toString());
+                br.write(new StringBuilder()
+                        .append(r.getPlayerIdentifier()).append(',')
+                        .append(r.getTotalVotes()).append(',')
+                        .append(r.getVoteSpree()).append(',')
+                        .append(r.getLastVote()).append(',')
+                        .append("\n")
+                        .toString());
+            }
+            U.info("Wrote " + records.size() + " to file....");
+            br.close();
+        } catch (IOException e) {
+            U.error("Couldn't make file....", e);
+        }
+
     }
 }

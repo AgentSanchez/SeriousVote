@@ -514,7 +514,9 @@ public class SeriousVote {
     public Path getResetDatePath(){
         return resetDatePath;
     }
-
+    public Path getSQLDumpPath(){
+        return Paths.get(privateConfigDir.toString(), "", "sqlExport.csv");
+    }
     public void resetCurrentRewards() {
         currentRewards = "";
     }
