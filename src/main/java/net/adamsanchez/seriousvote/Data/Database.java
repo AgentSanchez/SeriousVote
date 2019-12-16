@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.U;
-import net.adamsanchez.seriousvote.Data.PlayerRecord;
 
 import java.sql.*;
 import java.util.*;
@@ -26,6 +25,9 @@ public class Database {
     private int minIdleConnections = 5;
     private int maxActiveConnections = 10;
     private String timezoneFix = "&useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private ArrayList<PlayerRecord> recordCache;
+    private long recordCacheExpirationTime;
+    private final long cacheLifetime = 10000L;
     HikariConfig config = new HikariConfig();
     HikariDataSource ds;
 
@@ -129,16 +131,30 @@ public class Database {
     }
 
     /**
-     * Gets an ordered list of records starting at the nth record (offset)
+     * Gets an ordered list of records starting at the nth record (offset) using no Limit
      * @param con
      * @param table
      * @param orderByField
+     * @return
+     */
+    public ResultSet orderedSelectQuery(Connection con, String table, String orderByField){
+        String initial = "SELECT * FROM %s ORDER BY %s DESC";
+        ResultSet results = genericQuery(con, String.format(initial,table,orderByField));
+        return  results;
+    }
+
+    /**
+     * Gets an ordered list of records starting at the nth record (offset) with a limit
+     * @param con
+     * @param table
+     * @param orderByField
+     * @param limit
      * @param offset
      * @return
      */
-    public ResultSet orderedSelectQuery(Connection con, String table, String orderByField, int offset){
-        String initial = "SELECT * FROM %s ORDER BY %s DESC LIMIT 1 OFFSET %s";
-        ResultSet results = genericQuery(con, String.format(initial,table,orderByField,offset));
+    public ResultSet orderedSelectQuery(Connection con, String table, String orderByField, int limit, int offset){
+        String initial = "SELECT * FROM %s ORDER BY %s DESC LIMIT %s OFFSET %s";
+        ResultSet results = genericQuery(con, String.format(initial,table,orderByField,limit,offset));
         return  results;
     }
 
@@ -165,27 +181,18 @@ public class Database {
     }
 
     /**
-     * Retrieves the nth row from the database if it exists
+     * Retrieves the nth row from the cache if it exists
      * @param rank The n'th record
      * @return
      */
     public PlayerRecord getRecordByRank(int rank){
-        ResultSet results = null;
-        try(Connection con = getConnection()){
-
-            results = orderedSelectQuery(con,playerTable, "totalVotes", rank);
-
-            if(results.first()){
-                int sequentialVotes = results.getInt("voteSpree");
-                Date lastVote = results.getDate("lastVote");
-                int totalVote = results.getInt("totalVotes");
-                String playerIdentifier = results.getString("player");
-                return new PlayerRecord(playerIdentifier, totalVote,sequentialVotes,lastVote);
-            }
-        } catch (SQLException e) {
-            U.error("Trouble getting information from the database");
+        ArrayList<PlayerRecord> cache = getAllRecords();
+        if(rank < cache.size()) {
+            return cache.get(rank);
+        } else {
+            U.debug("There are not that many records!!! Requsted " + (rank+1) );
+            return null;
         }
-        return null;
     }
 
     public void updatePlayer(PlayerRecord player){
@@ -217,10 +224,34 @@ public class Database {
     }
 
     public ArrayList<PlayerRecord> getAllRecords(){
-        String query = String.format("SELECT * FROM %s;", playerTable);
+        //First Check Cache
+        //Has it been initialized
+        U.debug("Cache Expires at: " + recordCacheExpirationTime + " Current Time: " + new java.util.Date().getTime());
+
+        if(recordCache == null || recordCache.size() == 0){
+            U.debug("Cache initializing....");
+            recordCacheExpirationTime = new java.util.Date().getTime() + cacheLifetime;
+            return updateAllPlayerCache();
+        } else {
+            U.debug("Checking cache expiration");
+            //If time has expired
+            if(recordCacheExpirationTime < new java.util.Date().getTime()){
+                recordCacheExpirationTime = new java.util.Date().getTime() + cacheLifetime;
+                U.debug("Refreshing cache");
+                return updateAllPlayerCache();
+            } else{
+                U.debug("Cache still fresh...");
+                return recordCache;
+            }
+        }
+    }
+
+    private ArrayList<PlayerRecord> updateAllPlayerCache(){
         ArrayList<PlayerRecord> recordList = new ArrayList<>();
+        ResultSet results;
         try(Connection con = getConnection()) {
-            ResultSet results = genericQuery(con, query);
+            results = orderedSelectQuery(con,playerTable, "totalVotes");
+            U.debug("Received " + results.getFetchSize());
             while(results.next()){
                 int sequentialVotes = results.getInt("voteSpree");
                 Date lastVote = results.getDate("lastVote");
@@ -231,7 +262,8 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return recordList;
+        recordCache = recordList;
+        return recordCache;
     }
 
     public void playerUpdateQuery(String table, String playerIdentifier, int totalVotes, int voteSpree, Date lastVote){
