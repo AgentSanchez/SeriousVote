@@ -5,6 +5,7 @@ import me.rojo8399.placeholderapi.PlaceholderService;
 import me.rojo8399.placeholderapi.Token;
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.api.SeriousVoteAPI;
+import net.adamsanchez.seriousvote.utils.CC;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.plugin.PluginContainer;
@@ -53,38 +54,62 @@ public class PlaceHolders {
     }
 
     @Placeholder(id = "sv-top-name")
-    public String rankPlayerName(@Token @Nullable Integer rank){
-        U.debug("Attempting to retrieve #" + rank + " player's record... ");
+    public String rankPlayerName(@Token String rankStr){
+        int rank;
+        try{
+            rank = Integer.parseInt(rankStr);
+        } catch (NumberFormatException e){
+            U.debug(CC.RED + "You have given in incorrect number format!!!");
+            U.debug(e.getStackTrace().toString());
+            return "NUM_FORMAT_ERROR";
+        }
+        U.debug("SV-PlceHolder Retrieving #" + rank + " player's record... ");
         if(!SeriousVote.getInstance().usingVoteSpreeSystem()) {
             U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
             return "MILESTONES NOT ENABLED";
         }
-
-        if(rank == null || rank > SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters()){
-            U.debug("Requested number out of range!!!");
+        if((Integer)rank == null){
             //return U.getName(SeriousVoteAPI.getRecordByRank(0).getUuid());
-            return "_EMPTY_";
+            U.error("Placeholder did not pass me an integer....");
+            return "ERROR";
+        }
+        else if(rank > SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters()){
+            U.debug("Requested number out of range!!!");
+            return("UNKNOWN");
         }
         else
         {
-            String playerName = U.getName(SeriousVoteAPI.getRecordByRank(rank-1).getPlayerIdentifier());
+            String playerIdentifier = SeriousVoteAPI.getRecordByRank(rank-1).getPlayerIdentifier();
+            String playerName = U.getName(playerIdentifier);
             U.debug("Returning Player Name - " + playerName);
             return U.getName(SeriousVoteAPI.getRecordByRank(rank-1).getPlayerIdentifier());
         }
     }
 
     @Placeholder(id = "sv-top-votes")
-    public String rankPlayerVotes(@Token @Nullable Integer rank){
-        U.debug("Attempting to retrieve #" + rank + " player's record... ");
+    public String rankPlayerVotes(@Token String rankStr){
+        int rank;
+        try{
+            rank = Integer.parseInt(rankStr);
+        } catch (NumberFormatException e){
+            U.debug(CC.RED + "You have given in incorrect number format!!!");
+            U.debug(e.getStackTrace().toString());
+            return "NUM_FORMAT_ERROR";
+        }
+        U.debug("SV-PlceHolder Retrieving #" + rank + " player's record... ");
         if(!SeriousVote.getInstance().usingVoteSpreeSystem()) {
             U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
             return "MILESTONES NOT ENABLED";
         }
 
-        if(rank == null || rank > SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters()){
-            //return SeriousVoteAPI.getRecordByRank(0).getTotalVotes() + "";
+        if((Integer)rank == null){
+            //return U.getName(SeriousVoteAPI.getRecordByRank(0).getUuid());
+            U.error("Placeholder did not pass me an integer....");
+            return "ERROR";
+        }
+        else if(rank > SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters()){
             U.debug("Requested number out of range!!!");
-            return "_EMPTY_";
+            return("UNKNOWN");
         }
         else
         {
