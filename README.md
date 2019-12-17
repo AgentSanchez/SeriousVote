@@ -25,4 +25,4 @@ Allows for the use of /nvreload, You no longer need to restart your server Serve
 [Serious-Nuvotifer API-7 (Unofficial)](https://drive.google.com/file/d/0B2LjecPmLjo0aTlMak5lWnJ2MVE/view?usp=sharing)
 Same as the previous except works on API-7
 
-Check us out on Ore![To Ore](https://ore.spongepowered.org/curscascis/SeriousVote)
+Check us out on Ore! [To Ore](https://ore.spongepowered.org/curscascis/SeriousVote)
