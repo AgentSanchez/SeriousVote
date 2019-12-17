@@ -3,19 +3,14 @@ package net.adamsanchez.seriousvote.integration;
 import me.rojo8399.placeholderapi.Placeholder;
 import me.rojo8399.placeholderapi.PlaceholderService;
 import me.rojo8399.placeholderapi.Token;
-import me.rojo8399.placeholderapi.impl.PlaceholderAPIPlugin;
-import me.rojo8399.placeholderapi.impl.PlaceholderServiceImpl;
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.api.SeriousVoteAPI;
 import net.adamsanchez.seriousvote.utils.CC;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
-
-import javax.annotation.Nullable;
 
 public class PlaceHolders {
 
@@ -62,12 +57,25 @@ public class PlaceHolders {
     public String rankPlayerName(@Token String rankStr){
         int rank;
         try{
+            U.debug("Received a: " + rankStr);
             rank = Integer.parseInt(rankStr);
         } catch (NumberFormatException e){
-            U.debug(CC.RED + "You have given an incorrect number format!!! Received: \"" + rankStr + "\"" );
-            U.debug(e.getStackTrace().toString());
-            return "NUM_FORMAT_ERROR";
+
+            if(rankStr.contains("-") && rankStr.length() > 1){
+                try{
+                    U.debug(CC.YELLOW + "Invalid input...Trying to Parse: " + rankStr.substring(rankStr.indexOf("_") + 1, rankStr.length()));
+                    rank=Integer.parseInt(rankStr.substring(rankStr.indexOf("_") + 1, rankStr.length()));
+                } catch(NumberFormatException e2){
+                    return giveNumberFormatError(e2, rankStr);
+                }
+                return processTopNames(rank);
+            }
+            return giveNumberFormatError(e,rankStr);
         }
+        return processTopNames(rank);
+    }
+
+    public String processTopNames(int rank){
         U.debug("SV-PlceHolder Retrieving #" + rank + " player's record... ");
         if(!SeriousVote.getInstance().usingVoteSpreeSystem()) {
             U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
@@ -96,12 +104,25 @@ public class PlaceHolders {
     public String rankPlayerVotes(@Token String rankStr){
         int rank;
         try{
+            U.debug("Received a: " + rankStr);
             rank = Integer.parseInt(rankStr);
         } catch (NumberFormatException e){
-            U.debug(CC.RED + "You have given an incorrect number format!!! Received: \"" + rankStr + "\"" );
-            U.debug(e.getStackTrace().toString());
-            return "NUM_FORMAT_ERROR";
+
+            if(rankStr.contains("-") && rankStr.length() > 1){
+                    try{
+                        U.debug(CC.YELLOW + "Invalid input...Trying to Parse: " + rankStr.substring(rankStr.indexOf("_") + 1, rankStr.length()));
+                        rank=Integer.parseInt(rankStr.substring(rankStr.indexOf("_") + 1, rankStr.length()));
+                    } catch(NumberFormatException e2){
+                        return giveNumberFormatError(e2, rankStr);
+                    }
+                    return processTopVotes(rank);
+            }
+            return giveNumberFormatError(e,rankStr);
         }
+        return processTopVotes(rank);
+    }
+
+    public String processTopVotes(int rank){
         U.debug("SV-PlceHolder Retrieving #" + rank + " player's record... ");
         if(!SeriousVote.getInstance().usingVoteSpreeSystem()) {
             U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
@@ -124,6 +145,7 @@ public class PlaceHolders {
             return totalVotes + "";
         }
     }
+
 
     @Placeholder(id = "sv-total-voters")
     public int numberOfVoters(){
@@ -150,6 +172,12 @@ public class PlaceHolders {
 
     public static Text papiParse(String s, CommandSource src, CommandSource obsv){
         return getPapi().replacePlaceholders(s, src,obsv);
+    }
+
+    private String giveNumberFormatError(Exception e, String inputReceived){
+        U.debug(CC.RED + "You have given an incorrect number format!!! Received: \"" + inputReceived + "\"" );
+        U.debug(e.getStackTrace().toString());
+        return "NUM_FORMAT_ERROR";
     }
 }
 
