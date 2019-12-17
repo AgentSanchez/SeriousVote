@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote.utils;
 
 import net.adamsanchez.seriousvote.SeriousVote;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
@@ -147,7 +148,9 @@ public class U {
         }
     }
 
-
+    public static ConsoleSource getConsole(){
+        return SeriousVote.getPublicGame().getServer().getConsole();
+    }
 
 
 }

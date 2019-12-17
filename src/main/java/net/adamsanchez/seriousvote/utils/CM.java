@@ -107,7 +107,6 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
     public static List<String> getVoteSites(ConfigurationNode node) {
-        //TODO code potentially breaking here -- investigate
         return node.getNode("config","vote-sites").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }

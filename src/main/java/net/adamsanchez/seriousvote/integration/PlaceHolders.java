@@ -3,12 +3,17 @@ package net.adamsanchez.seriousvote.integration;
 import me.rojo8399.placeholderapi.Placeholder;
 import me.rojo8399.placeholderapi.PlaceholderService;
 import me.rojo8399.placeholderapi.Token;
+import me.rojo8399.placeholderapi.impl.PlaceholderAPIPlugin;
+import me.rojo8399.placeholderapi.impl.PlaceholderServiceImpl;
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.api.SeriousVoteAPI;
 import net.adamsanchez.seriousvote.utils.CC;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.text.Text;
 
 import javax.annotation.Nullable;
 
@@ -16,15 +21,15 @@ public class PlaceHolders {
 
     public static PlaceHolders aThis;
     public static boolean apiLoaded;
-
+    private static PlaceholderService papi;
     public static void initialize(PluginContainer instance){
         if (!Sponge.getServiceManager().isRegistered(PlaceholderService.class)) {
             instance.getLogger().warn("PlaceholderAPI not found, support disabled!");
             return;
         }
-        PlaceholderService apiService = Sponge.getServiceManager().provideUnchecked(PlaceholderService.class);
+        papi = Sponge.getServiceManager().provideUnchecked(PlaceholderService.class);
         aThis = new PlaceHolders();
-        apiService.loadAll(aThis, instance)
+        papi.loadAll(aThis, instance)
                 .stream()
                 .map(builder -> builder.author("seriousvote")
                         .plugin(instance)
@@ -59,7 +64,7 @@ public class PlaceHolders {
         try{
             rank = Integer.parseInt(rankStr);
         } catch (NumberFormatException e){
-            U.debug(CC.RED + "You have given in incorrect number format!!!");
+            U.debug(CC.RED + "You have given an incorrect number format!!! Received: \"" + rankStr + "\"" );
             U.debug(e.getStackTrace().toString());
             return "NUM_FORMAT_ERROR";
         }
@@ -82,6 +87,7 @@ public class PlaceHolders {
             String playerIdentifier = SeriousVoteAPI.getRecordByRank(rank-1).getPlayerIdentifier();
             String playerName = U.getName(playerIdentifier);
             U.debug("Returning Player Name - " + playerName);
+
             return U.getName(SeriousVoteAPI.getRecordByRank(rank-1).getPlayerIdentifier());
         }
     }
@@ -92,7 +98,7 @@ public class PlaceHolders {
         try{
             rank = Integer.parseInt(rankStr);
         } catch (NumberFormatException e){
-            U.debug(CC.RED + "You have given in incorrect number format!!!");
+            U.debug(CC.RED + "You have given an incorrect number format!!! Received: \"" + rankStr + "\"" );
             U.debug(e.getStackTrace().toString());
             return "NUM_FORMAT_ERROR";
         }
@@ -134,5 +140,16 @@ public class PlaceHolders {
         return SeriousVote.getInstance().getPlugin().getVersion().get();
     }
 
+    public static PlaceholderService getPapi(){
+        return papi;
+    }
+
+    public static Text papiParse(String s){
+        return getPapi().replacePlaceholders(s, U.getConsole().getCommandSource().get(), U.getConsole().getCommandSource().get());
+    }
+
+    public static Text papiParse(String s, CommandSource src, CommandSource obsv){
+        return getPapi().replacePlaceholders(s, src,obsv);
+    }
 }
 

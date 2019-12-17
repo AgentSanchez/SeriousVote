@@ -1,8 +1,10 @@
 package net.adamsanchez.seriousvote.commands;
 
+import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.Data.PlayerRecord;
 import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.utils.OutputHelper;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -21,12 +23,23 @@ public class VoteCommand implements CommandExecutor {
 
     public CommandResult execute(CommandSource src, CommandContext args) throws
             CommandException {
-        src.sendMessage(
-                TextSerializers.FORMATTING_CODE.deserialize(CM.getVoteSiteMessage(sv.getMainCfgNode()))
-        );
+        if(PlaceHolders.apiLoaded){
+            src.sendMessage(PlaceHolders.papiParse(
+                    CM.getVoteSiteMessage(sv.getMainCfgNode()),
+                    src,
+                    src
+            ));
+        }else {
+            src.sendMessage(
+                    OutputHelper.strToText(CM.getVoteSiteMessage(sv.getMainCfgNode()))
+            );
+        }
         CM.getVoteSites(sv.getMainCfgNode()).forEach(site -> {
             src.sendMessage(U.convertStringToLink(site));
         });
+
+
+
 
         if (sv.usingVoteSpreeSystem() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
             if (sv.getUserStorage().get().get(src.getName()).isPresent()) {
