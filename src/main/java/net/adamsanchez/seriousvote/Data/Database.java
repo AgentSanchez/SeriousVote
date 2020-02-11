@@ -66,6 +66,8 @@ public class Database {
         config.setMaxLifetime(1770000);
         config.setPoolName("SeriousVote-SQL");
 
+
+        U.debug("Attempting connection to: " + url);
         //Instantiate Pool
         ds = new HikariDataSource(config);
         U.info("Ready for connections");
