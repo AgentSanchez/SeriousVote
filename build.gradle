@@ -26,6 +26,7 @@ dependencies {
     compile 'com.zaxxer:HikariCP:2.7.2'
     compile 'com.github.rojo8399:PlaceholderAPI:master-SNAPSHOT'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.8-dmr'
+    compile 'org.mariadb.jdbc:mariadb-java-client:2.5.4'
     compile fileTree(dir: 'lib', include: '*.jar')
     testCompile 'junit:junit:4.12'
 }
@@ -34,7 +35,7 @@ shadowJar {
 
     dependencies {
         //Connection Pooling
-        include(dependency("com.zaxxer:HikariCP:2.7.2"))
+        include(dependency("com.zaxxer:HikariCP:3.4.2"))
         include(dependency("mysql::"))
     }
 }
