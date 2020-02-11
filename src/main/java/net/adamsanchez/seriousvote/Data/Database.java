@@ -22,8 +22,8 @@ public class Database {
     private String table_prefix = "SV";
     private String playerTable = "players";
     private String url = "jdbc:mysql://test.com:3306/testdata?useSSL=false";
-    private int minIdleConnections = 5;
-    private int maxActiveConnections = 10;
+    private int minIdleConnections = 2;
+    private int maxActiveConnections = 4;
     private String timezoneFix = "&useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private ArrayList<PlayerRecord> recordCache;
     private long recordCacheExpirationTime;
@@ -51,7 +51,7 @@ public class Database {
         }
         playerTable = table_prefix + "players";
 
-        url = "jdbc:mysql://" + host + ":" + port + "/" + dbname + "?useSSL=false";
+        url = "jdbc:" + dbType + "://" + host + ":" + port + "/" + dbname + "?useSSL=false";
 
         config.setJdbcUrl(url + timezoneFix);
         config.setUsername(username);

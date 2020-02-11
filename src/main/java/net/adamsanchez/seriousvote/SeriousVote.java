@@ -103,7 +103,7 @@ public class SeriousVote {
     public List<String> monthlySet, yearlySet, weeklySet;
     int[] milestonesUsed;
     ///////////////////////////////////////////////////////
-    public String databaseName, databaseHostname, databasePort, databasePrefix, databaseUsername, databasePassword, minIdleConnections, maxActiveConnections;
+    public String databaseType, databaseName, databaseHostname, databasePort, databasePrefix, databaseUsername, databasePassword, minIdleConnections, maxActiveConnections;
     ///////////////////////////////////////////////////////
     private LinkedList<String> commandQueue = new LinkedList<String>();
     private LinkedList<String> executingQueue = new LinkedList<String>();
@@ -227,6 +227,7 @@ public class SeriousVote {
         }
 
         //Reload DB configuration
+        databaseType = CM.getDatabaseType(mainCfgNode);
         databaseHostname = CM.getDatabaseHostname(mainCfgNode);
         databaseName = CM.getDatabaseName(mainCfgNode);
         databasePassword = CM.getDatabasePassword(mainCfgNode);

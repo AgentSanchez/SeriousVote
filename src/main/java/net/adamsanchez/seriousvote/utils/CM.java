@@ -54,6 +54,9 @@ public class CM {
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
+    public static String getDatabaseType(ConfigurationNode node){
+        return node.getNode("config","database","dbType").getString();
+    }
     public static String getDatabaseName(ConfigurationNode node){
         return node.getNode("config","database","name").getString();
     }
