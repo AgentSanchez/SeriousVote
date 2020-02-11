@@ -358,7 +358,7 @@ public class Database {
     }
 
     public void createPlayerTable() {
-        U.debug("Creating new table in database...");
+        U.debug("Initializing table...");
         String table = String.format("CREATE TABLE IF NOT EXISTS %s(" +
                 "player			VarChar(36) PRIMARY KEY," +
                 "lastVote		DATE," +
