@@ -41,6 +41,10 @@ public class Database {
         this.table_prefix = sv.databasePrefix;
         this.username = sv.databaseUsername;
         this.password = sv.databasePassword;
+        this.dbType = sv.databaseType.toLowerCase();
+        if(dbType != "mysql" || dbType != "mariadb"){
+            dbType = "mariadb";
+        }
         try {
             this.minIdleConnections = Integer.parseInt(sv.minIdleConnections);
             this.maxActiveConnections = Integer.parseInt(sv.maxActiveConnections);
