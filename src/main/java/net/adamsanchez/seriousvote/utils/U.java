@@ -11,6 +11,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,6 +26,13 @@ public class U {
     public static void debug(String debug){
         if(SeriousVote.getInstance().isDebug()) {
             SeriousVote.getInstance().getLogger().info("[DEBUG]: " + debug + CC.RESET);
+        }
+    }
+
+    public static void debug(Map<?,?> map, String prefix){
+        for(Map.Entry<?, ?> entry : map.entrySet()) {
+            String key = entry.getKey().toString();
+            U.debug(prefix + " " + key);
         }
     }
     public static void error(String error) {
