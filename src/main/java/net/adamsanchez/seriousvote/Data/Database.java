@@ -41,7 +41,7 @@ public class Database {
         this.table_prefix = sv.databasePrefix;
         this.username = sv.databaseUsername;
         this.password = sv.databasePassword;
-        this.dbType = sv.databaseType.toLowerCase();
+        this.dbType = sv.databaseType == null || sv.databaseType == "" ? this.dbType : sv.databaseType.toLowerCase();
         if(dbType != "mysql" || dbType != "mariadb"){
             dbType = "mariadb";
         }
@@ -98,6 +98,7 @@ public class Database {
     }
 
     public Connection getConnection() throws SQLException {
+        U.debug("Establishing connection with the database.");
         return ds.getConnection();
     }
 
@@ -113,6 +114,7 @@ public class Database {
     }
 
     private ResultSet genericQuery(Connection con, String query) {
+        U.debug("Processing query...");
         ResultSet results = null;
         try {
             results = con.createStatement().executeQuery(query);
@@ -165,6 +167,7 @@ public class Database {
     //////////////////////////////////////////////////////////////////////////////////////////
 
     public PlayerRecord getPlayer(String playerIdentifier) {
+        U.debug("Attempting to retrieve player data from database....");
         ResultSet results = null;
         Connection con = null;
         try {
@@ -199,6 +202,7 @@ public class Database {
      * @return
      */
     public PlayerRecord getRecordByRank(int rank) {
+        U.debug("Attempting to retrieve record by rank from cache...");
         ArrayList<PlayerRecord> cache = getAllRecords();
         if (rank < cache.size()) {
             return cache.get(rank);
@@ -216,6 +220,7 @@ public class Database {
      * Sets all player votes to 0
      */
     public void resetPlayers() {
+        U.debug("Attempting to remove all players....");
         String query = String.format("UPDATE %s SET totalVotes = 0", playerTable);
         Connection con = null;
         PreparedStatement statement = null;
@@ -239,6 +244,7 @@ public class Database {
     }
 
     public void deletePlayer(String playerIdentifier) {
+        U.debug("Attempting to remove player from database...");
         String query = String.format("DELETE FROM %s WHERE player='%s';", playerTable, playerIdentifier);
         PreparedStatement statement = null;
         Connection con = null;
@@ -288,6 +294,7 @@ public class Database {
     }
 
     private ArrayList<PlayerRecord> updateAllPlayerCache() {
+        U.debug("Attempting to update player cache...");
         ArrayList<PlayerRecord> recordList = new ArrayList<>();
         ResultSet results = null;
         Connection con = null;
@@ -322,6 +329,7 @@ public class Database {
     }
 
     public void playerUpdateQuery(String table, String playerIdentifier, int totalVotes, int voteSpree, Date lastVote) {
+        U.debug("Attempting to update db...");
         String initial = "REPLACE INTO %s(player, totalVotes, voteSpree, lastVote) VALUES(?,?,?,?)";
         PreparedStatement statement = null;
         Connection con = null;
@@ -350,6 +358,7 @@ public class Database {
     }
 
     public void createPlayerTable() {
+        U.debug("Creating new table in database...");
         String table = String.format("CREATE TABLE IF NOT EXISTS %s(" +
                 "player			VarChar(36) PRIMARY KEY," +
                 "lastVote		DATE," +
@@ -382,6 +391,7 @@ public class Database {
      * Returns the number of players in the table
      */
     public int getCount() {
+        U.debug("GETTING COUNT");
         ResultSet results = null;
         Connection con = null;
         Statement statement = null;
