@@ -189,7 +189,9 @@ public class SeriousVote {
             mainCfgNode = loader.load();
         } catch (IOException e) {
             U.error(CC.RED + "There was an error while reloading your configs");
-            U.error(e.toString());
+            U.error(CC.RED_UNDERLINED + "PLEASE CHECK YOUR CONFIG FOR MISSING QUOTES, BRACKETS, OR COMMAS BEFORE ASKING FOR HELP!!");
+            U.error(CC.YELLOW + CC.LINE);
+            U.error(CC.RED + e.toString());
             return false;
         }
 
