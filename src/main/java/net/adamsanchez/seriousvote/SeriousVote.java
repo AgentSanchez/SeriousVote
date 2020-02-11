@@ -363,11 +363,11 @@ public class SeriousVote {
 
     @Listener
     public void onPlayerJoin(ClientConnectionEvent.Join event) {
-        UUID playerID = event.getTargetEntity().getUniqueId();
+        String playerID = event.getTargetEntity().getUniqueId().toString();
         String username = event.getTargetEntity().getName();
 
         if (storedVotes.containsKey(playerID)) {
-
+            U.debug("Offline votes found for player with ID " + playerID);
             String rewardString = "";
             for (int ix = 0; ix < storedVotes.get(playerID).intValue(); ix++) {
                 rewardString = giveVote(username);
