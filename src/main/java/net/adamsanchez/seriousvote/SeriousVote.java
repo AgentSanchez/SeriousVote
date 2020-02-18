@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
         name = "SeriousVote",
         version = "4.8.8",
         description = "This plugin enables server admins to give players rewards for voting for their server.",
-        dependencies = { @Dependency(id = "nuvotifier", optional = false), @Dependency(id = "placeholderapi",optional = true) })
+        dependencies = {@Dependency(id = "nuvotifier", optional = false), @Dependency(id = "placeholderapi", optional = true)})
 public class SeriousVote {
 
     @Inject
@@ -142,7 +142,7 @@ public class SeriousVote {
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
         storedVotes = new HashMap<String, Integer>();
         offlineVotes = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
-        resetDatePath = Paths.get(privateConfigDir.toString(),"", "lastReset");
+        resetDatePath = Paths.get(privateConfigDir.toString(), "", "lastReset");
         OfflineHandler.initOfflineStorage();
         CM.initConfig(defaultConfig);
         currentRewards = "";
@@ -220,7 +220,7 @@ public class SeriousVote {
         U.info(CC.YELLOW + "Trying to load offline player votes from ... " + offlineVotes.toString());
         try {
             storedVotes = OfflineHandler.loadOffline();
-        } catch (EOFException e){
+        } catch (EOFException e) {
             storedVotes = new HashMap<>();
             try {
                 U.debug("Trying to save corrected Map.");
@@ -272,6 +272,7 @@ public class SeriousVote {
 
     /**
      * Checks for and imports the random loot settings from the config. It creates chanceMaps of tables.
+     *
      * @param node The base config node used for checking for loot.
      */
     public void updateLoot(ConfigurationNode node) {
@@ -337,7 +338,7 @@ public class SeriousVote {
             String currentRewards = giveVote(username);
             if (!currentRewards.equals("offline")) {
                 OutputHelper.broadCastMessage(publicMessage, username, currentRewards);
-            } else if (messageOffline && !bypassOffline){
+            } else if (messageOffline && !bypassOffline) {
                 OutputHelper.broadCastMessage(publicOfflineMessage, username);
             }
 
@@ -423,7 +424,7 @@ public class SeriousVote {
                 }
             } else if (hasLoot && !isNoRandom) {
 
-                for (int i = 0; i < LootTools.genNumRandRewards(numRandRewards,minRandRewards,maxRandRewards); i++) {
+                for (int i = 0; i < LootTools.genNumRandRewards(numRandRewards, minRandRewards, maxRandRewards); i++) {
                     mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
                     U.debug("Choosing a random reward.");
 
@@ -494,15 +495,16 @@ public class SeriousVote {
         return milestonesEnabled;
     }
 
-    public boolean isDebug(){
+    public boolean isDebug() {
         return debug;
     }
 
-    public boolean toggleDebug(){
+    public boolean toggleDebug() {
         debug = !debug;
         return debug;
     }
-    public void setDebug(boolean _debug){
+
+    public void setDebug(boolean _debug) {
         debug = _debug;
     }
 
@@ -513,26 +515,31 @@ public class SeriousVote {
     public HashMap<String, Integer> getStoredVotes() {
         return storedVotes;
     }
-    public static boolean isServerOnline(){
+
+    public static boolean isServerOnline() {
         return getPublicGame().getServer().getOnlineMode();
     }
-    public Path getOfflineVotes(){
+
+    public Path getOfflineVotes() {
         return offlineVotes;
     }
 
-    public Path getResetDatePath(){
+    public Path getResetDatePath() {
         return resetDatePath;
     }
-    public Path getSQLDumpPath(){
+
+    public Path getSQLDumpPath() {
         return Paths.get(privateConfigDir.toString(), "", "sqlExport.csv");
     }
+
     public void resetCurrentRewards() {
         currentRewards = "";
     }
 
-    public boolean hasUnprocessedVotes(){
+    public boolean hasUnprocessedVotes() {
         return !voteQueue.isEmpty();
     }
+
     public CommentedConfigurationNode getMainCfgNode() {
         return mainCfgNode;
     }
