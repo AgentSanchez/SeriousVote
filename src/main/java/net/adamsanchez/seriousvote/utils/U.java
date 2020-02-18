@@ -109,10 +109,9 @@ public class U {
         try {
             return textLink.toBuilder().onClick(TextActions.openUrl(new URL(textLink.toPlain()))).build();
         } catch (MalformedURLException e) {
-            U.error("Malformed URL");
-            U.error(e.toString());
+            U.debug("Malformed URL - Was that intentional? -- " + link);
         }
-        return Text.of("Malformed URL - Inform Administrator");
+        return Text.of(link);
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
