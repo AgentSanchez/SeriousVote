@@ -68,4 +68,6 @@ If you get no output at all, it means your network configuration is incorrect! T
 
 If you require any help because you are not receiving rewards, these will be the first steps I will make you go through, and I will ask you for confirmation that you have done them. So start here and don't try to get a shortcut. [Discord](https://discord.gg/wH6r8Vm)
 
+
+---
 Has this project helped your community grow? Think about donating [:moneybag:Donate](paypal.me/iamabanana)
