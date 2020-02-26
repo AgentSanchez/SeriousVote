@@ -3,7 +3,7 @@
 <img src="http://i.imgur.com/sf3L4Wu.png" width=800px height=250px style="float: right;">
 
 ----------
-:octocat:[GitHub](https://github.com/curscascis/SeriousVote) | [:computer:bStats](https://bstats.org/plugin/sponge/SeriousVote) | [:question:Wiki](https://github.com/curscascis/SeriousVote/wiki) | [:floppy_disk: Download - Latest Stable](https://raw.githubusercontent.com/curscascis/SeriousVote/master/build/libs/seriousvote-4.8.3.jar)|[:moneybag:Donate](https://paypal.me/iamabanana)
+:octocat:[GitHub](https://github.com/curscascis/SeriousVote) | [:computer:bStats](https://bstats.org/plugin/sponge/SeriousVote) | [:question:Wiki](https://github.com/curscascis/SeriousVote/wiki) | [:floppy_disk: Download - Latest Stable](https://raw.githubusercontent.com/curscascis/SeriousVote/master/build/libs/seriousvote-4.8.3.jar) | [:moneybag:Donate](https://paypal.me/iamabanana)
 
 
 ***Why not go anywhere else?***
