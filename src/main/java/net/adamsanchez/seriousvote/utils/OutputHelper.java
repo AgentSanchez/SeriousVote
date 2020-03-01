@@ -9,7 +9,6 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 public class OutputHelper {
 
     public static boolean broadCastMessage(String message, String username) {
-
         if (message == null || message.isEmpty() || message == "" ) return false;
         if(PlaceHolders.apiLoaded){
         SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(
@@ -18,13 +17,12 @@ public class OutputHelper {
                 SeriousVote.getPublicGame().getServer().getConsole(),
                 SeriousVote.getPublicGame().getServer().getConsole()));
         } else {
-            strToText(parseVariables(message, username));
+            SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(strToText(parseVariables(message, username)));
         }
         return true;
     }
 
     public static boolean broadCastMessage(String message, String username, String currentRewards) {
-
         if(!U.isPlayerOnline(username)) return false;
         if(PlaceHolders.apiLoaded){
             SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(
@@ -33,7 +31,7 @@ public class OutputHelper {
                             SeriousVote.getPublicGame().getServer().getConsole(),
                             SeriousVote.getPublicGame().getServer().getConsole()));
         } else {
-            strToText(parseVariables(message, username, currentRewards));
+            SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(strToText(parseVariables(message, username)));
         }
         return true;
     }
