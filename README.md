@@ -3,7 +3,7 @@
 <img src="http://i.imgur.com/sf3L4Wu.png" width=800px height=250px style="float: right;">
 
 ----------
-:octocat:[GitHub](https://github.com/curscascis/SeriousVote) | [:computer:bStats](https://bstats.org/plugin/sponge/SeriousVote) | [:question:Wiki](https://github.com/curscascis/SeriousVote/wiki) | [:floppy_disk: Download - Latest Stable](https://raw.githubusercontent.com/curscascis/SeriousVote/master/build/libs/seriousvote-4.8.3.jar)
+:octocat:[GitHub](https://github.com/curscascis/SeriousVote) | [:computer:bStats](https://bstats.org/plugin/sponge/SeriousVote) | [:question:Wiki](https://github.com/curscascis/SeriousVote/wiki) | [:floppy_disk: Download - Latest Stable](https://raw.githubusercontent.com/curscascis/SeriousVote/master/build/libs/seriousvote-4.8.3.jar) | [:moneybag:Donate](https://paypal.me/iamabanana)
 
 
 ***Why not go anywhere else?***
@@ -67,3 +67,7 @@ If you get no output at all, it means your network configuration is incorrect! T
 3. It's a big config I know, I'll be working on improving it's ease of use. Look at the config guide for help on where to start.
 
 If you require any help because you are not receiving rewards, these will be the first steps I will make you go through, and I will ask you for confirmation that you have done them. So start here and don't try to get a shortcut. [Discord](https://discord.gg/wH6r8Vm)
+
+
+---
+Has this project helped your community grow? Think about donating [:moneybag:Donate](https://paypal.me/iamabanana)
