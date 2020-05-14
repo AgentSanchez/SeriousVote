@@ -31,7 +31,7 @@ public class OutputHelper {
                             SeriousVote.getPublicGame().getServer().getConsole(),
                             SeriousVote.getPublicGame().getServer().getConsole()));
         } else {
-            SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(strToText(parseVariables(message, username)));
+            SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(strToText(parseVariables(message, username, currentRewards)));
         }
         return true;
     }

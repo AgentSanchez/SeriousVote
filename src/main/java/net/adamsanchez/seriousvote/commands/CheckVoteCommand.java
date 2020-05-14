@@ -39,7 +39,7 @@ public class CheckVoteCommand implements CommandExecutor {
                     } else if (c < b && c < a) {
                         leastDays = c;
                     }
-                    src.sendMessage(Text.of("They have to vote " + leastDays + "More days until their next dailies reward."));
+                    src.sendMessage(Text.of("They have to vote " + leastDays + " More days until their next dailies reward."));
                 }
             }
 

@@ -373,17 +373,18 @@ public class SeriousVote {
         String playerID = event.getTargetEntity().getUniqueId().toString();
         String username = event.getTargetEntity().getName();
 
-        if (storedVotes.containsKey(playerID)) {
+        if (storedVotes.containsKey(username)) {
             U.debug("Offline votes found for player with ID " + playerID);
             String rewardString = "";
-            for (int ix = 0; ix < storedVotes.get(playerID).intValue(); ix++) {
+            for (int ix = 0; ix < storedVotes.get(username).intValue(); ix++) {
                 rewardString = giveVote(username);
             }
 
             OutputHelper.broadCastMessage(publicMessage, username, rewardString);
             currentRewards = "";
 
-            storedVotes.remove(playerID);
+            storedVotes.remove(username);
+            executeCommands();
             try {
                 OfflineHandler.saveOffline();
             } catch (IOException e) {
@@ -398,6 +399,7 @@ public class SeriousVote {
     //////////////////////////////ACTION METHODS///////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
     public void executeCommands() {
+        U.debug(CC.CYAN + "Emptying Queue");
         for (String command : commandQueue) {
             game.getCommandManager().process(game.getServer().getConsole(), command);
         }
@@ -409,7 +411,7 @@ public class SeriousVote {
         if (U.isPlayerOnline(username) || bypassOffline) {
             LootTable mainLoot;
             currentRewards = "";
-            ArrayList<String> commandQueue = new ArrayList<String>();
+            ArrayList<String> localCommandList = new ArrayList<String>();
             if (hasLoot && !isNoRandom && numRandRewards >= 1) {
                 for (int i = 0; i < numRandRewards; i++) {
                     mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
@@ -419,7 +421,8 @@ public class SeriousVote {
                     currentRewards = currentRewards + mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
                     for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
                             .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                        commandQueue.add(OutputHelper.parseVariables(ix, username));
+                        localCommandList.add(OutputHelper.parseVariables(ix, username));
+                        U.debug(CC.YELLOW + "QUEUED: " + CC.WHITE + ix);
                     }
                 }
             } else if (hasLoot && !isNoRandom) {
@@ -432,18 +435,25 @@ public class SeriousVote {
                     currentRewards = currentRewards + mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
                     for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
                             .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                        commandQueue.add(OutputHelper.parseVariables(ix, username));
+                        localCommandList.add(OutputHelper.parseVariables(ix, username));
+                        U.debug(CC.YELLOW + "QUEUED: " + CC.WHITE + ix);
                     }
                 }
             }
             //Get Set Rewards
             U.debug("Adding SetCommands to the process queue");
             for (String setCommand : setCommands) {
-                commandQueue.add(OutputHelper.parseVariables(setCommand, username, currentRewards));
+                localCommandList.add(OutputHelper.parseVariables(setCommand, username, currentRewards));
                 U.debug("Will process the following commands: " + setCommand);
+                U.debug(CC.YELLOW + "QUEUED: " + CC.WHITE + setCommand);
             }
-            this.commandQueue.addAll(commandQueue);
+            this.commandQueue.addAll(localCommandList);
+            U.debug("Added all commands to the command queue");
+            for(String s: commandQueue){
+                U.debug(CC.YELLOW_UNDERLINED + s);
+            }
             return currentRewards;
+
 
         } else {
             String playerIdentifier = U.getPlayerIdentifier(username);
