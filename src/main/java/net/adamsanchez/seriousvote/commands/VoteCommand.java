@@ -56,6 +56,7 @@ public class VoteCommand implements CommandExecutor {
                         }
                     }
                 }
+
             }
         }
         return CommandResult.success();
