@@ -11,6 +11,8 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColor;
+import org.spongepowered.api.text.format.TextColors;
 
 import java.io.IOException;
 
@@ -29,7 +31,7 @@ public class SetVotesCommand implements CommandExecutor {
         boolean offline = args.<Boolean>getOne("offlineVotes").get();
         int newNumVotes = args.<Integer>getOne("numVotes").get();
 
-        PlayerRecord pr = sv.getVoteSpreeSystem().getRecord("playerID");
+        PlayerRecord pr = sv.getVoteSpreeSystem().getRecord(U.getPlayerIdentifier(username));
         if(offline){
             if(sv.getOfflineVotes().containsKey(username)){
                 sv.getOfflineVotes().put(username, newNumVotes);
@@ -40,9 +42,14 @@ public class SetVotesCommand implements CommandExecutor {
 
         if(pr!=null){
             pr.setTotalVotes(newNumVotes);
-            sv.getVoteSpreeSystem().updateRecord(pr);
+            U.debug("Retrieving from Database for " + pr.getPlayerIdentifier());
+            PlayerRecord newR = new PlayerRecord(pr.getPlayerIdentifier(), newNumVotes, pr.getVoteSpree(), pr.getLastVote());
+            if(!sv.getVoteSpreeSystem().updateRecord(newR)){
+                src.sendMessage(Text.of("COULD NOT UPDATE RECORD").toBuilder().color(TextColors.RED).build());
+                return CommandResult.success();
+            }
         }
-
+        src.sendMessage(Text.of("RECORD UPDATED").toBuilder().color(TextColors.GREEN).build());
         return CommandResult.success();
     }
 
