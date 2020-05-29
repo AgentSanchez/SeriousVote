@@ -336,12 +336,14 @@ public class Database {
 
         try {
             con = getConnection();
+            U.debug("Connection established...");
             statement = preparedStatement(con, String.format(initial, table));
             statement.setString(1, playerIdentifier);
             statement.setInt(2, totalVotes);
             statement.setInt(3, voteSpree);
             statement.setDate(4, lastVote);
             statement.execute();
+            U.debug("Statement Executed....");
         } catch (SQLException e) {
             U.error("Error in trying to update player vote record!");
         } finally {
