@@ -80,6 +80,7 @@ public class CommandHandler {
                         GenericArguments.onlyOne(GenericArguments.integer(Text.of("numVotes"))),
                         GenericArguments.onlyOne(GenericArguments.bool(Text.of("offlineVotes")))
                 )
+                .executor(new SetVotesCommand())
                 .build();
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
         Sponge.getCommandManager().register(SeriousVote.getInstance(), vote, "vote");

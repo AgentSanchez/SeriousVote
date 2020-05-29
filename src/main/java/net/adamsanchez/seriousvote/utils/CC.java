@@ -93,7 +93,11 @@ public class CC {
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getMinecraftVersion().getName()
                 + CC.YELLOW_BOLD + " Sponge-Version: "
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getName() + "-"
-                + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown"));
+                + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown")
+                + "\n" + CC.LINE + "\n"
+                + CC.YELLOW_BOLD + " Votifier-Version: " + CC.CYAN + Sponge.getPluginManager().getPlugin("nuvotifier").get().getName()
+                + " " + CC.PURPLE + Sponge.getPluginManager().getPlugin("nuvotifier").get().getSource().get().toString()
+        );
     }
 
     public static String logo(){

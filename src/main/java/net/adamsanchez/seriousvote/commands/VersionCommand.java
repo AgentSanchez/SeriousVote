@@ -20,15 +20,17 @@ public class VersionCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         SeriousVote sv = SeriousVote.getInstance();
-        sv.getLogger().info(CC.YELLOW_BOLD + "Serious Vote Version: "
-                + CC.PURPLE_BOLD + sv.getPlugin().getVersion().get()
+        sv.getLogger().info(CC.RED + "ONLINE MODE? " + Sponge.getGame().getServer().getOnlineMode() + " "
+                + CC.YELLOW_BOLD + "Serious Vote Version: "
+                + CC.PURPLE_BOLD + SeriousVote.getInstance().getPlugin().getVersion().get()
                 + CC.YELLOW_BOLD + " MC-Version: "
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getMinecraftVersion().getName()
                 + CC.YELLOW_BOLD + " Sponge-Version: "
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getName() + "-"
-                + CC.YELLOW_BOLD + " Votifier-Version: " + Sponge.getPluginManager().getPlugin("nuvotifier").get().getName()
-                                 + " " + Sponge.getPluginManager().getPlugin("nuvotifier").get().getVersion()
-                + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown"));
+                + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown")
+                + "\n" + CC.LINE + "\n"
+                + CC.YELLOW_BOLD + " Votifier-Version: " + CC.CYAN + Sponge.getPluginManager().getPlugin("nuvotifier").get().getName()
+                + " " + CC.PURPLE + Sponge.getPluginManager().getPlugin("nuvotifier").get().getSource().get().toString());
         return CommandResult.success();
     }
 }
