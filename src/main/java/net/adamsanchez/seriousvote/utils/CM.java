@@ -99,6 +99,10 @@ public class CM {
         return node.getNode("config", "monthly-reset-day").getInt();
     }
 
+    public static boolean getMonthlyResetWithOffline(CommentedConfigurationNode node){
+        return node.getNode("config", "monthly-reset-cache-enabled").getBoolean(true);
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////
 
     public static List<String> getSetCommands(ConfigurationNode node) {
