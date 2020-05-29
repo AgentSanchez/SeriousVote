@@ -72,6 +72,15 @@ public class CommandHandler {
                 )
                 .executor(new ChangePlayerIDCommand())
                 .build();
+        CommandSpec setPlayerVotes = CommandSpec.builder()
+                .description(Text.of("Set a player's vote record to a certain number of votes"))
+                .permission("seriousvote.commands.admin.setplayervotes")
+                .arguments(
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("playerID"))),
+                        GenericArguments.onlyOne(GenericArguments.integer(Text.of("numVotes"))),
+                        GenericArguments.onlyOne(GenericArguments.bool(Text.of("offlineVotes")))
+                )
+                .build();
         //////////////////////////COMMAND REGISTER////////////////////////////////////////////
         Sponge.getCommandManager().register(SeriousVote.getInstance(), vote, "vote");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), reload, "svreload", "seriousvotereload");
@@ -83,5 +92,6 @@ public class CommandHandler {
         Sponge.getCommandManager().register(SeriousVote.getInstance(), migrateFromOnline, "svmigratefromonline");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), changePlayerID, "svswapid");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), dumpSQLData, "svdumpsql");
+        Sponge.getCommandManager().register(SeriousVote.getInstance(), setPlayerVotes, "setvotes");
     }
 }

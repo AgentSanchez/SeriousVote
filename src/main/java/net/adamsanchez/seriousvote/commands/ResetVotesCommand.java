@@ -18,6 +18,8 @@ public class ResetVotesCommand implements CommandExecutor {
         if(SeriousVote.getInstance().usingVoteSpreeSystem()){
             SeriousVote.getInstance().getVoteSpreeSystem().resetPlayerVotes();
             src.sendMessage(Text.of("All votes reset to 0"));
+            SeriousVote.getInstance().getOfflineVotes().clear();
+            SeriousVote.getInstance().triggerSave();
         } else {
             src.sendMessage(Text.of("You are not using a database...."));
 

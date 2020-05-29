@@ -5,8 +5,6 @@ import net.adamsanchez.seriousvote.utils.U;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +18,7 @@ public class OfflineHandler {
 
     public  static void initOfflineStorage(){
         U.info("Attempting to load in offline player votes....");
-        if (Files.notExists(SeriousVote.getInstance().getOfflineVotes())) {
+        if (Files.notExists(SeriousVote.getInstance().getOfflineVotesPath())) {
             try {
                 OfflineHandler.saveOffline();
             } catch (IOException e) {
@@ -31,15 +29,15 @@ public class OfflineHandler {
     }
 
     public static void saveOffline() throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(SeriousVote.getInstance().getOfflineVotes().toFile());
+        FileOutputStream fileOutputStream = new FileOutputStream(SeriousVote.getInstance().getOfflineVotesPath().toFile());
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-        objectOutputStream.writeObject(SeriousVote.getInstance().getStoredVotes());
+        objectOutputStream.writeObject(SeriousVote.getInstance().getOfflineVotes());
         objectOutputStream.close();
 
     }
 
     public static HashMap<String,Integer> loadOffline() throws IOException, ClassNotFoundException {
-        FileInputStream fileInputStream = new FileInputStream(SeriousVote.getInstance().getOfflineVotes().toFile());
+        FileInputStream fileInputStream = new FileInputStream(SeriousVote.getInstance().getOfflineVotesPath().toFile());
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
         HashMap<String,Integer> storedVotes = (HashMap<String, Integer>) objectInputStream.readObject();

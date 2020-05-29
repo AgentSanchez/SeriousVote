@@ -32,10 +32,10 @@ public class GiveVoteCommand implements CommandExecutor {
             String playerIdentifier = U.getPlayerIdentifier(username);
             if (playerIdentifier != null) {
                 //Write to File
-                if (sv.getStoredVotes().containsKey(playerIdentifier)) {
-                    sv.getStoredVotes().put(playerIdentifier, sv.getStoredVotes().get(playerIdentifier).intValue() + 1);
+                if (sv.getOfflineVotes().containsKey(playerIdentifier)) {
+                    sv.getOfflineVotes().put(playerIdentifier, sv.getOfflineVotes().get(playerIdentifier).intValue() + 1);
                 } else {
-                    sv.getStoredVotes().put(playerIdentifier, new Integer(1));
+                    sv.getOfflineVotes().put(playerIdentifier, new Integer(1));
                 }
                 try {
                     OfflineHandler.saveOffline();

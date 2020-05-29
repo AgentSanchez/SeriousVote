@@ -86,7 +86,7 @@ public class SeriousVote {
     @Inject
     @DefaultConfig(sharedRoot = false)
     private Path defaultConfig;
-    private Path offlineVotes;
+    private Path offlineVotesPath;
     private Path resetDatePath;
 
     @Inject
@@ -114,7 +114,7 @@ public class SeriousVote {
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String, String>>>();
 
     //Stored Offline Votes
-    HashMap<String, Integer> storedVotes = new HashMap<String, Integer>();
+    HashMap<String, Integer> offlineVotes = new HashMap<String, Integer>();
     int numRandRewards;
     int minRandRewards;
     int maxRandRewards;
@@ -140,8 +140,8 @@ public class SeriousVote {
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
         CC.printSVInfo();
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
-        storedVotes = new HashMap<String, Integer>();
-        offlineVotes = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
+        offlineVotes = new HashMap<String, Integer>();
+        offlineVotesPath = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
         resetDatePath = Paths.get(privateConfigDir.toString(), "", "lastReset");
         OfflineHandler.initOfflineStorage();
         CM.initConfig(defaultConfig);
@@ -217,11 +217,11 @@ public class SeriousVote {
 
 
         //Load Offline votes
-        U.info(CC.YELLOW + "Trying to load offline player votes from ... " + offlineVotes.toString());
+        U.info(CC.YELLOW + "Trying to load offline player votes from ... " + offlineVotesPath.toString());
         try {
-            storedVotes = OfflineHandler.loadOffline();
+            offlineVotes = OfflineHandler.loadOffline();
         } catch (EOFException e) {
-            storedVotes = new HashMap<>();
+            offlineVotes = new HashMap<>();
             try {
                 U.debug("Trying to save corrected Map.");
                 OfflineHandler.saveOffline();
@@ -373,17 +373,17 @@ public class SeriousVote {
         String playerID = event.getTargetEntity().getUniqueId().toString();
         String username = event.getTargetEntity().getName();
 
-        if (storedVotes.containsKey(username)) {
+        if (offlineVotes.containsKey(username)) {
             U.debug("Offline votes found for player with ID " + playerID);
             String rewardString = "";
-            for (int ix = 0; ix < storedVotes.get(username).intValue(); ix++) {
+            for (int ix = 0; ix < offlineVotes.get(username).intValue(); ix++) {
                 rewardString = giveVote(username);
             }
 
             OutputHelper.broadCastMessage(publicMessage, username, rewardString);
             currentRewards = "";
 
-            storedVotes.remove(username);
+            offlineVotes.remove(username);
             executeCommands();
             try {
                 OfflineHandler.saveOffline();
@@ -459,11 +459,11 @@ public class SeriousVote {
             String playerIdentifier = U.getPlayerIdentifier(username);
             if (playerIdentifier != null) {
                 //Write to File
-                if (storedVotes.containsKey(playerIdentifier)) {
-                    storedVotes.put(playerIdentifier, storedVotes.get(playerIdentifier).intValue() + 1);
+                if (offlineVotes.containsKey(playerIdentifier)) {
+                    offlineVotes.put(playerIdentifier, offlineVotes.get(playerIdentifier).intValue() + 1);
 
                 } else {
-                    storedVotes.put(playerIdentifier, new Integer(1));
+                    offlineVotes.put(playerIdentifier, new Integer(1));
                 }
                 try {
                     OfflineHandler.saveOffline();
@@ -522,18 +522,26 @@ public class SeriousVote {
         return voteSpreeSystem;
     }
 
-    public HashMap<String, Integer> getStoredVotes() {
-        return storedVotes;
+    public HashMap<String, Integer> getOfflineVotes() {
+        return offlineVotes;
     }
 
     public static boolean isServerOnline() {
         return getPublicGame().getServer().getOnlineMode();
     }
 
-    public Path getOfflineVotes() {
-        return offlineVotes;
+    public Path getOfflineVotesPath() {
+        return offlineVotesPath;
     }
 
+    public void triggerSave(){
+        try {
+            OfflineHandler.saveOffline();
+        } catch (IOException e) {
+            U.debug("Could not save file in a triggered save :(");
+            e.printStackTrace();
+        }
+    }
     public Path getResetDatePath() {
         return resetDatePath;
     }
