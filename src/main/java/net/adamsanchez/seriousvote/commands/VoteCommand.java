@@ -1,5 +1,6 @@
 package net.adamsanchez.seriousvote.commands;
 
+import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.Data.PlayerRecord;
@@ -23,13 +24,13 @@ public class VoteCommand implements CommandExecutor {
 
     public CommandResult execute(CommandSource src, CommandContext args) throws
             CommandException {
-        if(PlaceHolders.apiLoaded){
+        if (PlaceHolders.apiLoaded) {
             src.sendMessage(PlaceHolders.papiParse(
                     CM.getVoteSiteMessage(sv.getMainCfgNode()),
                     src,
                     src
             ));
-        }else {
+        } else {
             src.sendMessage(
                     OutputHelper.strToText(CM.getVoteSiteMessage(sv.getMainCfgNode()))
             );
@@ -37,9 +38,6 @@ public class VoteCommand implements CommandExecutor {
         CM.getVoteSites(sv.getMainCfgNode()).forEach(site -> {
             src.sendMessage(U.convertStringToLink(site));
         });
-
-
-
 
         if (sv.usingVoteSpreeSystem() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
             if (sv.getUserStorage().get().get(src.getName()).isPresent()) {
@@ -50,20 +48,12 @@ public class VoteCommand implements CommandExecutor {
                             + " votes. You have currently voted " + record.getVoteSpree()
                             + " days in a row.").toBuilder().color(TextColors.GOLD).build());
                     if (sv.isDailiesEnabled()) {
-                        int vsa = record.getVoteSpree() + 1;
-                        int a = 365 * (vsa / 365 + 1) - vsa;
-                        int b = 30 * (vsa / 30 + 1) - vsa;
-                        int c = 7 * (vsa / 7 + 1) - vsa;
-                        int leastDays = 0;
-                        if (a < b && a < c) {
-                            leastDays = a;
-                        } else if (b < c && b < a) {
-                            leastDays = b;
-                        } else if (c < b && c < a) {
-                            leastDays = c;
+                        int spree = record.getVoteSpree();
+                        if (spree != 0) {
+                            src.sendMessage(Text.of("You have to vote " + VoteSpreeSystem.getRemainingDays(spree) + " more days until your next dailies reward."));
+                        } else {
+                            src.sendMessage(Text.of("You have to vote 7 more days until your next dailies reward."));
                         }
-                        leastDays += 1;
-                        src.sendMessage(Text.of("You have to vote " + leastDays + " more days until your next dailies reward."));
                     }
                 }
             }
