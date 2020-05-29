@@ -24,6 +24,7 @@ public class VoteSpreeSystemTest {
         assertEquals(3, VoteSpreeSystem.getRemainingDays(865));
         assertEquals(3, VoteSpreeSystem.getRemainingDays(67));
         assertEquals(1, VoteSpreeSystem.getRemainingDays(29));
+        assertEquals(3, VoteSpreeSystem.getRemainingDays(25));
     }
 
 }
