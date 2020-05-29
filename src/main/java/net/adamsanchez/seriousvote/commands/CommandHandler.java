@@ -93,6 +93,6 @@ public class CommandHandler {
         Sponge.getCommandManager().register(SeriousVote.getInstance(), migrateFromOnline, "svmigratefromonline");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), changePlayerID, "svswapid");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), dumpSQLData, "svdumpsql");
-        Sponge.getCommandManager().register(SeriousVote.getInstance(), setPlayerVotes, "setvotes");
+        Sponge.getCommandManager().register(SeriousVote.getInstance(), setPlayerVotes, "setvote");
     }
 }
