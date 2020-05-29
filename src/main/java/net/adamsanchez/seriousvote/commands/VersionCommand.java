@@ -9,6 +9,7 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.plugin.PluginContainer;
 
 /**
  * Created by Adam Sanchez on 4/15/2018.
@@ -25,6 +26,8 @@ public class VersionCommand implements CommandExecutor {
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getMinecraftVersion().getName()
                 + CC.YELLOW_BOLD + " Sponge-Version: "
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getName() + "-"
+                + CC.YELLOW_BOLD + " Votifier-Version: " + Sponge.getPluginManager().getPlugin("nuvotifier").get().getName()
+                                 + " " + Sponge.getPluginManager().getPlugin("nuvotifier").get().getVersion()
                 + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown"));
         return CommandResult.success();
     }
