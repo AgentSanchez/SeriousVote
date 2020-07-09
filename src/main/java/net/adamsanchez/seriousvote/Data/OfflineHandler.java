@@ -46,7 +46,7 @@ public class OfflineHandler {
     }
 
     public static void storeLastReset(Date date){
-        BufferedWriter writer = null;
+        BufferedWriter writer;
         try {
             writer = new BufferedWriter(new FileWriter(SeriousVote.getInstance().getResetDatePath().toFile()));
             writer.write(date.toString());
@@ -84,15 +84,13 @@ public class OfflineHandler {
             f.delete();
             BufferedWriter br = new BufferedWriter(new FileWriter(SeriousVote.getInstance().getSQLDumpPath().toString()));
 
-            for(PlayerRecord r : records){
+            for(PlayerRecord r : records) {
                 U.debug("Writing Player:" + r.toString());
-                br.write(new StringBuilder()
-                        .append(r.getPlayerIdentifier()).append(',')
-                        .append(r.getTotalVotes()).append(',')
-                        .append(r.getVoteSpree()).append(',')
-                        .append(r.getLastVote()).append(',')
-                        .append("\n")
-                        .toString());
+                br.write(r.getPlayerIdentifier() + ',' +
+                        r.getTotalVotes() + ',' +
+                        r.getVoteSpree() + ',' +
+                        r.getLastVote() + ',' +
+                        "\n");
             }
             U.info("Wrote " + records.size() + " to file....");
             br.close();

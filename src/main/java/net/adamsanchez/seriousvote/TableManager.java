@@ -20,7 +20,7 @@ public class TableManager {
         }
         if (nodeStrings.size() < 1) return null;
 
-            String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
+            String[] inputLootSource = nodeStrings.toArray(new String[ 0 ]);
             //Create a new Array of the proper size x*2 to hold the tables for choosing later
             String[][] table = new String[2][inputLootSource.length / 2];
             U.info(inputLootSource.length / 2 + " Tables Imported for Rewards");

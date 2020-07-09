@@ -19,7 +19,7 @@ public class ScheduleManager {
         Scheduler scheduler = Sponge.getScheduler();
         Task.Builder taskBuilder = scheduler.createTaskBuilder();
         taskList = new ArrayList<>();
-        Task task = taskBuilder.execute(() -> taskCheckForUnprocessedVotes())
+        Task task = taskBuilder.execute(ScheduleManager::taskCheckForUnprocessedVotes)
                 .interval(700, TimeUnit.MILLISECONDS)
                 .name("SeriousVote-CommandRewardExecutor")
                 .submit(sv.getPlugin());
@@ -27,7 +27,7 @@ public class ScheduleManager {
 
         if (sv.isMilestonesEnabled() && CM.getMonthlyResetEnabled(sv.getMainCfgNode())) {
             U.info("Setting up monthly reset...");
-            Task checkForResets = taskBuilder.execute(() -> taskCheckForMonthlyReset())
+            Task checkForResets = taskBuilder.execute(ScheduleManager::taskCheckForMonthlyReset)
                     .interval(2, TimeUnit.HOURS)
                     .name("SeriousVote-MonthlyResetService")
                     .submit(sv.getPlugin());

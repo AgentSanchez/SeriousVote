@@ -11,13 +11,12 @@ import java.util.stream.Collectors;
  * Created by adam_ on 4/26/2017.
  */
 public class LootTable {
-    private ConfigurationNode tableSource;
     private boolean activated = false;
-    private String tableName = "";
+    private final String tableName;
 
     private String[][] Table;
 
-    private int chanceTotal,chanceMax, chanceMin = 0;
+    private int chanceMax;
     private int[] chanceMap;
 
 
@@ -25,9 +24,9 @@ public class LootTable {
 
     public LootTable(String rewardSet, ConfigurationNode tableSource) {
         //Gather Reward Set From Configurations
-        this.tableSource = tableSource.getNode("config","Tables", rewardSet);
+        ConfigurationNode tableSource1 = tableSource.getNode("config", "Tables", rewardSet);
         this.tableName = rewardSet;
-        List<String> nodeStrings = this.tableSource.getChildrenList().stream()
+        List<String> nodeStrings = tableSource1.getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
 
         if(nodeStrings.size()%2!= 0 || nodeStrings.size()<1){
@@ -35,24 +34,24 @@ public class LootTable {
             activated = false;
         } else {
             //Convert List to Array
-            String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
+            String[] inputLootSource = nodeStrings.toArray(new String[ 0 ]);
             //Create a new Array of the proper size x*2
             Table = new String[2][inputLootSource.length/2];
             chanceMap = new int[inputLootSource.length/2];
 
-            for(int ix = 0; ix < inputLootSource.length; ix+=2){
-                 Table[0][ix/2] = inputLootSource[ix];
-                 Table[1][ix/2] = inputLootSource[ix+1];
-                 //Initialize chanceMap
-                 chanceMap[ix/2] = Integer.parseInt(Table[0][ix/2]);
-                 if(ix != 0){
-                     chanceMap[ix/2]+= chanceMap[(ix/2)-1];
+            for (int ix = 0; ix < inputLootSource.length; ix += 2) {
+                Table[ 0 ][ ix / 2 ] = inputLootSource[ ix ];
+                Table[ 1 ][ ix / 2 ] = inputLootSource[ ix + 1 ];
+                //Initialize chanceMap
+                chanceMap[ ix / 2 ] = Integer.parseInt(Table[ 0 ][ ix / 2 ]);
+                if (ix != 0) {
+                    chanceMap[ ix / 2 ] += chanceMap[ (ix / 2) - 1 ];
 
-                 }
+                }
             }
-            chanceTotal = chanceMap.length-1;
-            chanceMin = chanceMap[0];
-            chanceMax = chanceMap[chanceTotal];
+            int chanceTotal = chanceMap.length - 1;
+            int chanceMin = chanceMap[ 0 ];
+            chanceMax = chanceMap[ chanceTotal ];
 
 
         }
@@ -75,8 +74,7 @@ public class LootTable {
             }
         }
         if(currentChoice < 0 ) U.error("There was a problem while rolling something might be broken");
-        String chosenReward = Table[1][currentChoice];
-        return chosenReward;
+        return Table[ 1 ][ currentChoice ];
     }
 
     public int roll(){

@@ -1,29 +1,31 @@
 package net.adamsanchez.seriousvote.commands;
 
+import net.adamsanchez.seriousvote.Data.PlayerRecord;
 import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
+import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.utils.CM;
-import net.adamsanchez.seriousvote.Data.PlayerRecord;
-import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.OutputHelper;
 import net.adamsanchez.seriousvote.utils.U;
-import org.spongepowered.api.command.CommandException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializers;
+import org.spongepowered.api.util.annotation.NonnullByDefault;
 
 /**
  * Created by Adam Sanchez on 4/13/2018.
  */
 public class VoteCommand implements CommandExecutor {
-    SeriousVote sv = SeriousVote.getInstance();
+    final SeriousVote sv = SeriousVote.getInstance();
 
-    public CommandResult execute(CommandSource src, CommandContext args) throws
-            CommandException {
+    @Override
+    @NonNull
+    @NonnullByDefault
+    public CommandResult execute(CommandSource src, CommandContext args) {
         if (PlaceHolders.apiLoaded) {
             src.sendMessage(PlaceHolders.papiParse(
                     CM.getVoteSiteMessage(sv.getMainCfgNode()),
@@ -35,12 +37,10 @@ public class VoteCommand implements CommandExecutor {
                     OutputHelper.strToText(CM.getVoteSiteMessage(sv.getMainCfgNode()))
             );
         }
-        CM.getVoteSites(sv.getMainCfgNode()).forEach(site -> {
-            src.sendMessage(U.convertStringToLink(site));
-        });
+        CM.getVoteSites(sv.getMainCfgNode()).forEach(site -> src.sendMessage(U.convertStringToLink(site)));
 
         if (sv.usingVoteSpreeSystem() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
-            if (sv.getUserStorage().get().get(src.getName()).isPresent()) {
+            if (SeriousVote.getUserStorage().flatMap(userStorage -> userStorage.get(src.getName())).isPresent()) {
                 String playerIdentifier = U.getPlayerIdentifier(src.getName());
                 PlayerRecord record = sv.getVoteSpreeSystem().getRecord(playerIdentifier);
                 if (record != null) {

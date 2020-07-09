@@ -12,6 +12,8 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 
+import java.util.Arrays;
+
 public class PlaceHolders {
 
     public static PlaceHolders aThis;
@@ -70,8 +72,8 @@ public class PlaceHolders {
 
             if (rankStr.contains("-") && rankStr.length() > 1) {
                 try {
-                    U.debug(CC.YELLOW + "Invalid input...Trying to Parse: " + rankStr.substring(rankStr.indexOf("_") + 1, rankStr.length()));
-                    rank = Integer.parseInt(rankStr.substring(rankStr.indexOf("_") + 1, rankStr.length()));
+                    U.debug(CC.YELLOW + "Invalid input...Trying to Parse: " + rankStr.substring(rankStr.indexOf("_") + 1));
+                    rank = Integer.parseInt(rankStr.substring(rankStr.indexOf("_") + 1));
                 } catch (NumberFormatException e2) {
                     return giveNumberFormatError(e2, rankStr);
                 }
@@ -88,11 +90,7 @@ public class PlaceHolders {
             U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
             return "MILESTONES NOT ENABLED";
         }
-        if ((Integer) rank == null) {
-            //return U.getName(SeriousVoteAPI.getRecordByRank(0).getUuid());
-            U.error("Placeholder did not pass me an integer....");
-            return "ERROR";
-        } else if (rank > SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters()) {
+        if (rank > SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters()) {
             U.debug("Requested number out of range!!!");
             return ("UNKNOWN");
         } else {
@@ -114,8 +112,8 @@ public class PlaceHolders {
 
             if (rankStr.contains("-") && rankStr.length() > 1) {
                 try {
-                    U.debug(CC.YELLOW + "Invalid input...Trying to Parse: " + rankStr.substring(rankStr.indexOf("_") + 1, rankStr.length()));
-                    rank = Integer.parseInt(rankStr.substring(rankStr.indexOf("_") + 1, rankStr.length()));
+                    U.debug(CC.YELLOW + "Invalid input...Trying to Parse: " + rankStr.substring(rankStr.indexOf("_") + 1));
+                    rank = Integer.parseInt(rankStr.substring(rankStr.indexOf("_") + 1));
                 } catch (NumberFormatException e2) {
                     return giveNumberFormatError(e2, rankStr);
                 }
@@ -133,11 +131,7 @@ public class PlaceHolders {
             return "MILESTONES NOT ENABLED";
         }
 
-        if ((Integer) rank == null) {
-            //return U.getName(SeriousVoteAPI.getRecordByRank(0).getUuid());
-            U.error("Placeholder did not pass me an integer....");
-            return "ERROR";
-        } else if (rank > SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters()) {
+        if (rank > SeriousVote.getInstance().getVoteSpreeSystem().getNumberOfVoters()) {
             U.debug("Requested number out of range!!!");
             return ("UNKNOWN");
         } else {
@@ -177,7 +171,7 @@ public class PlaceHolders {
 
     private String giveNumberFormatError(Exception e, String inputReceived) {
         U.debug(CC.RED + "You have given an incorrect number format!!! Received: \"" + inputReceived + "\"");
-        U.debug(e.getStackTrace().toString());
+        U.debug(Arrays.toString(e.getStackTrace()));
         return "NUM_FORMAT_ERROR";
     }
 }

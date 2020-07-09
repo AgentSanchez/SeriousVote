@@ -3,15 +3,7 @@ package net.adamsanchez.seriousvote.integration;
 import com.magitechserver.magibridge.MagiBridge;
 import com.magitechserver.magibridge.config.FormatType;
 import com.magitechserver.magibridge.discord.DiscordMessageBuilder;
-import me.rojo8399.placeholderapi.Placeholder;
-import me.rojo8399.placeholderapi.PlaceholderService;
-import me.rojo8399.placeholderapi.Token;
-import net.adamsanchez.seriousvote.SeriousVote;
-import net.adamsanchez.seriousvote.api.SeriousVoteAPI;
-import net.adamsanchez.seriousvote.utils.CC;
-import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
@@ -19,7 +11,6 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 public class MagiBridgeAPI {
 
     public static boolean isEnabled;
-    private static MagiBridge magiBridge;
 
     public static void initialize(PluginContainer instance) {
         if(!isEnabled) {
@@ -27,7 +18,7 @@ public class MagiBridgeAPI {
             return;
         }
         try {
-            magiBridge = Sponge.getServiceManager().provideUnchecked(MagiBridge.class);
+            Sponge.getServiceManager().provideUnchecked(MagiBridge.class);
             instance.getLogger().info("MagiBridge loaded in! Enabling Seriousvote integration!!");
         } catch (NoClassDefFoundError e) {
             instance.getLogger().warn("MagiBridge not found, support disabled!");

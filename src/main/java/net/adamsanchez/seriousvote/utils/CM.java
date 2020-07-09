@@ -1,7 +1,5 @@
 package net.adamsanchez.seriousvote.utils;
 
-import com.google.common.collect.Iterables;
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import net.adamsanchez.seriousvote.SeriousVote;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -10,11 +8,7 @@ import org.spongepowered.api.asset.Asset;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /**

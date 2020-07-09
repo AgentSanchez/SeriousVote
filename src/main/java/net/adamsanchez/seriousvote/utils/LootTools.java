@@ -80,7 +80,6 @@ public class LootTools {
         }
 
         if (currentChoice < 0) U.error("There was a problem while rolling something might be broken");
-        String chosenReward = rewardTables[1][currentChoice];
-        return chosenReward;
+        return rewardTables[ 1 ][ currentChoice ];
     }
 }

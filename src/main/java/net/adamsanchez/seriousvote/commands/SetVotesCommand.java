@@ -1,20 +1,16 @@
 package net.adamsanchez.seriousvote.commands;
 
-import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.Data.PlayerRecord;
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.U;
-import org.spongepowered.api.command.CommandException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
-
-import java.io.IOException;
+import org.spongepowered.api.util.annotation.NonnullByDefault;
 
 /**
  * Created by Adam Sanchez on 4/13/2018.
@@ -25,15 +21,17 @@ public class SetVotesCommand implements CommandExecutor {
     //  if they all work we're gravy.
 
     @Override
-    public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+    @NonNull
+    @NonnullByDefault
+    public CommandResult execute(CommandSource src, CommandContext args) {
         SeriousVote sv = SeriousVote.getInstance();
         String username = args.<String>getOne("playerID").get();
         boolean offline = args.<Boolean>getOne("offlineVotes").get();
         int newNumVotes = args.<Integer>getOne("numVotes").get();
 
         PlayerRecord pr = sv.getVoteSpreeSystem().getRecord(U.getPlayerIdentifier(username));
-        if(offline){
-            if(sv.getOfflineVotes().containsKey(username)){
+        if (offline) {
+            if (sv.getOfflineVotes().containsKey(username)) {
                 sv.getOfflineVotes().put(username, newNumVotes);
                 sv.triggerSave();
             }

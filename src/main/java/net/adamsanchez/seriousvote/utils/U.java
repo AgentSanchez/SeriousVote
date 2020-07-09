@@ -1,7 +1,6 @@
 package net.adamsanchez.seriousvote.utils;
 
 import net.adamsanchez.seriousvote.SeriousVote;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.user.UserStorageService;
@@ -12,6 +11,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -50,21 +50,21 @@ public class U {
         return getName(playerIdentifier, false);
     }
     public static String getName(String playerIdentifier, boolean bypass){
-        if(bypass == false && SeriousVote.isServerOnline() == false) return playerIdentifier;
-        if(SeriousVote.isServerOnline() && !isUUID(playerIdentifier)){
+        if (!bypass && !SeriousVote.isServerOnline()) return playerIdentifier;
+        if (SeriousVote.isServerOnline() && !isUUID(playerIdentifier)) {
             U.error("Non UUID player identifier provided while server was in online mode!! identifier: " + playerIdentifier);
             return playerIdentifier;
         }
         //id getname returns and if identifier are equal return identifier
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
         U.debug("Attempting to get name from UUID...");
-        Optional<User> user = userStorage.get().get(UUID.fromString(playerIdentifier));
+        Optional<User> user = userStorage.flatMap(storage -> storage.get(UUID.fromString(playerIdentifier)));
         if(!user.isPresent()){
             if(isUsername(playerIdentifier)){
                 U.debug("UUID not found, but this does appear to be a name....");
                 return playerIdentifier;
             }
-            U.debug("System was unable to retrieve name from UUID: " + playerIdentifier.toString());
+            U.debug("System was unable to retrieve name from UUID: " + playerIdentifier);
             return "";
         } else {
             U.debug("System was able to retrieve name from UUID for: " + user.get().getName());
@@ -77,13 +77,13 @@ public class U {
      * @param nameOrID
      * @return
      */
-    public static String getPlayerIdentifier(String nameOrID){
-        U.debug("Retrieving playerIdentifier for input + \"" + nameOrID + "\"." );
-        String result = nameOrID;
-        if(SeriousVote.isServerOnline() == false){
+    public static String getPlayerIdentifier(String nameOrID) {
+        U.debug("Retrieving playerIdentifier for input + \"" + nameOrID + "\".");
+        String result;
+        if (!SeriousVote.isServerOnline()) {
             result = nameOrID;
         } else {
-            result = U.getIdFromName(nameOrID).toString();
+            result = U.getIdFromName(nameOrID);
         }
         U.debug("Player Identifier returned as \"" + result + "\"");
         return result;
@@ -95,7 +95,7 @@ public class U {
 
     public static String getIdFromName(String name){
         Optional<UserStorageService> userStorage =  SeriousVote.getUserStorage();
-        if((userStorage.get().get(name).isPresent())){
+        if ((userStorage.flatMap(storage -> storage.get(name)).isPresent())) {
             U.debug("returning ID from name");
             return userStorage.get().get(name).get().getUniqueId().toString();
         } else {
@@ -129,7 +129,7 @@ public class U {
     public static String convertNameToID(String playerIdentifier){
         if(isUUID(playerIdentifier)) return playerIdentifier;
         String s = getIdFromName(playerIdentifier);
-        if(s != null && s!= ""){
+        if (s != null && !Objects.equals(s, "")) {
             U.debug("Converted Successfully!! to: " + s);
             return s;
         }
@@ -148,8 +148,7 @@ public class U {
 
     public static boolean isUsername(String playerIdentifier){
         try{
-            if(SeriousVote.getUserStorage().get().get(playerIdentifier).isPresent()) return true;
-            return false;
+            return SeriousVote.getUserStorage().flatMap(userStorage -> userStorage.get(playerIdentifier)).isPresent();
         }catch (Exception e){
             return false;
         }

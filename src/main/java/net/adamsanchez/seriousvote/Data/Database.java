@@ -6,48 +6,37 @@ import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.U;
 
 import java.sql.*;
-import java.util.*;
-import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by adam_ on 01/22/17.
  */
 public class Database {
-    private String host = "localhost";
-    private String port = "3306";
-    private String username = "root";
-    private String password = "ohokay";
-    private String dbname = "SeriousVote";
-    private String dbType = "mysql";
-    private String table_prefix = "SV";
     private String playerTable = "players";
-    private String url = "jdbc:mysql://test.com:3306/testdata?useSSL=false";
-    private int minIdleConnections = 2;
-    private int maxActiveConnections = 4;
-    private String timezoneFix = "&useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    final HikariConfig config = new HikariConfig();
     private ArrayList<PlayerRecord> recordCache;
     private long recordCacheExpirationTime;
-    private final long cacheLifetime = 10000L;
-    HikariConfig config = new HikariConfig();
-    HikariDataSource ds;
+    final HikariDataSource ds;
+    private final String timezoneFix = "&useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
 
     public Database() {
-
         SeriousVote sv = SeriousVote.getInstance();
-        this.host = sv.databaseHostname;
-        this.port = sv.databasePort;
-        this.dbname = sv.databaseName;
-        this.table_prefix = sv.databasePrefix;
-        this.username = sv.databaseUsername;
-        this.password = sv.databasePassword;
-        this.dbType = sv.databaseType == null || sv.databaseType == "" ? this.dbType : sv.databaseType.toLowerCase();
-        if(dbType != "mysql" || dbType != "mariadb"){
-            dbType = "mariadb";
-        }
+        String host = sv.databaseHostname;
+        String port = sv.databasePort;
+        String dbname = sv.databaseName;
+        String table_prefix = sv.databasePrefix;
+        String username = sv.databaseUsername;
+        String password = sv.databasePassword;
+        String dbType1 = "mysql";
+        String dbType = sv.databaseType == null || Objects.equals(sv.databaseType, "") ? dbType1 : sv.databaseType.toLowerCase();
+        dbType = "mariadb";
+        int maxActiveConnections = 4;
+        int minIdleConnections = 2;
         try {
-            this.minIdleConnections = Integer.parseInt(sv.minIdleConnections);
-            this.maxActiveConnections = Integer.parseInt(sv.maxActiveConnections);
+            minIdleConnections = Integer.parseInt(sv.minIdleConnections);
+            maxActiveConnections = Integer.parseInt(sv.maxActiveConnections);
         } catch (Exception e) {
             U.info("Incorrect values given for connection pool, reverting to default");
             U.info("Max Active: " + maxActiveConnections);
@@ -55,7 +44,7 @@ public class Database {
         }
         playerTable = table_prefix + "players";
 
-        url = "jdbc:" + dbType + "://" + host + ":" + port + "/" + dbname + "?useSSL=false";
+        String url = "jdbc:" + dbType + "://" + host + ":" + port + "/" + dbname + "?useSSL=false";
 
         config.setJdbcUrl(url + timezoneFix);
         config.setUsername(username);
@@ -127,8 +116,7 @@ public class Database {
 
     public ResultSet genericSelectQuery(Connection con, String table, String field, String value) {
         String initial = "SELECT * FROM %s WHERE %s='%s'";
-        ResultSet results = genericQuery(con, String.format(initial, table, field, value));
-        return results;
+        return genericQuery(con, String.format(initial, table, field, value));
     }
 
     /**
@@ -141,8 +129,7 @@ public class Database {
      */
     public ResultSet orderedSelectQuery(Connection con, String table, String orderByField) {
         String initial = "SELECT * FROM %s ORDER BY %s DESC";
-        ResultSet results = genericQuery(con, String.format(initial, table, orderByField));
-        return results;
+        return genericQuery(con, String.format(initial, table, orderByField));
     }
 
     /**
@@ -157,8 +144,7 @@ public class Database {
      */
     public ResultSet orderedSelectQuery(Connection con, String table, String orderByField, int limit, int offset) {
         String initial = "SELECT * FROM %s ORDER BY %s DESC LIMIT %s OFFSET %s";
-        ResultSet results = genericQuery(con, String.format(initial, table, orderByField, limit, offset));
-        return results;
+        return genericQuery(con, String.format(initial, table, orderByField, limit, offset));
     }
 
 
@@ -168,11 +154,7 @@ public class Database {
 
     public PlayerRecord getPlayer(String playerIdentifier) {
         U.debug("Attempting to retrieve player data from database....");
-        ResultSet results = null;
-        Connection con = null;
-        try {
-            con = getConnection();
-            results = genericSelectQuery(con, playerTable, "player", playerIdentifier.toString());
+        try (Connection con = getConnection(); ResultSet results = genericSelectQuery(con, playerTable, "player", playerIdentifier)) {
             if (results.first()) {
                 int sequentialVotes = results.getInt("voteSpree");
                 Date lastVote = results.getDate("lastVote");
@@ -181,16 +163,6 @@ public class Database {
             }
         } catch (SQLException e) {
             U.error("Trouble getting information from the database");
-        } finally {
-            try {
-                if (results != null) {
-                    results.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception e) {
-            }
         }
         return null;
     }
@@ -222,50 +194,22 @@ public class Database {
     public void resetPlayers() {
         U.debug("Attempting to remove all players....");
         String query = String.format("UPDATE %s SET totalVotes = 0", playerTable);
-        Connection con = null;
-        PreparedStatement statement = null;
-        try {
-            con = getConnection();
-            statement = preparedStatement(con, query);
+        try (Connection con = getConnection(); PreparedStatement statement = preparedStatement(con, query)) {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception e) {
-            }
         }
     }
 
     public void deletePlayer(String playerIdentifier) {
         U.debug("Attempting to remove player from database...");
         String query = String.format("DELETE FROM %s WHERE player='%s';", playerTable, playerIdentifier);
-        PreparedStatement statement = null;
-        Connection con = null;
 
-        try {
-            con = getConnection();
-            statement = preparedStatement(con, query);
+        try (Connection con = getConnection(); PreparedStatement statement = preparedStatement(con, query)) {
             statement.execute();
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception e) {
-            }
         }
 
     }
@@ -275,6 +219,7 @@ public class Database {
         //Has it been initialized
         U.debug("Cache Expires at: " + recordCacheExpirationTime + " Current Time: " + new java.util.Date().getTime());
 
+        long cacheLifetime = 10000L;
         if (recordCache == null || recordCache.size() == 0) {
             U.debug("Cache initializing....");
             recordCacheExpirationTime = new java.util.Date().getTime() + cacheLifetime;
@@ -296,13 +241,9 @@ public class Database {
     private ArrayList<PlayerRecord> updateAllPlayerCache() {
         U.debug("Attempting to update player cache...");
         ArrayList<PlayerRecord> recordList = new ArrayList<>();
-        ResultSet results = null;
-        Connection con = null;
 
 
-        try {
-            con = getConnection();
-            results = orderedSelectQuery(con, playerTable, "totalVotes");
+        try (Connection con = getConnection(); ResultSet results = orderedSelectQuery(con, playerTable, "totalVotes")) {
             U.debug("Received " + results.getFetchSize());
             while (results.next()) {
                 int sequentialVotes = results.getInt("voteSpree");
@@ -313,16 +254,6 @@ public class Database {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (results != null) {
-                    results.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception e) {
-            }
         }
         recordCache = recordList;
         return recordCache;
@@ -354,7 +285,7 @@ public class Database {
                 if (con != null) {
                     con.close();
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
     }
@@ -367,24 +298,10 @@ public class Database {
                 "totalVotes		INT," +
                 "voteSpree		INT" +
                 ")", playerTable);
-        Connection con = null;
-        Statement statement = null;
-        try {
-            con = getConnection();
-            statement = con.createStatement();
+        try (Connection con = getConnection(); Statement statement = con.createStatement()) {
             statement.executeUpdate(table);
         } catch (SQLException e) {
             U.error("Error Creating SQL TABLE-- CHECK YOUR DATA CONFIG", e);
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception e) {
-            }
         }
 
     }
@@ -403,7 +320,7 @@ public class Database {
         try {
             con = getConnection();
             results = con.createStatement().executeQuery(query);
-            while (results.next()) {
+            if (results.next()) {
                 count = results.getInt(1);
                 U.debug("Table has " + count + " players.");
                 return count;
@@ -412,16 +329,13 @@ public class Database {
             e.printStackTrace();
         } finally {
             try {
-                if (statement != null) {
-                    statement.close();
-                }
                 if (results != null) {
                     results.close();
                 }
                 if (con != null) {
                     con.close();
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return count;

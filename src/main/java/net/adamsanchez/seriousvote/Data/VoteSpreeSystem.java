@@ -1,18 +1,18 @@
 package net.adamsanchez.seriousvote.Data;
 
-import net.adamsanchez.seriousvote.*;
+import net.adamsanchez.seriousvote.LootTable;
+import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.TableManager;
 import net.adamsanchez.seriousvote.utils.*;
 import ninja.leaping.configurate.ConfigurationNode;
-
-
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import javax.naming.Name;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -24,8 +24,8 @@ public class VoteSpreeSystem {
     String msgYear = "{player} Has voted for a year straight!!! He's earned a prize!";
     String msgMonth = "{player} Has voted for a month straight!!! He's earned a prize!";
     String msgWeek = "{player} Has voted for a week straight!!! He's earned a prize!";
-    SeriousVote sv;
-    ConfigurationNode rootNode;
+    final SeriousVote sv;
+    final ConfigurationNode rootNode;
 
 
     //query database for person
@@ -76,7 +76,7 @@ public class VoteSpreeSystem {
             }
             U.debug("Converting player with ID: " + record.getPlayerIdentifier());
             String newID = U.convertIDToName(record.getPlayerIdentifier());
-            if(newID != null && newID != ""){
+            if (newID != null && !Objects.equals(newID, "")) {
                 PlayerRecord newRecord = new PlayerRecord(newID, record.getTotalVotes(), record.getVoteSpree(), record.getLastVote());
                 db.updatePlayer(newRecord);
                 U.debug("New player with new ID " + newID + " added...");
@@ -116,14 +116,14 @@ public class VoteSpreeSystem {
     public PlayerRecord getRecordByRank(int rank){
         PlayerRecord record = db.getRecordByRank(rank);
         U.debug("Request record for player in rank " + rank + ". Identifier: " + record.getPlayerIdentifier() + " Votes: " + record.getTotalVotes());
-        return record == null ? null : record;
+        return record;
     }
 
 
     public void checkForMilestones(PlayerRecord record, String playerName) {
         //Check based on amount of votes given.
         U.info("Player has " + record.getTotalVotes() + " votes currently.");
-        List<String> commandList = new ArrayList<String>();
+        List<String> commandList = new ArrayList<>();
         if (CM.getEnabledMilestones(rootNode).length < 1)
             U.error("You have no enabled custom milestones or your config is broken :(");
 
@@ -132,7 +132,7 @@ public class VoteSpreeSystem {
             //TODO Check to see if that specific number provides any random rewards before trying to give them out.
 
             //Choose The Random Rewards from the chosen table
-            if (chosenRewardTable != "") {
+            if (!Objects.equals(chosenRewardTable, "")) {
                 LootTable chosenTable = new LootTable(chosenRewardTable, rootNode);
                 for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
@@ -154,7 +154,7 @@ public class VoteSpreeSystem {
     }
 
     public void checkForDailies(PlayerRecord record, String playerName) {
-        List<String> commandList = new ArrayList<String>();
+        List<String> commandList = new ArrayList<>();
         //yearly
         if (U.isPlayerOnline(playerName)) {
             if (record.getVoteSpree() >= 365 && record.getVoteSpree() % 365 == 0) {
@@ -200,7 +200,7 @@ public class VoteSpreeSystem {
             }
 
             int leastDays = getRemainingDays(record.getVoteSpree());
-            Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
+            Player player = SeriousVote.getPublicGame().getServer().getPlayer(playerName).get();
             player.sendMessage(Text.of("You have " + leastDays + " left until your next dailies reward!").toBuilder().color(TextColors.GOLD).build());
         }
 
@@ -211,12 +211,11 @@ public class VoteSpreeSystem {
 
         PlayerRecord record = getRecord(playerIdentifier);
         if (record == null) {
-            U.info("Creating a new record for " + playerIdentifier.toString() + ".");
+            U.info("Creating a new record for " + playerIdentifier + ".");
             record = PlayerRecord.getBlankRecord(playerIdentifier);
             record.setLastVote(new Date(new java.util.Date().getTime()));
             record.setTotalVotes(1);
             record.setVoteSpree(1);
-            updateRecord(record);
 
         } else {
             // If it's been a day since the last vote, increase the vote spree and change the lastvote
@@ -242,13 +241,12 @@ public class VoteSpreeSystem {
             record.setTotalVotes(record.getTotalVotes() + 1);
             if (sv.isMilestonesEnabled()) checkForMilestones(record, U.getName(playerIdentifier));
 
-            updateRecord(record);
-
         }
+        updateRecord(record);
     }
 
     public PlayerRecord createRecord(String playerIdentifier) {
-        U.info("Creating a new record for " + playerIdentifier.toString() + ".");
+        U.info("Creating a new record for " + playerIdentifier + ".");
         PlayerRecord record;
         record = PlayerRecord.getBlankRecord(playerIdentifier);
         record.setLastVote(new Date(new java.util.Date().getTime()));

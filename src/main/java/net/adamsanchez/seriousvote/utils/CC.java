@@ -3,7 +3,7 @@ package net.adamsanchez.seriousvote.utils;
 import net.adamsanchez.seriousvote.SeriousVote;
 import org.spongepowered.api.Platform;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.service.user.UserStorageService;
+import org.spongepowered.api.plugin.PluginContainer;
 
 /**
  * Created by Adam Sanchez on 4/14/2018.
@@ -96,7 +96,7 @@ public class CC {
                 + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown")
                 + "\n" + CC.LINE + "\n"
                 + CC.YELLOW_BOLD + " Votifier-Version: " + CC.CYAN + Sponge.getPluginManager().getPlugin("nuvotifier").get().getName()
-                + " " + CC.PURPLE + Sponge.getPluginManager().getPlugin("nuvotifier").get().getSource().get().toString()
+                + " " + CC.PURPLE + Sponge.getPluginManager().getPlugin("nuvotifier").flatMap(PluginContainer::getSource).get().toString()
         );
     }
 

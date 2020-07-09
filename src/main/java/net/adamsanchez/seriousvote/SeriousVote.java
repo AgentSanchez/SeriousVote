@@ -3,45 +3,35 @@ package net.adamsanchez.seriousvote;
 import com.google.inject.Inject;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
-
-
-import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
-import net.adamsanchez.seriousvote.commands.*;
+import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
+import net.adamsanchez.seriousvote.commands.CommandHandler;
 import net.adamsanchez.seriousvote.integration.MagiBridgeAPI;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.utils.*;
 import ninja.leaping.configurate.ConfigurationNode;
-
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
-
+import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.config.DefaultConfig;
+import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
-import org.spongepowered.api.event.Listener;
-
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
-
-import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.config.DefaultConfig;
-
 import org.spongepowered.api.plugin.PluginContainer;
-
 import org.spongepowered.api.service.user.UserStorageService;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
 import java.nio.file.Path;
-
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
-
-
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -107,15 +97,14 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////
     public String databaseType, databaseName, databaseHostname, databasePort, databasePrefix, databaseUsername, databasePassword, minIdleConnections, maxActiveConnections;
     ///////////////////////////////////////////////////////
-    private LinkedList<String> commandQueue = new LinkedList<String>();
-    private LinkedList<String> executingQueue = new LinkedList<String>();
-    private LinkedList<Vote> voteQueue = new LinkedList<Vote>();
-    private ScheduleManager scheduleManager;
+    private final LinkedList<String> commandQueue = new LinkedList<>();
+    private final LinkedList<String> executingQueue = new LinkedList<>();
+    private final LinkedList<Vote> voteQueue = new LinkedList<>();
 
-    LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String, String>>>();
+    LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<>();
 
     //Stored Offline Votes
-    HashMap<String, Integer> offlineVotes = new HashMap<String, Integer>();
+    HashMap<String, Integer> offlineVotes = new HashMap<>();
     int numRandRewards;
     int minRandRewards;
     int maxRandRewards;
@@ -132,7 +121,6 @@ public class SeriousVote {
     //////////////////////////////////////////////////////////////////
 
     String[][] mainRewardTables;
-    private int chanceTotal, chanceMax, chanceMin = 0;
     private int[] chanceMap;
 
     @Listener
@@ -141,7 +129,7 @@ public class SeriousVote {
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
         CC.printSVInfo();
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
-        offlineVotes = new HashMap<String, Integer>();
+        offlineVotes = new HashMap<>();
         offlineVotesPath = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
         resetDatePath = Paths.get(privateConfigDir.toString(), "", "lastReset");
         OfflineHandler.initOfflineStorage();
@@ -161,14 +149,14 @@ public class SeriousVote {
         CommandHandler.registerCommands();
         getLogger().info(CC.YELLOW + "Serious Vote Has Loaded");
 
-        if (milestonesEnabled == true | dailiesEnabled == true) {
+        if (milestonesEnabled | dailiesEnabled) {
             voteSpreeSystem = new VoteSpreeSystem(mainCfgNode);
         } else {
             voteSpreeSystem = null;
         }
 
         //begin any scheduled tasks
-        scheduleManager = new ScheduleManager().run();
+        ScheduleManager scheduleManager = new ScheduleManager().run();
     }
 
     @Listener
@@ -266,7 +254,7 @@ public class SeriousVote {
     ////////////////////////////////////////////////////////////////////////////////////////////
     private int updateRewardsNumbers(ConfigurationNode node) {
         int number = node.getNode("config", "random-rewards-number").getInt();
-        isNoRandom = number == 0 ? true : false;
+        isNoRandom = number == 0;
         minRandRewards = node.getNode("config", "rewards-min").getInt();
         maxRandRewards = node.getNode("config", "rewards-max").getInt() + 1;
         return number;
@@ -289,26 +277,26 @@ public class SeriousVote {
             U.error("Please check the Config for your main random rewards, to make sure they are formatted correctly");
         } else {
             hasLoot = true;
-            String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
+            String[] inputLootSource = nodeStrings.toArray(new String[ 0 ]);
             //Create a new Array of the proper size x*2 to hold the tables for choosing later
             String[][] table = new String[2][inputLootSource.length / 2];
             chanceMap = new int[inputLootSource.length / 2];
             U.info(CC.PURPLE + inputLootSource.length / 2 + CC.YELLOW + " Tables Imported for Rewards");
 
             for (int ix = 0; ix < inputLootSource.length; ix += 2) {
-                table[0][ix / 2] = inputLootSource[ix];
-                table[1][ix / 2] = inputLootSource[ix + 1];
+                table[ 0 ][ ix / 2 ] = inputLootSource[ ix ];
+                table[ 1 ][ ix / 2 ] = inputLootSource[ ix + 1 ];
                 //Initialize chanceMap
-                chanceMap[ix / 2] = Integer.parseInt(table[0][ix / 2]);
+                chanceMap[ ix / 2 ] = Integer.parseInt(table[ 0 ][ ix / 2 ]);
                 if (ix != 0) {
-                    chanceMap[ix / 2] += chanceMap[(ix / 2) - 1];
+                    chanceMap[ ix / 2 ] += chanceMap[ (ix / 2) - 1 ];
 
                 }
             }
             mainRewardTables = table;
-            chanceTotal = chanceMap.length - 1;
-            chanceMin = chanceMap[0];
-            chanceMax = chanceMap[chanceTotal];
+            int chanceTotal = chanceMap.length - 1;
+            int chanceMin = chanceMap[ 0 ];
+            int chanceMax = chanceMap[ chanceTotal ];
 
 
         }
@@ -328,9 +316,9 @@ public class SeriousVote {
     }
 
     public void processVotes() {
-        LinkedList<Vote> localQueue = new LinkedList<>();
+        LinkedList<Vote> localQueue;
         synchronized (voteQueue) {
-            localQueue.addAll(voteQueue);
+            localQueue = new LinkedList<>(voteQueue);
             voteQueue.clear();
         }
 
@@ -350,7 +338,7 @@ public class SeriousVote {
                 if (U.isPlayerOnline(username)) {
                     voteSpreeSystem.addVote(U.getPlayerIdentifier(username));
                 } else {
-                    if (userStorage.get().get(username).isPresent()) {
+                    if (userStorage.flatMap(storage -> storage.get(username)).isPresent()) {
                         voteSpreeSystem.addVote(U.getPlayerIdentifier(username));
                     }
                 }
@@ -379,7 +367,7 @@ public class SeriousVote {
         if (offlineVotes.containsKey(username)) {
             U.debug("Offline votes found for player with ID " + playerID);
             String rewardString = "";
-            for (int ix = 0; ix < offlineVotes.get(username).intValue(); ix++) {
+            for (int ix = 0; ix < offlineVotes.get(username); ix++) {
                 rewardString = giveVote(username);
             }
 
@@ -414,7 +402,7 @@ public class SeriousVote {
         if (U.isPlayerOnline(username) || bypassOffline) {
             LootTable mainLoot;
             currentRewards = "";
-            ArrayList<String> localCommandList = new ArrayList<String>();
+            ArrayList<String> localCommandList = new ArrayList<>();
             if (hasLoot && !isNoRandom && numRandRewards >= 1) {
                 for (int i = 0; i < numRandRewards; i++) {
                     mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
@@ -463,10 +451,10 @@ public class SeriousVote {
             if (playerIdentifier != null) {
                 //Write to File
                 if (offlineVotes.containsKey(playerIdentifier)) {
-                    offlineVotes.put(playerIdentifier, offlineVotes.get(playerIdentifier).intValue() + 1);
+                    offlineVotes.put(playerIdentifier, offlineVotes.get(playerIdentifier) + 1);
 
                 } else {
-                    offlineVotes.put(playerIdentifier, new Integer(1));
+                    offlineVotes.put(playerIdentifier, 1);
                 }
                 try {
                     OfflineHandler.saveOffline();
@@ -500,8 +488,7 @@ public class SeriousVote {
     }
 
     public boolean usingVoteSpreeSystem() {
-        if (voteSpreeSystem != null) return true;
-        return false;
+        return voteSpreeSystem != null;
     }
 
     public boolean isMilestonesEnabled() {

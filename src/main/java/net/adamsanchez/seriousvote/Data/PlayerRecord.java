@@ -3,16 +3,13 @@ package net.adamsanchez.seriousvote.Data;
 import net.adamsanchez.seriousvote.utils.CC;
 
 import java.sql.Date;
-import java.util.UUID;
 
 /**
  * Created by adam_ on 01/23/17.
  */
 public class PlayerRecord {
 
-
-
-    private String playerIdentifier;
+    private final String playerIdentifier;
     private int totalVotes, voteSpree;
     private Date lastVote;
 
@@ -55,13 +52,11 @@ public class PlayerRecord {
     }
 
     @Override
-    public String toString(){
-        return new StringBuilder()
-                .append(CC.YELLOW).append("  ID: ").append(CC.WHITE).append(playerIdentifier)
-                .append(CC.YELLOW).append(" Votes: ").append(CC.WHITE).append(totalVotes)
-                .append(CC.YELLOW).append(" VoteSpree: ").append(CC.WHITE).append(voteSpree)
-                .append(CC.YELLOW).append(" LastVoted: ").append(CC.WHITE).append(lastVote)
-                .toString();
+    public String toString() {
+        return CC.YELLOW + "  ID: " + CC.WHITE + playerIdentifier +
+                CC.YELLOW + " Votes: " + CC.WHITE + totalVotes +
+                CC.YELLOW + " VoteSpree: " + CC.WHITE + voteSpree +
+                CC.YELLOW + " LastVoted: " + CC.WHITE + lastVote;
 
     }
 
