@@ -137,6 +137,9 @@ public class CM {
     public static boolean getMessageOffline(CommentedConfigurationNode node) {
         return node.getNode("config","broadcast-offline").getBoolean();
     }
+    public static boolean getAllowMagiBridge(CommentedConfigurationNode mainCfgNode) {
+        return mainCfgNode.getNode("config","allowMagiBridge").getBoolean();
+    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
     public static void initConfig(Path pluginDirectory){

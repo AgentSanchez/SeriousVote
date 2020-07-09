@@ -1,6 +1,7 @@
 package net.adamsanchez.seriousvote.utils;
 
 import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.integration.MagiBridgeAPI;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
@@ -10,29 +11,35 @@ public class OutputHelper {
 
     public static boolean broadCastMessage(String message, String username) {
         if (message == null || message.isEmpty() || message == "" ) return false;
+        Text broadcastMessage;
         if(PlaceHolders.apiLoaded){
-        SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(
-        PlaceHolders.getPapi().replacePlaceholders(
-                parseVariables(message, username),
-                SeriousVote.getPublicGame().getServer().getConsole(),
-                SeriousVote.getPublicGame().getServer().getConsole()));
+            broadcastMessage = PlaceHolders.getPapi().replacePlaceholders(
+                            parseVariables(message, username),
+                            SeriousVote.getPublicGame().getServer().getConsole(),
+                            SeriousVote.getPublicGame().getServer().getConsole());
         } else {
-            SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(strToText(parseVariables(message, username)));
+            broadcastMessage = strToText(parseVariables(message, username));
         }
+        SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(broadcastMessage);
+        if(MagiBridgeAPI.isEnabled)
+            MagiBridgeAPI.makeBroadCast(broadcastMessage);
         return true;
     }
 
     public static boolean broadCastMessage(String message, String username, String currentRewards) {
         if(!U.isPlayerOnline(username)) return false;
+        Text broadcastMessage;
         if(PlaceHolders.apiLoaded){
-            SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(
-                    PlaceHolders.getPapi().replacePlaceholders(
-                            parseVariables(message, username, currentRewards),
-                            SeriousVote.getPublicGame().getServer().getConsole(),
-                            SeriousVote.getPublicGame().getServer().getConsole()));
+            broadcastMessage = PlaceHolders.getPapi().replacePlaceholders(
+                    parseVariables(message, username, currentRewards),
+                    SeriousVote.getPublicGame().getServer().getConsole(),
+                    SeriousVote.getPublicGame().getServer().getConsole());
         } else {
-            SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(strToText(parseVariables(message, username, currentRewards)));
+            broadcastMessage = strToText(parseVariables(message, username, currentRewards));
         }
+        SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(broadcastMessage);
+        if(MagiBridgeAPI.isEnabled)
+            MagiBridgeAPI.makeBroadCast(broadcastMessage);
         return true;
     }
 

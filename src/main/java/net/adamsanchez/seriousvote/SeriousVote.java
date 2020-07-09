@@ -8,6 +8,7 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
+import net.adamsanchez.seriousvote.integration.MagiBridgeAPI;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.utils.*;
 import ninja.leaping.configurate.ConfigurationNode;
@@ -54,7 +55,7 @@ import java.util.stream.Collectors;
         name = "SeriousVote",
         version = "4.8.8",
         description = "This plugin enables server admins to give players rewards for voting for their server.",
-        dependencies = {@Dependency(id = "nuvotifier", optional = false), @Dependency(id = "placeholderapi", optional = true)})
+        dependencies = {@Dependency(id = "nuvotifier"), @Dependency(id = "placeholderapi", optional = true), @Dependency(id="magibridge", optional = true)})
 public class SeriousVote {
 
     @Inject
@@ -178,6 +179,7 @@ public class SeriousVote {
     @Listener
     public void onServerStart(GameStartingServerEvent event) {
         PlaceHolders.initialize(Sponge.getPluginManager().fromInstance(this).get());
+        MagiBridgeAPI.initialize(Sponge.getPluginManager().fromInstance(this).get());
     }
 
     @Listener
@@ -256,6 +258,7 @@ public class SeriousVote {
         weeklySet = CM.getWeeklySetCommands(mainCfgNode);
         milestonesUsed = CM.getEnabledMilestones(mainCfgNode);
 
+        MagiBridgeAPI.isEnabled = CM.getAllowMagiBridge(mainCfgNode);
 
         return true;
     }
