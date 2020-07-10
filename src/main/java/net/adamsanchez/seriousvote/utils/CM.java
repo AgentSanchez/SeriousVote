@@ -126,17 +126,23 @@ public class CM {
     }
 
     public static boolean getBypassOffline(CommentedConfigurationNode node) {
-        return node.getNode("config","bypass-offline").getBoolean();
+        return node.getNode("config", "bypass-offline").getBoolean();
     }
+
     public static boolean getMessageOffline(CommentedConfigurationNode node) {
-        return node.getNode("config","broadcast-offline").getBoolean();
+        return node.getNode("config", "broadcast-offline").getBoolean();
     }
+
     public static boolean getAllowMagiBridge(CommentedConfigurationNode mainCfgNode) {
-        return mainCfgNode.getNode("config","allowMagiBridge").getBoolean();
+        return mainCfgNode.getNode("config", "allowMagiBridge").getBoolean();
+    }
+
+    public static String getDiscordChannel(CommentedConfigurationNode mainCfgNode) {
+        return mainCfgNode.getNode("config", "discordChannel").getString();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
-    public static void initConfig(Path pluginDirectory){
+    public static void initConfig(Path pluginDirectory) {
         Asset configAsset = SeriousVote.getInstance().getPlugin().getAsset("seriousvote.conf").orElse(null);
         if (Files.notExists(pluginDirectory)) {
             if (configAsset != null) {
@@ -148,11 +154,9 @@ public class CM {
                 } catch (IOException e) {
                     e.printStackTrace();
                     SeriousVote.getInstance().getLogger().error("Could not unpack the default config from the jar! Maybe your Minecraft server doesn't have write permissions?");
-                    return;
                 }
             } else {
                 SeriousVote.getInstance().getLogger().error("Could not find the default config file in the jar! Did you open the jar and delete it?");
-                return;
             }
         }
     }

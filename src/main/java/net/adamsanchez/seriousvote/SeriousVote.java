@@ -247,6 +247,7 @@ public class SeriousVote {
         milestonesUsed = CM.getEnabledMilestones(mainCfgNode);
 
         MagiBridgeAPI.isEnabled = CM.getAllowMagiBridge(mainCfgNode);
+        MagiBridgeAPI.channel = CM.getDiscordChannel(mainCfgNode);
 
         return true;
     }

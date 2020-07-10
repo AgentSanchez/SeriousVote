@@ -26,18 +26,16 @@ public class OutputHelper {
     }
 
     public static boolean broadCastMessage(String message, String username, String currentRewards) {
-        if(!U.isPlayerOnline(username)) return false;
-        Text broadcastMessage;
-        if(PlaceHolders.apiLoaded){
-            broadcastMessage = PlaceHolders.getPapi().replacePlaceholders(
-                    parseVariables(message, username, currentRewards),
-                    SeriousVote.getPublicGame().getServer().getConsole(),
-                    SeriousVote.getPublicGame().getServer().getConsole());
-        } else {
-            broadcastMessage = strToText(parseVariables(message, username, currentRewards));
-        }
+        if (!U.isPlayerOnline(username)) return false;
+        Text broadcastMessage = PlaceHolders.apiLoaded ?
+                PlaceHolders.getPapi().replacePlaceholders(
+                        parseVariables(message, username, currentRewards),
+                        SeriousVote.getPublicGame().getServer().getConsole(),
+                        SeriousVote.getPublicGame().getServer().getConsole()) :
+                strToText(parseVariables(message, username, currentRewards));
+
         SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(broadcastMessage);
-        if(MagiBridgeAPI.isEnabled)
+        if (MagiBridgeAPI.isEnabled)
             MagiBridgeAPI.makeBroadCast(broadcastMessage);
         return true;
     }
