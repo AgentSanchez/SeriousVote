@@ -12,6 +12,7 @@ import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.utils.*;
 import ninja.leaping.configurate.ConfigurationNode;
 
+import org.bstats.sponge.Metrics2;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
@@ -52,7 +53,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 @Plugin(id = "seriousvote",
         name = "SeriousVote",
-        version = "4.8.8",
+        version = "4.8.9",
         description = "This plugin enables server admins to give players rewards for voting for their server.",
         dependencies = {@Dependency(id = "nuvotifier", optional = false), @Dependency(id = "placeholderapi", optional = true)})
 public class SeriousVote {
@@ -80,6 +81,7 @@ public class SeriousVote {
         return logger;
     }
 
+    private final Metrics2 metrics;
 
     @Inject
     @DefaultConfig(sharedRoot = false)
@@ -176,6 +178,12 @@ public class SeriousVote {
     @Listener
     public void onServerStart(GameStartingServerEvent event) {
         PlaceHolders.initialize(Sponge.getPluginManager().fromInstance(this).get());
+    }
+
+    @Inject
+    public SeriousVote(Metrics2.Factory metricsFactory) {
+        int pluginId = 147;
+        metrics = metricsFactory.make(pluginId);
     }
 
     @Listener
