@@ -37,7 +37,6 @@ public class CommandHandler {
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))))
                 .executor(new CheckVoteCommand())
                 .build();
-
         CommandSpec version = CommandSpec.builder()
                 .description(Text.of("SeriousVote Version"))
                 .permission("seriousvote.commands.admin.version")
