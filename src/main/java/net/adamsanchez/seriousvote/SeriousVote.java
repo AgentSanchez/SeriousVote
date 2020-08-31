@@ -71,8 +71,6 @@ public class SeriousVote {
         return this.plugin;
     }
 
-    @Inject
-    private Metrics metrics;
     private static SeriousVote instance;
 
     @Inject
