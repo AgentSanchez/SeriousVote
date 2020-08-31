@@ -15,12 +15,19 @@ repositories {
         url = 'http://repo.spongepowered.org/maven'
         url 'https://jitpack.io'
     }
+
     flatDir {
         dirs 'lib'
+    }
+
+    maven {
+        name = 'CodeMC'
+        url = 'https://repo.codemc.org/repository/maven-public'
     }
 }
 
 dependencies {
+    compile 'org.bstats:bstats-sponge:1.7'
     compile 'org.spongepowered:spongeapi:5.0.0'
     compile 'org.spongepowered:spongeapi:6.0.0'
     compile 'com.zaxxer:HikariCP:3.4.2'
@@ -35,6 +42,7 @@ shadowJar {
 
     dependencies {
         //Connection Pooling
+        include(dependency("org.bstats:bstats-sponge:1.7"))
         include(dependency("com.zaxxer:HikariCP:3.4.2"))
         include(dependency("mysql::"))
     }
