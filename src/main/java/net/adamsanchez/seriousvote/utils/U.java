@@ -76,13 +76,18 @@ public class U {
      * @param nameOrID
      * @return
      */
-    public static String getPlayerIdentifier(String nameOrID){
+    public static String getPlayerIdentifier(String nameOrID) throws PlayerNotFoundException {
         U.debug("Retrieving playerIdentifier for input + \"" + nameOrID + "\"." );
         String result = nameOrID;
         if(SeriousVote.isServerOnline() == false){
             result = nameOrID;
         } else {
-            result = U.getIdFromName(nameOrID).toString();
+            try {
+                result = U.getIdFromName(nameOrID).toString();
+            } catch (Exception e){
+                U.error("Player not found!");
+                throw new PlayerNotFoundException("The username could not be found in the system, is it possible they haven't joined yet?", e);
+            }
         }
         U.debug("Player Identifier returned as \"" + result + "\"");
         return result;
@@ -98,7 +103,7 @@ public class U {
             U.debug("returning ID from name");
             return userStorage.get().get(name).get().getUniqueId().toString();
         } else {
-            U.debug("Unable to get ID from name...");
+            U.debug("Unable to get ID from name... It seems this player hasn't joined the server before");
             return null;
         }
     }
