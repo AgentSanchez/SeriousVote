@@ -464,6 +464,7 @@ public class SeriousVote {
 
         } else {
             String playerIdentifier = U.getPlayerIdentifier(username);
+
             if (playerIdentifier != null) {
                 //Write to File
                 if (offlineVotes.containsKey(playerIdentifier)) {
