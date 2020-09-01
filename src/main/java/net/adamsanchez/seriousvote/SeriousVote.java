@@ -81,7 +81,7 @@ public class SeriousVote {
         return logger;
     }
 
-    private final Metrics2 metrics;
+    //private final Metrics2 metrics;
 
     @Inject
     @DefaultConfig(sharedRoot = false)
@@ -182,8 +182,9 @@ public class SeriousVote {
 
     @Inject
     public SeriousVote(Metrics2.Factory metricsFactory) {
-        int pluginId = 147;
-        metrics = metricsFactory.make(pluginId);
+        //TODO Reimplement later - not sure on how I want to do this.
+        //int pluginId = 147;
+        //metrics = metricsFactory.make(pluginId);
     }
 
     @Listener
