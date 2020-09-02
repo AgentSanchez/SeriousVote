@@ -424,7 +424,6 @@ public class SeriousVote {
             }
 
             OutputHelper.broadCastMessage(publicMessage, username, rewardString);
-            currentRewards = "";
 
             offlineVotes.remove(username);
             executeCommands();
@@ -459,8 +458,7 @@ public class SeriousVote {
         if (!lootTablesAvailable || randomDisabled) {
             return workingRequest;
         }
-        //Setup Loot Table
-        //TODO make this table an instance variable belonging to loot tables
+        //Setup Loot Table and gather rewards
         LootTable mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
         int maxNumberOfRewards = LootTools.genNumRandRewards(numRandRewards, minRandRewards, maxRandRewards);
         for (int i = 0; i < maxNumberOfRewards; i++) {
@@ -475,7 +473,6 @@ public class SeriousVote {
             }
         }
         return workingRequest;
-
     }
 
     /**
@@ -485,24 +482,27 @@ public class SeriousVote {
 
     }
 
-    public void storeOfflineVote(VoteRequest vr) {
-        String playerIdentifier = U.getPlayerIdentifier(vr.getUsername());
-
-        if (playerIdentifier != null) {
+    public VoteRequest storeOfflineVote(VoteRequest vr) {
+        VoteRequest workingRequest = vr;
+        if (workingRequest.getUsername() != null) {
             //Write to File
-            if (offlineVotes.containsKey(playerIdentifier)) {
-                offlineVotes.put(playerIdentifier, offlineVotes.get(playerIdentifier).intValue() + 1);
-
+            if (offlineVotes.containsKey(workingRequest.getUsername())) {
+                offlineVotes.put(workingRequest.getUsername(), offlineVotes.get(workingRequest.getUsername()).intValue() + 1);
             } else {
-                offlineVotes.put(playerIdentifier, new Integer(1));
+                offlineVotes.put(workingRequest.getUsername(), new Integer(1));
             }
             try {
                 OfflineHandler.saveOffline();
+                workingRequest.setVoteStatus(Status.COMPLETED);
             } catch (IOException e) {
                 U.error("Woah did that just happen? I couldn't save that offline player's vote!", e);
+                workingRequest.setVoteStatus(Status.ERROR);
             }
+        } else {
+            U.error("That vote didn't have a playername :(");
+            workingRequest.setVoteStatus(Status.ERROR);
         }
-        return "offline";
+        return workingRequest;
     }
 
 
