@@ -10,6 +10,15 @@ import java.util.Set;
 public class VoteRequest extends Vote {
     private List<String> rewardStore = new LinkedList<String>();
     private Status voteStatus = Status.WAITING;
+
+    public Set<String> getRewardNames() {
+        return rewardNames;
+    }
+
+    public void addRewardName(String name) {
+        this.rewardNames.add(name);
+    }
+
     private Set<String> rewardNames = new HashSet<String>();
 
     public void addReward(String command){
