@@ -10,6 +10,7 @@ import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.utils.*;
+import net.adamsanchez.seriousvote.vote.VoteRequest;
 import ninja.leaping.configurate.ConfigurationNode;
 
 import org.bstats.sponge.Metrics2;
@@ -108,7 +109,7 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////
     private LinkedList<String> commandQueue = new LinkedList<String>();
     private LinkedList<String> executingQueue = new LinkedList<String>();
-    private LinkedList<Vote> voteQueue = new LinkedList<Vote>();
+    private List<VoteRequest> voteQueue = new LinkedList<VoteRequest>();
     private ScheduleManager scheduleManager;
 
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String, String>>>();
@@ -324,15 +325,16 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////////////////////////////////////////
     @Listener
     public synchronized void onVote(VotifierEvent event) {
+        //Workflow Stage 1
         Vote vote = event.getVote();
-
         synchronized (voteQueue) {
-            voteQueue.add(vote);
+            voteQueue.add((VoteRequest)vote);
         }
     }
 
     public void processVotes() {
-        LinkedList<Vote> localQueue = new LinkedList<>();
+        //Workflow Stage 2 - Timed Task Main thread
+        List<VoteRequest> localQueue = new LinkedList<>();
         synchronized (voteQueue) {
             localQueue.addAll(voteQueue);
             voteQueue.clear();
