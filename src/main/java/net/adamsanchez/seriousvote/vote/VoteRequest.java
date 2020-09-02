@@ -7,9 +7,46 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class VoteRequest extends Vote {
+public class VoteRequest {
+
+    private String serviceName;
+    private String username;
+    private String timeStamp;
+
     private List<String> rewardStore = new LinkedList<String>();
     private Status voteStatus = Status.WAITING;
+    private Set<String> rewardNames = new HashSet<String>();
+
+    public VoteRequest(){}
+    public VoteRequest(Vote v){
+        username = v.getUsername();
+        serviceName = v.getServiceName();
+        timeStamp = v.getTimeStamp();
+    }
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
 
     public Set<String> getRewardNames() {
         return rewardNames;
@@ -19,24 +56,24 @@ public class VoteRequest extends Vote {
         this.rewardNames.add(name);
     }
 
-    private Set<String> rewardNames = new HashSet<String>();
 
-    public void addReward(String command){
+    public void addReward(String command) {
         rewardStore.add(command);
     }
 
-    public List<String> getRewards(){
+    public List<String> getRewards() {
         return rewardStore;
     }
 
-    public boolean hasRewards(){
+    public boolean hasRewards() {
         return !rewardStore.isEmpty();
     }
 
-    public Status getVoteStatus(){
+    public Status getVoteStatus() {
         return voteStatus;
     }
-    public void setVoteStatus(Status status){
+
+    public void setVoteStatus(Status status) {
         this.voteStatus = status;
     }
 

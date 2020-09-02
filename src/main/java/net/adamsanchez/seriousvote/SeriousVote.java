@@ -109,7 +109,7 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////
     public String databaseType, databaseName, databaseHostname, databasePort, databasePrefix, databaseUsername, databasePassword, minIdleConnections, maxActiveConnections;
     ///////////////////////////////////////////////////////
-    private LinkedList<String> commandQueue = new LinkedList<String>();
+    private LinkedList<VoteRequest> processedVoteQueue = new LinkedList<VoteRequest>();
     private LinkedList<String> executingQueue = new LinkedList<String>();
     private List<VoteRequest> voteQueue = new LinkedList<VoteRequest>();
     private ScheduleManager scheduleManager;
@@ -147,7 +147,6 @@ public class SeriousVote {
         resetDatePath = Paths.get(privateConfigDir.toString(), "", "lastReset");
         OfflineHandler.initOfflineStorage();
         CM.initConfig(defaultConfig);
-        currentRewards = "";
         reloadConfigs();
 
     }
@@ -327,9 +326,8 @@ public class SeriousVote {
     @Listener
     public synchronized void onVote(VotifierEvent event) {
         //Workflow Stage 1
-        Vote vote = event.getVote();
         synchronized (voteQueue) {
-            voteQueue.add((VoteRequest) vote);
+            voteQueue.add(new VoteRequest(event.getVote()));
         }
     }
 
@@ -347,27 +345,47 @@ public class SeriousVote {
 
         for (VoteRequest vr : localQueue) {
             VoteRequest workingRequest = vr;
+            workingRequest.setVoteStatus(Status.IN_PROCESS);
             ///NEW CODE ////
             //Get Online Status
             workingRequest = workflowOnlineState(workingRequest);
+
+            //Use online status to decide which route to take
             switch (workingRequest.getVoteStatus()) {
                 case BUILD_ONLINE:
+                    //if online gather rewards
+                    workingRequest.setVoteStatus(Status.GATHER_REWARDS);
+                    workingRequest = processVoteChanceTables(workingRequest);
                     break;
                 case BUILD_OFFLINE:
+                    if (processIfOffline) {
+                        workingRequest.setVoteStatus(Status.GATHER_REWARDS);
+                        workingRequest = processVoteChanceTables(workingRequest);
+                    } else {
+                        workingRequest.setVoteStatus(Status.SAVE_OFFLINE);
+                        workingRequest = storeOfflineVote(workingRequest);
+                        if (workingRequest.getVoteStatus() == Status.ERROR) {
+                            U.error("There was an error processing that last vote.");
+                        }
+                    }
                     break;
                 default:
                     U.error("Something was wrong with that vote? Was it offline?");
                     continue;
             }
-            ///////////////
-            U.debug("Vote Registered From " + vr.getServiceName() + " for " + vr.getUsername());
-            VoteRequest response = processVoteChanceTables(vr);
-            if (!currentRewards.equals("offline")) {
-                OutputHelper.broadCastMessage(publicMessage, vr.getUsername(), currentRewards);
-            } else if (messageOffline && !processIfOffline) {
-                OutputHelper.broadCastMessage(publicOfflineMessage, vr.getUsername());
-            }
 
+            //Take the state changed request and see whether to broadcast a message or not.
+            switch (workingRequest.getVoteStatus()) {
+                case REWARDS_GATHERED:
+                    OutputHelper.broadCastMessage(publicMessage, vr.getUsername(), U.listMaker(workingRequest.getRewardNames()));
+                    break;
+                case OFFLINE_SAVED:
+                    OutputHelper.broadCastMessage(publicOfflineMessage, vr.getUsername());
+                    break;
+                default:
+                    U.error("Error with that vote's state...Uh Oh!");
+                    continue;
+            }
 
             if (voteSpreeSystem != null) {
                 if (U.isPlayerOnline(vr.getUsername())) {
@@ -378,12 +396,13 @@ public class SeriousVote {
                     }
                 }
             }
+            workingRequest.setVoteStatus(Status.COMPLETED);
+            processedVoteQueue.add(workingRequest);
         }
         executeCommands();
     }
 
     public VoteRequest workflowOnlineState(VoteRequest vr) {
-        //TODO Fill in checks for online
         if (U.isPlayerOnline(vr.getUsername())) {
             vr.setVoteStatus(Status.BUILD_ONLINE);
         } else {
@@ -391,13 +410,6 @@ public class SeriousVote {
         }
         return vr;
     }
-
-    public void workflowBroadcast(VoteRequest vr) {
-        //TODO Broadcast to the server here
-
-        //TODO After Broadcasting(or not) pass it on
-    }
-
 
     public void reloadDB() {
         if (dailiesEnabled || milestonesEnabled) {
@@ -418,12 +430,19 @@ public class SeriousVote {
 
         if (offlineVotes.containsKey(username)) {
             U.debug("Offline votes found for player with ID " + playerID);
-            String rewardString = "";
+            List<VoteRequest> voteCollection = new LinkedList<VoteRequest>();
             for (int ix = 0; ix < offlineVotes.get(username).intValue(); ix++) {
-                rewardString = processVoteChanceTables(username);
+                VoteRequest workingRequest = new VoteRequest();
+                workingRequest.setUsername(username);
+                voteCollection.add(processVoteChanceTables(workingRequest));
+            }
+            //Collect all the reward names into one to prevent spam.
+            Set<String> rewardNames = new HashSet<String>();
+            for(VoteRequest vr: voteCollection){
+                rewardNames.addAll(vr.getRewardNames());
             }
 
-            OutputHelper.broadCastMessage(publicMessage, username, rewardString);
+            OutputHelper.broadCastMessage(publicMessage, username, U.listMaker(rewardNames));
 
             offlineVotes.remove(username);
             executeCommands();
@@ -442,10 +461,12 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////////////////////////////////////////
     public void executeCommands() {
         U.debug(CC.CYAN + "Emptying Queue");
-        for (String command : commandQueue) {
-            game.getCommandManager().process(game.getServer().getConsole(), command);
+        for (VoteRequest vr : processedVoteQueue) {
+            for (String command : vr.getRewards()) {
+                game.getCommandManager().process(game.getServer().getConsole(), command);
+            }
         }
-        commandQueue.clear();
+        processedVoteQueue.clear();
     }
 
     public VoteRequest processVoteChanceTables(VoteRequest vr) {
@@ -456,6 +477,7 @@ public class SeriousVote {
             workingRequest.addReward(setCommand);
         }
         if (!lootTablesAvailable || randomDisabled) {
+            workingRequest.setVoteStatus(Status.REWARDS_GATHERED);
             return workingRequest;
         }
         //Setup Loot Table and gather rewards
@@ -472,6 +494,7 @@ public class SeriousVote {
                 U.debug(CC.YELLOW + "QUEUED: " + CC.WHITE + ix);
             }
         }
+        workingRequest.setVoteStatus(Status.REWARDS_GATHERED);
         return workingRequest;
     }
 
@@ -493,7 +516,7 @@ public class SeriousVote {
             }
             try {
                 OfflineHandler.saveOffline();
-                workingRequest.setVoteStatus(Status.COMPLETED);
+                workingRequest.setVoteStatus(Status.OFFLINE_SAVED);
             } catch (IOException e) {
                 U.error("Woah did that just happen? I couldn't save that offline player's vote!", e);
                 workingRequest.setVoteStatus(Status.ERROR);
@@ -580,11 +603,7 @@ public class SeriousVote {
     public Path getSQLDumpPath() {
         return Paths.get(privateConfigDir.toString(), "", "sqlExport.csv");
     }
-
-    public void resetCurrentRewards() {
-        currentRewards = "";
-    }
-
+    
     public boolean hasUnprocessedVotes() {
         return !voteQueue.isEmpty();
     }
