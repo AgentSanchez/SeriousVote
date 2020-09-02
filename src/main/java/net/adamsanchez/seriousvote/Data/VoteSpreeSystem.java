@@ -1,6 +1,7 @@
 package net.adamsanchez.seriousvote.Data;
 
 import net.adamsanchez.seriousvote.*;
+import net.adamsanchez.seriousvote.loot.LootTable;
 import net.adamsanchez.seriousvote.utils.*;
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -9,7 +10,6 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import javax.naming.Name;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
