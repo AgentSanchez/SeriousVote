@@ -1,4 +1,4 @@
-package net.adamsanchez.seriousvote;
+package net.adamsanchez.seriousvote.loot;
 
 import net.adamsanchez.seriousvote.utils.U;
 import ninja.leaping.configurate.ConfigurationNode;
