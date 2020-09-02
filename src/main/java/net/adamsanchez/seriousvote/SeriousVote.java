@@ -443,7 +443,7 @@ public class SeriousVote {
             }
 
             OutputHelper.broadCastMessage(publicMessage, username, U.listMaker(rewardNames));
-
+            processedVoteQueue.addAll(voteCollection);
             offlineVotes.remove(username);
             executeCommands();
             try {
@@ -452,8 +452,6 @@ public class SeriousVote {
                 U.error("Error while saving offline votes file", e);
             }
         }
-
-
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -501,8 +499,12 @@ public class SeriousVote {
     /**
      * This processes loot tables and then moves to the  command execution workflow
      */
-    public void disperseGift(String username) {
-
+    public void forceGiveVote(String username) {
+        VoteRequest workingRequest = new VoteRequest();
+        workingRequest.setUsername(username);
+        workingRequest = processVoteChanceTables(workingRequest);
+        processedVoteQueue.add(workingRequest);
+        executeCommands();
     }
 
     public VoteRequest storeOfflineVote(VoteRequest vr) {
@@ -603,7 +605,7 @@ public class SeriousVote {
     public Path getSQLDumpPath() {
         return Paths.get(privateConfigDir.toString(), "", "sqlExport.csv");
     }
-    
+
     public boolean hasUnprocessedVotes() {
         return !voteQueue.isEmpty();
     }
