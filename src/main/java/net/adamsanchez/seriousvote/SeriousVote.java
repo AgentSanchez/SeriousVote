@@ -15,7 +15,6 @@ import net.adamsanchez.seriousvote.vote.Status;
 import net.adamsanchez.seriousvote.vote.VoteRequest;
 import ninja.leaping.configurate.ConfigurationNode;
 
-import org.bstats.sponge.Metrics2;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
@@ -83,8 +82,6 @@ public class SeriousVote {
     public Logger getLogger() {
         return logger;
     }
-
-    //private final Metrics2 metrics;
 
     @Inject
     @DefaultConfig(sharedRoot = false)
@@ -179,13 +176,6 @@ public class SeriousVote {
     @Listener
     public void onServerStart(GameStartingServerEvent event) {
         PlaceHolders.initialize(Sponge.getPluginManager().fromInstance(this).get());
-    }
-
-    @Inject
-    public SeriousVote(Metrics2.Factory metricsFactory) {
-        //TODO Reimplement later - not sure on how I want to do this.
-        //int pluginId = 147;
-        //metrics = metricsFactory.make(pluginId);
     }
 
     @Listener
@@ -479,16 +469,16 @@ public class SeriousVote {
             return workingRequest;
         }
         //Setup Loot Table and gather rewards
-        LootTable mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
         int maxNumberOfRewards = LootTools.genNumRandRewards(numRandRewards, minRandRewards, maxRandRewards);
         for (int i = 0; i < maxNumberOfRewards; i++) {
+            LootTable mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
             U.debug("Choosing a random reward.");
             String chosenReward = mainLoot.chooseReward();
-            workingRequest.addReward(mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString());
+            U.debug("Chose: " + chosenReward);
+            workingRequest.addRewardName(mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString());
             for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
                     .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                workingRequest.addReward(ix);
-                //localCommandList.add(OutputHelper.parseVariables(ix, vr.getUsername()));
+                workingRequest.addReward(OutputHelper.parseVariables(ix, workingRequest.getUsername()));
                 U.debug(CC.YELLOW + "QUEUED: " + CC.WHITE + ix);
             }
         }

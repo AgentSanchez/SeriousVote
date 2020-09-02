@@ -10,10 +10,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -34,6 +31,11 @@ public class U {
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             String key = entry.getKey().toString();
             U.debug(prefix + " " + key);
+        }
+    }
+    public static void debug(Set<String> setOfWords) {
+        for (String s: setOfWords) {
+            U.debug(s);
         }
     }
 
@@ -181,7 +183,10 @@ public class U {
         String sepA = ", ";
         String sepB = " and ";
         int counter = 0;
-        while (setOfWords.iterator().hasNext()) {
+        Iterator<String> it = setOfWords.iterator();
+        U.debug(CC.RED + "Making List   " + setOfWords.size());
+        U.debug(setOfWords);
+        while (it.hasNext()) {
             if (counter > 0) {
                 if (counter == setOfWords.size() - 1) {
                     list.append(sepB);
@@ -189,10 +194,9 @@ public class U {
                     list.append(sepA);
                 }
             }
-            list.append(setOfWords.iterator().next());
+            list.append(it.next());
             counter++;
         }
-
         return list.toString().trim();
     }
 

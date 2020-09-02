@@ -44,7 +44,7 @@ public class OutputHelper {
         if (currentRewards == "") {
             return string.replace("{player}", username).replace("{rewards}", "No Random Rewards");
         }
-        return string.replace("{player}", username).replace("{rewards}", currentRewards.substring(0, currentRewards.length() - 2));
+        return string.replace("{player}", username).replace("{rewards}", currentRewards);
     }
 
     public static Text strToText(String string){
