@@ -5,5 +5,6 @@ public enum Status {
     IN_PROCESS,
     BUILD_OFFLINE,
     BUILD_ONLINE,
-    COMPLETED
+    COMPLETED,
+    ERROR
 }
