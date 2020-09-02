@@ -462,7 +462,7 @@ public class SeriousVote {
         //Setup Loot Table
         //TODO make this table an instance variable belonging to loot tables
         LootTable mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
-        int maxNumberOfRewards = numRandRewards >= 1 ? numRandRewards : LootTools.genNumRandRewards(numRandRewards, minRandRewards, maxRandRewards);
+        int maxNumberOfRewards = LootTools.genNumRandRewards(numRandRewards, minRandRewards, maxRandRewards);
         for (int i = 0; i < maxNumberOfRewards; i++) {
             U.debug("Choosing a random reward.");
             String chosenReward = mainLoot.chooseReward();
