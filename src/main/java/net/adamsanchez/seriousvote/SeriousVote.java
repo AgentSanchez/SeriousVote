@@ -9,6 +9,7 @@ import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
+import net.adamsanchez.seriousvote.loot.LootTable;
 import net.adamsanchez.seriousvote.utils.*;
 import net.adamsanchez.seriousvote.vote.VoteRequest;
 import ninja.leaping.configurate.ConfigurationNode;
@@ -340,6 +341,8 @@ public class SeriousVote {
             voteQueue.clear();
         }
 
+        //TODO Determine validty of vote -> if offline / online - if found in system
+
         for (Vote vote : localQueue) {
 
             String username = vote.getUsername();
@@ -364,6 +367,13 @@ public class SeriousVote {
         }
         executeCommands();
     }
+
+    public void workflowBroadcast(VoteRequest vr){
+        //TODO Broadcast to the server here
+
+        //TODO After Broadcasting(or not) pass it on
+    }
+
 
     public void reloadDB() {
         if (dailiesEnabled || milestonesEnabled) {
