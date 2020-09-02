@@ -26,7 +26,7 @@ public class GiveVoteCommand implements CommandExecutor {
         if (U.isPlayerOnline(username)) {
             Player player = sv.getPublicGame().getServer().getPlayer(username).get();
             player.sendMessage(Text.of("An administrator has awarded you a vote!"));
-            sv.giveVote(username);
+            sv.processVoteChanceTables(username);
             src.sendMessage(Text.of("You have successfully given " + username + " a vote"));
         } else {
             String playerIdentifier = U.getPlayerIdentifier(username);

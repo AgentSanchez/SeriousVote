@@ -11,6 +11,7 @@ import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.loot.LootTable;
 import net.adamsanchez.seriousvote.utils.*;
+import net.adamsanchez.seriousvote.vote.Status;
 import net.adamsanchez.seriousvote.vote.VoteRequest;
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -121,13 +122,12 @@ public class SeriousVote {
     int minRandRewards;
     int maxRandRewards;
     List<String> setCommands;
-    String currentRewards;
     String publicMessage;
     String publicOfflineMessage;
     boolean debug = false;
-    boolean hasLoot = false;
-    boolean isNoRandom = false;
-    boolean bypassOffline = false;
+    boolean lootTablesAvailable = false;
+    boolean randomDisabled = false;
+    boolean processIfOffline = false;
     boolean messageOffline = false;
     private static Optional<UserStorageService> userStorage;
     //////////////////////////////////////////////////////////////////
@@ -214,7 +214,7 @@ public class SeriousVote {
         debug = CM.getDebugMode(mainCfgNode);
         publicMessage = CM.getPublicMessage(mainCfgNode);
         publicOfflineMessage = CM.getOfflineMessage(mainCfgNode);
-        bypassOffline = CM.getBypassOffline(mainCfgNode);
+        processIfOffline = CM.getBypassOffline(mainCfgNode);
         messageOffline = CM.getMessageOffline(mainCfgNode);
         numRandRewards = updateRewardsNumbers(mainCfgNode);
         updateLoot(mainCfgNode);
@@ -272,7 +272,7 @@ public class SeriousVote {
     ////////////////////////////////////////////////////////////////////////////////////////////
     private int updateRewardsNumbers(ConfigurationNode node) {
         int number = node.getNode("config", "random-rewards-number").getInt();
-        isNoRandom = number == 0 ? true : false;
+        randomDisabled = number == 0 ? true : false;
         minRandRewards = node.getNode("config", "rewards-min").getInt();
         maxRandRewards = node.getNode("config", "rewards-max").getInt() + 1;
         return number;
@@ -294,7 +294,7 @@ public class SeriousVote {
         if (nodeStrings.size() % 2 != 0) {
             U.error("Please check the Config for your main random rewards, to make sure they are formatted correctly");
         } else {
-            hasLoot = true;
+            lootTablesAvailable = true;
             String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
             //Create a new Array of the proper size x*2 to hold the tables for choosing later
             String[][] table = new String[2][inputLootSource.length / 2];
@@ -329,7 +329,7 @@ public class SeriousVote {
         //Workflow Stage 1
         Vote vote = event.getVote();
         synchronized (voteQueue) {
-            voteQueue.add((VoteRequest)vote);
+            voteQueue.add((VoteRequest) vote);
         }
     }
 
@@ -341,26 +341,40 @@ public class SeriousVote {
             voteQueue.clear();
         }
 
-        //TODO Determine validty of vote -> if offline / online - if found in system
+        //TODO Determine validity of vote -> if offline / online - if found in system
+        //  Separate out the loot gathering code (command making)
+        //  Separate out Online checking and add state
 
-        for (Vote vote : localQueue) {
-
-            String username = vote.getUsername();
-            U.debug("Vote Registered From " + vote.getServiceName() + " for " + username);
-            String currentRewards = giveVote(username);
+        for (VoteRequest vr : localQueue) {
+            VoteRequest workingRequest = vr;
+            ///NEW CODE ////
+            //Get Online Status
+            workingRequest = workflowOnlineState(workingRequest);
+            switch (workingRequest.getVoteStatus()) {
+                case BUILD_ONLINE:
+                    break;
+                case BUILD_OFFLINE:
+                    break;
+                default:
+                    U.error("Something was wrong with that vote? Was it offline?");
+                    continue;
+            }
+            ///////////////
+            U.debug("Vote Registered From " + vr.getServiceName() + " for " + vr.getUsername());
+            VoteRequest response = processVoteChanceTables(vr);
             if (!currentRewards.equals("offline")) {
-                OutputHelper.broadCastMessage(publicMessage, username, currentRewards);
-            } else if (messageOffline && !bypassOffline) {
-                OutputHelper.broadCastMessage(publicOfflineMessage, username);
+                OutputHelper.broadCastMessage(publicMessage, vr.getUsername(), currentRewards);
+            } else if (messageOffline && !processIfOffline) {
+                OutputHelper.broadCastMessage(publicOfflineMessage, vr.getUsername());
             }
 
 
             if (voteSpreeSystem != null) {
-                if (U.isPlayerOnline(username)) {
-                    voteSpreeSystem.addVote(U.getPlayerIdentifier(username));
+                if (U.isPlayerOnline(vr.getUsername())) {
+                    voteSpreeSystem.addVote(U.getPlayerIdentifier(vr.getUsername()));
                 } else {
-                    if (userStorage.get().get(username).isPresent()) {
-                        voteSpreeSystem.addVote(U.getPlayerIdentifier(username));
+                    if (userStorage.get().get(vr.getUsername()).isPresent()) {
+                        voteSpreeSystem.addVote(U.getPlayerIdentifier(vr.getUsername()));
                     }
                 }
             }
@@ -368,7 +382,17 @@ public class SeriousVote {
         executeCommands();
     }
 
-    public void workflowBroadcast(VoteRequest vr){
+    public VoteRequest workflowOnlineState(VoteRequest vr) {
+        //TODO Fill in checks for online
+        if (U.isPlayerOnline(vr.getUsername())) {
+            vr.setVoteStatus(Status.BUILD_ONLINE);
+        } else {
+            vr.setVoteStatus(Status.BUILD_OFFLINE);
+        }
+        return vr;
+    }
+
+    public void workflowBroadcast(VoteRequest vr) {
         //TODO Broadcast to the server here
 
         //TODO After Broadcasting(or not) pass it on
@@ -396,7 +420,7 @@ public class SeriousVote {
             U.debug("Offline votes found for player with ID " + playerID);
             String rewardString = "";
             for (int ix = 0; ix < offlineVotes.get(username).intValue(); ix++) {
-                rewardString = giveVote(username);
+                rewardString = processVoteChanceTables(username);
             }
 
             OutputHelper.broadCastMessage(publicMessage, username, rewardString);
@@ -425,74 +449,60 @@ public class SeriousVote {
         commandQueue.clear();
     }
 
-    public String giveVote(String username) {
-
-        if (U.isPlayerOnline(username) || bypassOffline) {
-            LootTable mainLoot;
-            currentRewards = "";
-            ArrayList<String> localCommandList = new ArrayList<String>();
-            if (hasLoot && !isNoRandom && numRandRewards >= 1) {
-                for (int i = 0; i < numRandRewards; i++) {
-                    mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
-                    U.debug("Choosing a random reward.");
-                    String chosenReward = mainLoot.chooseReward();
-
-                    currentRewards = currentRewards + mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
-                    for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
-                            .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                        localCommandList.add(OutputHelper.parseVariables(ix, username));
-                        U.debug(CC.YELLOW + "QUEUED: " + CC.WHITE + ix);
-                    }
-                }
-            } else if (hasLoot && !isNoRandom) {
-
-                for (int i = 0; i < LootTools.genNumRandRewards(numRandRewards, minRandRewards, maxRandRewards); i++) {
-                    mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
-                    U.debug("Choosing a random reward.");
-
-                    String chosenReward = mainLoot.chooseReward();
-                    currentRewards = currentRewards + mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString() + ", ";
-                    for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
-                            .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                        localCommandList.add(OutputHelper.parseVariables(ix, username));
-                        U.debug(CC.YELLOW + "QUEUED: " + CC.WHITE + ix);
-                    }
-                }
-            }
-            //Get Set Rewards
-            U.debug("Adding SetCommands to the process queue");
-            for (String setCommand : setCommands) {
-                localCommandList.add(OutputHelper.parseVariables(setCommand, username, currentRewards));
-                U.debug("Will process the following commands: " + setCommand);
-                U.debug(CC.YELLOW + "QUEUED: " + CC.WHITE + setCommand);
-            }
-            this.commandQueue.addAll(localCommandList);
-            U.debug("Added all commands to the command queue");
-            for(String s: commandQueue){
-                U.debug(CC.YELLOW_UNDERLINED + s);
-            }
-            return currentRewards;
-
-
-        } else {
-            String playerIdentifier = U.getPlayerIdentifier(username);
-
-            if (playerIdentifier != null) {
-                //Write to File
-                if (offlineVotes.containsKey(playerIdentifier)) {
-                    offlineVotes.put(playerIdentifier, offlineVotes.get(playerIdentifier).intValue() + 1);
-
-                } else {
-                    offlineVotes.put(playerIdentifier, new Integer(1));
-                }
-                try {
-                    OfflineHandler.saveOffline();
-                } catch (IOException e) {
-                    U.error("Woah did that just happen? I couldn't save that offline player's vote!", e);
-                }
-            }
-            return "offline";
+    public VoteRequest processVoteChanceTables(VoteRequest vr) {
+        //Workflow Level 4
+        VoteRequest workingRequest = vr;
+        U.debug("Adding SetCommands to the process queue");
+        for (String setCommand : setCommands) {
+            workingRequest.addReward(setCommand);
         }
+        if (!lootTablesAvailable || randomDisabled) {
+            return workingRequest;
+        }
+        //Setup Loot Table
+        //TODO make this table an instance variable belonging to loot tables
+        LootTable mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
+        int maxNumberOfRewards = numRandRewards >= 1 ? numRandRewards : LootTools.genNumRandRewards(numRandRewards, minRandRewards, maxRandRewards);
+        for (int i = 0; i < maxNumberOfRewards; i++) {
+            U.debug("Choosing a random reward.");
+            String chosenReward = mainLoot.chooseReward();
+            workingRequest.addReward(mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString());
+            for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
+                    .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+                workingRequest.addReward(ix);
+                //localCommandList.add(OutputHelper.parseVariables(ix, vr.getUsername()));
+                U.debug(CC.YELLOW + "QUEUED: " + CC.WHITE + ix);
+            }
+        }
+        return workingRequest;
+
+    }
+
+    /**
+     * This processes loot tables and then moves to the  command execution workflow
+     */
+    public void disperseGift(String username) {
+
+    }
+
+    public void storeOfflineVote(VoteRequest vr) {
+        String playerIdentifier = U.getPlayerIdentifier(vr.getUsername());
+
+        if (playerIdentifier != null) {
+            //Write to File
+            if (offlineVotes.containsKey(playerIdentifier)) {
+                offlineVotes.put(playerIdentifier, offlineVotes.get(playerIdentifier).intValue() + 1);
+
+            } else {
+                offlineVotes.put(playerIdentifier, new Integer(1));
+            }
+            try {
+                OfflineHandler.saveOffline();
+            } catch (IOException e) {
+                U.error("Woah did that just happen? I couldn't save that offline player's vote!", e);
+            }
+        }
+        return "offline";
     }
 
 
@@ -554,7 +564,7 @@ public class SeriousVote {
         return offlineVotesPath;
     }
 
-    public void triggerSave(){
+    public void triggerSave() {
         try {
             OfflineHandler.saveOffline();
         } catch (IOException e) {
@@ -562,6 +572,7 @@ public class SeriousVote {
             e.printStackTrace();
         }
     }
+
     public Path getResetDatePath() {
         return resetDatePath;
     }
