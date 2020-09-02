@@ -53,8 +53,6 @@ public class LootTable {
             chanceTotal = chanceMap.length-1;
             chanceMin = chanceMap[0];
             chanceMax = chanceMap[chanceTotal];
-
-
         }
 
     }
