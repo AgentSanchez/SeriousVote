@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote.Data;
 
 import net.adamsanchez.seriousvote.*;
 import net.adamsanchez.seriousvote.loot.LootTable;
+import net.adamsanchez.seriousvote.loot.LootTools;
 import net.adamsanchez.seriousvote.utils.*;
 import ninja.leaping.configurate.ConfigurationNode;
 

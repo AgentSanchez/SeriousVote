@@ -1,11 +1,9 @@
 package net.adamsanchez.seriousvote.loot;
 
-import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.*;
 import net.adamsanchez.seriousvote.vote.Status;
 import net.adamsanchez.seriousvote.vote.VoteRequest;
 import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
 import java.util.stream.Collectors;
 

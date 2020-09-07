@@ -1,7 +1,6 @@
 package net.adamsanchez.seriousvote;
 
 import com.google.inject.Inject;
-import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 
@@ -10,6 +9,7 @@ import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.loot.LootTable;
+import net.adamsanchez.seriousvote.loot.LootTools;
 import net.adamsanchez.seriousvote.utils.*;
 import net.adamsanchez.seriousvote.vote.Status;
 import net.adamsanchez.seriousvote.vote.VoteRequest;

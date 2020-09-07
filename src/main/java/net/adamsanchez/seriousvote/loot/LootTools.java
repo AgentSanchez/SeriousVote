@@ -1,6 +1,7 @@
-package net.adamsanchez.seriousvote.utils;
+package net.adamsanchez.seriousvote.loot;
 
 import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.utils.U;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
