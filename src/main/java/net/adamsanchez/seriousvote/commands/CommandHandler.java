@@ -86,7 +86,7 @@ public class CommandHandler {
         Sponge.getCommandManager().register(SeriousVote.getInstance(), reload, "svreload", "seriousvotereload");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), giveVote, "givevote");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), checkVote, "checkvote");
-        Sponge.getCommandManager().register(SeriousVote.getInstance(), version, "svversion","seriousvoteversion", "version");
+        Sponge.getCommandManager().register(SeriousVote.getInstance(), version, "svversion","seriousvoteversion", "svinfo");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), debugMode, "svdebug","seriousvotedebug");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), resetVotes, "svresetall");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), migrateFromOnline, "svmigratefromonline");
