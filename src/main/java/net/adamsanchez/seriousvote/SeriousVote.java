@@ -159,8 +159,8 @@ public class SeriousVote {
         //TODO replace this with CM loadConfig
         //try loading from file
         if(!CM.updateConfigs(loader)) return false;
-
         LootManager.updateLoot();
+
         U.debug("Here's your commands");
         for (String ix : CM.getRandomCommands()) {
             U.debug(ix);
@@ -178,7 +178,7 @@ public class SeriousVote {
                 e1.printStackTrace();
             }
         } catch (IOException e) {
-            U.error(CC.RED + "ahahahahaha We Couldn't load up the stored offline player votes", e);
+            U.error(CC.RED + "We Couldn't load up the stored offline player votes", e);
         } catch (ClassNotFoundException e) {
             U.error(CC.RED + "Well crap that is noooot a hash map! GO slap the dev!");
         }
@@ -209,7 +209,7 @@ public class SeriousVote {
         for (VoteRequest vr : localQueue) {
             VoteRequest workingRequest = vr;
             workingRequest.setVoteStatus(Status.IN_PROCESS);
-            ///NEW CODE ////
+
             //Get Online Status
             workingRequest = workflowOnlineState(workingRequest);
 
