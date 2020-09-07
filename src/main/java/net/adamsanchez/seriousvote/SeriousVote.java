@@ -447,8 +447,5 @@ public class SeriousVote {
         return !voteQueue.isEmpty();
     }
 
-    public CommentedConfigurationNode getMainCfgNode() {
-        return mainCfgNode;
-    }
 
 }
