@@ -159,7 +159,7 @@ public class SeriousVote {
         getLogger().info(CC.YELLOW + "Serious Vote Has Loaded");
 
         if (milestonesEnabled == true | dailiesEnabled == true) {
-            voteSpreeSystem = new VoteSpreeSystem(mainCfgNode);
+            voteSpreeSystem = new VoteSpreeSystem();
         } else {
             voteSpreeSystem = null;
         }
@@ -200,16 +200,16 @@ public class SeriousVote {
         }
 
         //update variables and other instantiations
-        debug = CM.getDebugMode(mainCfgNode);
-        publicMessage = CM.getPublicMessage(mainCfgNode);
-        publicOfflineMessage = CM.getOfflineMessage(mainCfgNode);
-        processIfOffline = CM.getBypassOffline(mainCfgNode);
-        messageOffline = CM.getMessageOffline(mainCfgNode);
-        numRandRewards = updateRewardsNumbers(mainCfgNode);
-        updateLoot(mainCfgNode);
-        setCommands = CM.getSetCommands(mainCfgNode);
+        debug = CM.getDebugMode();
+        publicMessage = CM.getPublicMessage();
+        publicOfflineMessage = CM.getOfflineMessage();
+        processIfOffline = CM.getBypassOffline();
+        messageOffline = CM.getMessageOffline();
+        numRandRewards = updateRewardsNumbers();
+        updateLoot();
+        setCommands = CM.getSetCommands();
         U.debug("Here's your commands");
-        for (String ix : CM.getRandomCommands(mainCfgNode)) {
+        for (String ix : CM.getRandomCommands()) {
             U.debug(ix);
         }
 
@@ -233,26 +233,26 @@ public class SeriousVote {
         }
 
         //Reload DB configuration
-        databaseType = CM.getDatabaseType(mainCfgNode);
-        databaseHostname = CM.getDatabaseHostname(mainCfgNode);
-        databaseName = CM.getDatabaseName(mainCfgNode);
-        databasePassword = CM.getDatabasePassword(mainCfgNode);
-        databasePrefix = CM.getDatabasePrefix(mainCfgNode);
-        databaseUsername = CM.getDatabaseUsername(mainCfgNode);
-        databasePort = CM.getDatabasePort(mainCfgNode);
-        minIdleConnections = CM.getMinIdleConnections(mainCfgNode);
-        maxActiveConnections = CM.getMaxActiveConnections(mainCfgNode);
+        databaseType = CM.getDatabaseType();
+        databaseHostname = CM.getDatabaseHostname();
+        databaseName = CM.getDatabaseName();
+        databasePassword = CM.getDatabasePassword();
+        databasePrefix = CM.getDatabasePrefix();
+        databaseUsername = CM.getDatabaseUsername();
+        databasePort = CM.getDatabasePort();
+        minIdleConnections = CM.getMinIdleConnections();
+        maxActiveConnections = CM.getMaxActiveConnections();
 
-        milestonesEnabled = CM.getMilestonesEnabled(mainCfgNode);
-        dailiesEnabled = CM.getDailiesEnabled(mainCfgNode);
+        milestonesEnabled = CM.getMilestonesEnabled();
+        dailiesEnabled = CM.getDailiesEnabled();
 
         reloadDB();
 
         /////////Load Up VoteSpreeSystem/////////
-        monthlySet = CM.getMonthlySetCommands(mainCfgNode);
-        yearlySet = CM.getYearlySetCommands(mainCfgNode);
-        weeklySet = CM.getWeeklySetCommands(mainCfgNode);
-        milestonesUsed = CM.getEnabledMilestones(mainCfgNode);
+        monthlySet = CM.getMonthlySetCommands();
+        yearlySet = CM.getYearlySetCommands();
+        weeklySet = CM.getWeeklySetCommands();
+        milestonesUsed = CM.getEnabledMilestones();
 
 
         return true;
@@ -407,7 +407,7 @@ public class SeriousVote {
             if (voteSpreeSystem != null) {
                 voteSpreeSystem.shutdown();
             }
-            voteSpreeSystem = new VoteSpreeSystem(mainCfgNode);
+            voteSpreeSystem = new VoteSpreeSystem();
             return;
         }
         U.info("Attempting to reload database, but it is not enabled!");

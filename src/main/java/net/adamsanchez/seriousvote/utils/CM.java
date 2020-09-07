@@ -25,6 +25,7 @@ public class CM {
         return get().mainCfgNode.getNode("config", "debug-mode").getBoolean();
     }
 
+    /////////////////////////////////////Dailies/////////////////////////////////////////////
     public static List<String> getWeeklySetCommands() {
         return get().mainCfgNode.getNode("config", "dailies", "weekly", "set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
@@ -40,6 +41,23 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
+    public static List<String> getWeeklyRandomCommands() {
+        return get().mainCfgNode.getNode("config", "dailies", "weekly", "random").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
+    public static List<String> getMonthlyRandomCommands() {
+        return get().mainCfgNode.getNode("config", "dailies", "monthly", "random").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
+    public static List<String> getYearlyRandomCommands() {
+        return get().mainCfgNode.getNode("config", "dailies", "yearly", "random").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
+    /////////////////////////////////////Milestones/////////////////////////////////////////////
+
     public static int[] getEnabledMilestones() {
         List<String> list = get().mainCfgNode.getNode("config", "milestones", "records-enabled").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
@@ -49,6 +67,11 @@ public class CM {
         }
 
         return array;
+    }
+
+    public static List<String> getMilestoneRandomRewardByNumber(int number) {
+        return get().mainCfgNode.getNode("config", "milestones", "records", "" + number, "random").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -123,6 +146,29 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
+    public static int getRandomRewardsNumber() {
+        return get().mainCfgNode.getNode("config", "random-rewards-number").getInt();
+    }
+
+    public static int getRandomMax() {
+        return get().mainCfgNode.getNode("config", "rewards-max").getInt() + 1;
+    }
+
+    public static int getRandomMin() {
+        return get().mainCfgNode.getNode("config", "rewards-min").getInt();
+    }
+
+    public static boolean getRandomDisabled() {
+        return get().mainCfgNode.getNode("config", "random-rewards-number").getInt() == 0 ? true : false;
+    }
+
+    ////////////////////////////////Random////////////////////////////////////////////////////
+    public static List<String> getLootSetByName(String lootTableName) {
+        return get().mainCfgNode.getNode("config", "Tables", lootTableName).getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
+
     ///////////////////////////////Vote Sites////////////////////////////////////////////////////
 
     public static List<String> getVoteSites() {
@@ -150,11 +196,11 @@ public class CM {
     }
 
 
-
     ///////////////////////////////Offline////////////////////////////////////////////////////
     public static boolean getBypassOffline() {
         return get().mainCfgNode.getNode("config", "bypass-offline").getBoolean();
     }
+
     //////////////////////////////////////////////////////////////////////////////////////////////////
     public static void initConfig(Path pluginDirectory) {
         Asset configAsset = SeriousVote.getInstance().getPlugin().getAsset("seriousvote.conf").orElse(null);

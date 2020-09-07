@@ -26,7 +26,6 @@ public class VoteSpreeSystem {
     String msgMonth = "{player} Has voted for a month straight!!! He's earned a prize!";
     String msgWeek = "{player} Has voted for a week straight!!! He's earned a prize!";
     SeriousVote sv;
-    ConfigurationNode rootNode;
 
 
     //query database for person
@@ -35,11 +34,10 @@ public class VoteSpreeSystem {
     //If more than or equal to the milestone give reward
     Database db;
 
-    public VoteSpreeSystem(ConfigurationNode node) {
+    public VoteSpreeSystem() {
         sv = SeriousVote.getInstance();
         db = new Database();
         db.createPlayerTable();
-        rootNode = node;
     }
 
     public boolean updateRecord(String playerIdentifier, int totalVotes, int voteSpree, Date lastVote) {
@@ -125,16 +123,16 @@ public class VoteSpreeSystem {
         //Check based on amount of votes given.
         U.info("Player has " + record.getTotalVotes() + " votes currently.");
         List<String> commandList = new ArrayList<String>();
-        if (CM.getEnabledMilestones(rootNode).length < 1)
+        if (CM.getEnabledMilestones().length < 1)
             U.error("You have no enabled custom milestones or your config is broken :(");
 
-        if (IntStream.of(CM.getEnabledMilestones(rootNode)).anyMatch(x -> x == record.getTotalVotes())) {
-            String chosenRewardTable = TableManager.chooseTable(rootNode.getNode("config", "milestones", "records", "" + record.getTotalVotes(), "random"));
+        if (IntStream.of(CM.getEnabledMilestones()).anyMatch(x -> x == record.getTotalVotes())) {
+            String chosenRewardTable = TableManager.chooseTable(CM.getMilestoneRandomRewardByNumber(record.getTotalVotes()));
             //TODO Check to see if that specific number provides any random rewards before trying to give them out.
 
             //Choose The Random Rewards from the chosen table
             if (chosenRewardTable != "") {
-                LootTable chosenTable = new LootTable(chosenRewardTable, rootNode);
+                LootTable chosenTable = new LootTable(chosenRewardTable);
                 for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
@@ -159,7 +157,7 @@ public class VoteSpreeSystem {
         //yearly
         if (U.isPlayerOnline(playerName)) {
             if (record.getVoteSpree() >= 365 && record.getVoteSpree() % 365 == 0) {
-                LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", "yearly", "random")), rootNode);
+                LootTable chosenTable = new LootTable(TableManager.chooseTable(CM.getYearlyRandomCommands()));
                 //Choose The Random Rewards from the chosen table
                 for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
@@ -173,7 +171,7 @@ public class VoteSpreeSystem {
 
 
             } else if (record.getVoteSpree() >= 30 && record.getVoteSpree() % 30 == 0) {
-                LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", "monthly", "random")), rootNode);
+                LootTable chosenTable = new LootTable(TableManager.chooseTable(CM.getMonthlyRandomCommands()));
                 //Choose The Random Rewards from the chosen table
                 for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
@@ -186,7 +184,7 @@ public class VoteSpreeSystem {
                 U.bcast(rootNode.getNode("config", "dailies", "monthly", "message").getString(), playerName);
 
             } else if (record.getVoteSpree() >= 7 && record.getVoteSpree() % 7 == 0) {
-                LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", "weekly", "random")), rootNode);
+                LootTable chosenTable = new LootTable(TableManager.chooseTable(CM.getWeeklyRandomCommands()));
                 U.info("Chosing from Table: " + chosenTable.getTableName());
                 //Choose The Random Rewards from the chosen table
                 for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()

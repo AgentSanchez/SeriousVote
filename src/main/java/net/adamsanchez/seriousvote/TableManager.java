@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
  */
 public class TableManager {
 
-    public static String[][] makeTableSet(ConfigurationNode node){
-        List<String> nodeStrings = node.getChildrenList().stream().map(ConfigurationNode::getString).collect(Collectors.toList());
+    public static String[][] makeTableSet(List<String> rewardsList){
+        List<String> nodeStrings = rewardsList;
         if(nodeStrings.size()%2 != 0){
             U.error("Please check the Config for errors.");
             return null;
@@ -33,8 +33,8 @@ public class TableManager {
         return table;
 
     }
-    public static String chooseTable(ConfigurationNode node){
-        String[][] rewardTable = makeTableSet(node);
+    public static String chooseTable(List<String> rewardsList){
+        String[][] rewardTable = makeTableSet(rewardsList);
         return rewardTable != null ? chooseTable(rewardTable) : "";
     }
     private static String chooseTable(String [][] rewardTable){

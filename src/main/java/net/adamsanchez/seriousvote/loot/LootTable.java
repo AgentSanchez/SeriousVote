@@ -1,11 +1,11 @@
 package net.adamsanchez.seriousvote.loot;
 
+import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.utils.U;
 import ninja.leaping.configurate.ConfigurationNode;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 /**
  * Created by adam_ on 4/26/2017.
@@ -23,12 +23,10 @@ public class LootTable {
 
     //TODO This class will be the instantiable version to allow quick creation and deflation of the rewards system
 
-    public LootTable(String rewardSet, ConfigurationNode tableSource) {
+    public LootTable(String rewardSet) {
         //Gather Reward Set From Configurations
-        this.tableSource = tableSource.getNode("config","Tables", rewardSet);
         this.tableName = rewardSet;
-        List<String> nodeStrings = this.tableSource.getChildrenList().stream()
-                .map(ConfigurationNode::getString).collect(Collectors.toList());
+        List<String> nodeStrings = CM.getLootSetByName(tableName);
 
         if(nodeStrings.size()%2!= 0 || nodeStrings.size()<1){
             U.error("Please check the Config for Table: " + rewardSet + " It might not be formatted correctly.");
