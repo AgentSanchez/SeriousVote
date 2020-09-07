@@ -31,18 +31,17 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-    public static List<String> getMonthlySetCommands() {
-        return get().mainCfgNode.getNode("config", "dailies", "monthly", "set").getChildrenList().stream()
-                .map(ConfigurationNode::getString).collect(Collectors.toList());
-    }
-
-    public static List<String> getYearlySetCommands() {
-        return get().mainCfgNode.getNode("config", "dailies", "yearly", "set").getChildrenList().stream()
-                .map(ConfigurationNode::getString).collect(Collectors.toList());
-    }
-
     public static List<String> getWeeklyRandomCommands() {
         return get().mainCfgNode.getNode("config", "dailies", "weekly", "random").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
+    public static String getWeeklyMessage(){
+        return get().mainCfgNode.getNode("config","dailies","weekly","message").getString();
+    }
+
+    public static List<String> getMonthlySetCommands() {
+        return get().mainCfgNode.getNode("config", "dailies", "monthly", "set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
@@ -51,9 +50,23 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
+    public static String getMonthlyMessage(){
+        return get().mainCfgNode.getNode("config","dailies","monthly","message").getString();
+    }
+
+
+    public static List<String> getYearlySetCommands() {
+        return get().mainCfgNode.getNode("config", "dailies", "yearly", "set").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
     public static List<String> getYearlyRandomCommands() {
         return get().mainCfgNode.getNode("config", "dailies", "yearly", "random").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
+    public static String getYearlyMessage(){
+        return get().mainCfgNode.getNode("config","dailies","yearly","message").getString();
     }
 
     /////////////////////////////////////Milestones/////////////////////////////////////////////
@@ -72,6 +85,16 @@ public class CM {
     public static List<String> getMilestoneRandomRewardByNumber(int number) {
         return get().mainCfgNode.getNode("config", "milestones", "records", "" + number, "random").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
+    public static List<String> getMilestoneSetRewardByNumber(int number) {
+        return get().mainCfgNode.getNode("config", "milestones", "records", "" + number, "set").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
+
+    public static String getMilestonesMessageByNumber(int number) {
+        return get().mainCfgNode.getNode("config", "milestones", "records", "" + number, "message").getString();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +191,10 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-
+    public static List<String> getRandomRewardById(String rewardIdentifier) {
+        return get().mainCfgNode.getNode("config", "Rewards", rewardIdentifier, "rewards").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
     ///////////////////////////////Vote Sites////////////////////////////////////////////////////
 
     public static List<String> getVoteSites() {
@@ -194,7 +220,6 @@ public class CM {
     public static String getVoteSiteMessage() {
         return get().mainCfgNode.getNode("config", "vote-sites-message").getString();
     }
-
 
     ///////////////////////////////Offline////////////////////////////////////////////////////
     public static boolean getBypassOffline() {
