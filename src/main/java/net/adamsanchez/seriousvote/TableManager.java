@@ -1,26 +1,23 @@
 package net.adamsanchez.seriousvote;
 
 import net.adamsanchez.seriousvote.utils.U;
-import ninja.leaping.configurate.ConfigurationNode;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-
 /**
  * Created by adam_ on 7/4/2017.
  */
 public class TableManager {
 
     public static String[][] makeTableSet(List<String> rewardsList){
-        List<String> nodeStrings = rewardsList;
-        if(nodeStrings.size()%2 != 0){
+        List<String> rewardStrings = rewardsList;
+        if(rewardStrings.size()%2 != 0){
             U.error("Please check the Config for errors.");
             return null;
         }
-        if (nodeStrings.size() < 1) return null;
+        if (rewardStrings.size() < 1) return null;
 
-            String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
+            String[] inputLootSource = rewardStrings.stream().toArray(String[]::new);
             //Create a new Array of the proper size x*2 to hold the tables for choosing later
             String[][] table = new String[2][inputLootSource.length / 2];
             U.info(inputLootSource.length / 2 + " Tables Imported for Rewards");
