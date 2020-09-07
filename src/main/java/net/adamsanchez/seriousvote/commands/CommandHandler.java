@@ -47,6 +47,11 @@ public class CommandHandler {
                 .permission("seriousvote.commands.admin.debug")
                 .executor(new DebugCommand())
                 .build();
+        CommandSpec metricToggle = CommandSpec.builder()
+                .description(Text.of("Toggles Metric Collection On / Off"))
+                .permission("seriousvote.commands.admin.metrics")
+                .executor(new DebugCommand())
+                .build();
         CommandSpec resetVotes = CommandSpec.builder()
                 .description(Text.of("Resets all player votes to 0"))
                 .permission("seriousvote.commands.admin.resetallvotes")
@@ -88,6 +93,7 @@ public class CommandHandler {
         Sponge.getCommandManager().register(SeriousVote.getInstance(), checkVote, "checkvote");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), version, "svversion","seriousvoteversion", "svinfo");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), debugMode, "svdebug","seriousvotedebug");
+        Sponge.getCommandManager().register(SeriousVote.getInstance(), metricToggle, "svmetrics","svmetricstoggle");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), resetVotes, "svresetall");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), migrateFromOnline, "svmigratefromonline");
         Sponge.getCommandManager().register(SeriousVote.getInstance(), changePlayerID, "svswapid");

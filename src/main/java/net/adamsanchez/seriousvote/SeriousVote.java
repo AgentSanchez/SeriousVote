@@ -97,7 +97,7 @@ public class SeriousVote {
     private CommentedConfigurationNode mainCfgNode;
 
     ///////////////////////////////////////////////////////
-    
+
     private VoteSpreeSystem voteSpreeSystem;
     ///////////////////////////////////////////////////////
     private LinkedList<VoteRequest> processedVoteQueue = new LinkedList<VoteRequest>();
@@ -158,7 +158,7 @@ public class SeriousVote {
 
         //TODO replace this with CM loadConfig
         //try loading from file
-        if(!CM.updateConfigs(loader)) return false;
+        if (!CM.updateConfigs(loader)) return false;
         LootManager.updateLoot();
 
         U.debug("Here's your commands");
@@ -291,6 +291,17 @@ public class SeriousVote {
         String playerID = event.getTargetEntity().getUniqueId().toString();
         String username = event.getTargetEntity().getName();
 
+        //TODO send message to user if theyre an "admin" to enbale metrics if they arent enabled
+        if (event.getTargetEntity().hasPermission("seriousvote.commands.admin.metrics")) {
+            if (!CM.getMetricsEnabled()) {
+                event.getTargetEntity().sendMessage(OutputHelper.strToText(
+                        "&6SeriousVote does not have metrics enabled!! " +
+                                "Metrics help me gauge how much usage there is for the plugin, and encourages me to produce better content." +
+                                "You can do /svmetrics to enable them now!"
+                ));
+            }
+        }
+
         if (offlineVotes.containsKey(username)) {
             U.debug("Offline votes found for player with ID " + playerID);
             List<VoteRequest> voteCollection = new LinkedList<VoteRequest>();
@@ -393,6 +404,9 @@ public class SeriousVote {
 
     public boolean toggleDebug() {
         return CM.setDebugState(!CM.getDebugMode());
+    }
+    public boolean toggleMetrics() {
+        return CM.setMetricsState(!CM.getMetricsEnabled());
     }
 
 
