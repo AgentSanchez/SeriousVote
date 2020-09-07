@@ -37,8 +37,8 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-    public static String getWeeklyMessage(){
-        return mainCfgNode.getNode("config","dailies","weekly","message").getString();
+    public static String getWeeklyMessage() {
+        return mainCfgNode.getNode("config", "dailies", "weekly", "message").getString();
     }
 
     public static List<String> getMonthlySetCommands() {
@@ -51,8 +51,8 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-    public static String getMonthlyMessage(){
-        return mainCfgNode.getNode("config","dailies","monthly","message").getString();
+    public static String getMonthlyMessage() {
+        return mainCfgNode.getNode("config", "dailies", "monthly", "message").getString();
     }
 
 
@@ -66,8 +66,8 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-    public static String getYearlyMessage(){
-        return mainCfgNode.getNode("config","dailies","yearly","message").getString();
+    public static String getYearlyMessage() {
+        return mainCfgNode.getNode("config", "dailies", "yearly", "message").getString();
     }
 
     /////////////////////////////////////Milestones/////////////////////////////////////////////
@@ -192,7 +192,7 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-    public static boolean getAreLootTablesAvailable(){
+    public static boolean getAreLootTablesAvailable() {
         int size = getRandomCommands().size();
         if (size < 1) return false;
         if (size % 2 != 0) return false;
@@ -204,7 +204,7 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-    public static String getRewardNameById(String rewardIdentifier){
+    public static String getRewardNameById(String rewardIdentifier) {
         return mainCfgNode.getNode("config", "Rewards", rewardIdentifier, "name").getString();
     }
     ///////////////////////////////Vote Sites////////////////////////////////////////////////////
@@ -266,8 +266,10 @@ public class CM {
         this.loader = loader;
     }
 
-    public static boolean setDebugState(boolean booleanValue){
-           return mainCfgNode.getNode("config", "debug-mode").setValue(booleanValue).getBoolean();
+    public static boolean setDebugState(boolean booleanValue) {
+        mainCfgNode.getNode("config", "debug-mode").setValue(booleanValue);
+        saveConfig();
+        return mainCfgNode.getNode("config", "debug-mode").getBoolean();
     }
 
     public static boolean updateConfigs(ConfigurationLoader<CommentedConfigurationNode> loader) {
@@ -276,6 +278,17 @@ public class CM {
             cm = new CM(loader);
         }
         return CM.loadConfig();
+    }
+
+    private static boolean saveConfig() {
+        try {
+            get().loader.save(mainCfgNode);
+        } catch (Exception e) {
+            U.error("Problem saving the config to file");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     private static boolean loadConfig() {
