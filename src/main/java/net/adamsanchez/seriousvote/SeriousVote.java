@@ -205,7 +205,6 @@ public class SeriousVote {
         publicOfflineMessage = CM.getOfflineMessage();
         processIfOffline = CM.getBypassOffline();
         messageOffline = CM.getMessageOffline();
-        numRandRewards = updateRewardsNumbers();
         updateLoot();
         setCommands = CM.getSetCommands();
         U.debug("Here's your commands");
@@ -258,22 +257,11 @@ public class SeriousVote {
         return true;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    private int updateRewardsNumbers(ConfigurationNode node) {
-        int number = node.getNode("config", "random-rewards-number").getInt();
-        randomDisabled = number == 0 ? true : false;
-        minRandRewards = node.getNode("config", "rewards-min").getInt();
-        maxRandRewards = node.getNode("config", "rewards-max").getInt() + 1;
-        return number;
-    }
-
 
     /**
      * Checks for and imports the random loot settings from the config. It creates chanceMaps of tables.
-     *
-     * @param node The base config node used for checking for loot.
      */
-    public void updateLoot(ConfigurationNode node) {
+    public void updateLoot() {
         List<String> rewardStrings = CM.getRandomCommands();
         if (!CM.getAreLootTablesAvailable()) {
             U.warn(CC.LINE);
@@ -463,7 +451,7 @@ public class SeriousVote {
         //Setup Loot Table and gather rewards
         int maxNumberOfRewards = LootTools.genNumRandRewards(numRandRewards, minRandRewards, maxRandRewards);
         for (int i = 0; i < maxNumberOfRewards; i++) {
-            LootTable mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables), mainCfgNode);
+            LootTable mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables));
             U.debug("Choosing a random reward.");
             String chosenReward = mainLoot.chooseReward();
             U.debug("Chose: " + chosenReward);
