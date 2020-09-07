@@ -265,6 +265,10 @@ public class CM {
         this.loader = loader;
     }
 
+    public static boolean setDebugState(boolean booleanValue){
+            mainCfgNode.getNode("config", "debug-mode").setValue(booleanValue).getBoolean();
+    }
+
     public boolean loadConfig() {
         try {
             mainCfgNode = loader.load();

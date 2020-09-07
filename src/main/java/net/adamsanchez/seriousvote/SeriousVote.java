@@ -114,7 +114,6 @@ public class SeriousVote {
     List<String> setCommands;
     String publicMessage;
     String publicOfflineMessage;
-    boolean debug = false;
     boolean processIfOffline = false;
     private static Optional<UserStorageService> userStorage;
     //////////////////////////////////////////////////////////////////
@@ -438,17 +437,13 @@ public class SeriousVote {
     }
 
     public boolean isDebug() {
-        return debug;
+        return CM.getDebugMode();
     }
 
     public boolean toggleDebug() {
-        debug = !debug;
-        return debug;
+        return CM.setDebugState(!CM.getDebugMode());
     }
 
-    public void setDebug(boolean _debug) {
-        debug = _debug;
-    }
 
     public VoteSpreeSystem getVoteSpreeSystem() {
         return voteSpreeSystem;
