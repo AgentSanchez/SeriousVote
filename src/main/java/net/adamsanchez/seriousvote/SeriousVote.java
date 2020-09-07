@@ -274,41 +274,37 @@ public class SeriousVote {
      * @param node The base config node used for checking for loot.
      */
     public void updateLoot(ConfigurationNode node) {
-        List<String> nodeStrings = node.getNode("config", "vote-reward", "random").getChildrenList().stream()
-                .map(ConfigurationNode::getString).collect(Collectors.toList());
-        if (nodeStrings.size() < 1) {
-            U.info("There are no random tables to load");
+        List<String> rewardStrings = CM.getRandomCommands();
+        if (!CM.getAreLootTablesAvailable()) {
+            U.warn(CC.LINE);
+            U.warn("There are no random tables to load, or they are formatted incorrectly. If you are not using random rewards you can ignore this message.");
+            U.warn(CC.LINE);
             return;
         }
-        if (nodeStrings.size() % 2 != 0) {
-            U.error("Please check the Config for your main random rewards, to make sure they are formatted correctly");
-        } else {
-            lootTablesAvailable = true;
-            String[] inputLootSource = nodeStrings.stream().toArray(String[]::new);
-            //Create a new Array of the proper size x*2 to hold the tables for choosing later
-            String[][] table = new String[2][inputLootSource.length / 2];
-            chanceMap = new int[inputLootSource.length / 2];
-            U.info(CC.PURPLE + inputLootSource.length / 2 + CC.YELLOW + " Tables Imported for Rewards");
+        String[] inputLootSource = rewardStrings.stream().toArray(String[]::new);
+        //Create a new Array of the proper size x*2 to hold the tables for choosing later
+        String[][] table = new String[2][inputLootSource.length / 2];
+        chanceMap = new int[inputLootSource.length / 2];
+        U.info(CC.PURPLE + inputLootSource.length / 2 + CC.YELLOW + " Tables Imported for Rewards");
 
-            for (int ix = 0; ix < inputLootSource.length; ix += 2) {
-                table[0][ix / 2] = inputLootSource[ix];
-                table[1][ix / 2] = inputLootSource[ix + 1];
-                //Initialize chanceMap
-                chanceMap[ix / 2] = Integer.parseInt(table[0][ix / 2]);
-                if (ix != 0) {
-                    chanceMap[ix / 2] += chanceMap[(ix / 2) - 1];
+        for (int ix = 0; ix < inputLootSource.length; ix += 2) {
+            table[0][ix / 2] = inputLootSource[ix];
+            table[1][ix / 2] = inputLootSource[ix + 1];
+            //Initialize chanceMap
+            chanceMap[ix / 2] = Integer.parseInt(table[0][ix / 2]);
+            if (ix != 0) {
+                chanceMap[ix / 2] += chanceMap[(ix / 2) - 1];
 
-                }
             }
-            mainRewardTables = table;
-            chanceTotal = chanceMap.length - 1;
-            chanceMin = chanceMap[0];
-            chanceMax = chanceMap[chanceTotal];
-
-
         }
+        mainRewardTables = table;
+        chanceTotal = chanceMap.length - 1;
+        chanceMin = chanceMap[0];
+        chanceMax = chanceMap[chanceTotal];
+
 
     }
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////LISTENERS///////////////////////////////////////////////////////
@@ -328,10 +324,6 @@ public class SeriousVote {
             localQueue.addAll(voteQueue);
             voteQueue.clear();
         }
-
-        //TODO Determine validity of vote -> if offline / online - if found in system
-        //  Separate out the loot gathering code (command making)
-        //  Separate out Online checking and add state
 
         for (VoteRequest vr : localQueue) {
             VoteRequest workingRequest = vr;
@@ -428,7 +420,7 @@ public class SeriousVote {
             }
             //Collect all the reward names into one to prevent spam.
             Set<String> rewardNames = new HashSet<String>();
-            for(VoteRequest vr: voteCollection){
+            for (VoteRequest vr : voteCollection) {
                 rewardNames.addAll(vr.getRewardNames());
             }
 
