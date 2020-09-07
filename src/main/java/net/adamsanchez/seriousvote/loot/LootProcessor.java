@@ -16,7 +16,7 @@ public class LootProcessor {
         for (String setCommand : CM.getSetCommands()) {
             workingRequest.addReward(setCommand);
         }
-        if (!lootTablesAvailable || randomDisabled) {
+        if (!lootTablesAvailable || CM.getRandomDisabled()) {
             workingRequest.setVoteStatus(Status.REWARDS_GATHERED);
             return workingRequest;
         }
@@ -27,9 +27,8 @@ public class LootProcessor {
             U.debug("Choosing a random reward.");
             String chosenReward = mainLoot.chooseReward();
             U.debug("Chose: " + chosenReward);
-            workingRequest.addRewardName(mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString());
-            for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
-                    .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+            workingRequest.addRewardName(CM.getRewardNameById(chosenReward));
+            for (String ix : CM.getRewardsByID(chosenReward)) {
                 workingRequest.addReward(OutputHelper.parseVariables(ix, workingRequest.getUsername()));
                 U.debug(CC.YELLOW + "QUEUED: " + CC.WHITE + ix);
             }

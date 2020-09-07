@@ -22,57 +22,57 @@ public class CM {
     ConfigurationLoader<CommentedConfigurationNode> loader;
 
     public static boolean getDebugMode() {
-        return get().mainCfgNode.getNode("config", "debug-mode").getBoolean();
+        return mainCfgNode.getNode("config", "debug-mode").getBoolean();
     }
 
     /////////////////////////////////////Dailies/////////////////////////////////////////////
     public static List<String> getWeeklySetCommands() {
-        return get().mainCfgNode.getNode("config", "dailies", "weekly", "set").getChildrenList().stream()
+        return mainCfgNode.getNode("config", "dailies", "weekly", "set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
     public static List<String> getWeeklyRandomCommands() {
-        return get().mainCfgNode.getNode("config", "dailies", "weekly", "random").getChildrenList().stream()
+        return mainCfgNode.getNode("config", "dailies", "weekly", "random").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
     public static String getWeeklyMessage(){
-        return get().mainCfgNode.getNode("config","dailies","weekly","message").getString();
+        return mainCfgNode.getNode("config","dailies","weekly","message").getString();
     }
 
     public static List<String> getMonthlySetCommands() {
-        return get().mainCfgNode.getNode("config", "dailies", "monthly", "set").getChildrenList().stream()
+        return mainCfgNode.getNode("config", "dailies", "monthly", "set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
     public static List<String> getMonthlyRandomCommands() {
-        return get().mainCfgNode.getNode("config", "dailies", "monthly", "random").getChildrenList().stream()
+        return mainCfgNode.getNode("config", "dailies", "monthly", "random").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
     public static String getMonthlyMessage(){
-        return get().mainCfgNode.getNode("config","dailies","monthly","message").getString();
+        return mainCfgNode.getNode("config","dailies","monthly","message").getString();
     }
 
 
     public static List<String> getYearlySetCommands() {
-        return get().mainCfgNode.getNode("config", "dailies", "yearly", "set").getChildrenList().stream()
+        return mainCfgNode.getNode("config", "dailies", "yearly", "set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
     public static List<String> getYearlyRandomCommands() {
-        return get().mainCfgNode.getNode("config", "dailies", "yearly", "random").getChildrenList().stream()
+        return mainCfgNode.getNode("config", "dailies", "yearly", "random").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
     public static String getYearlyMessage(){
-        return get().mainCfgNode.getNode("config","dailies","yearly","message").getString();
+        return mainCfgNode.getNode("config","dailies","yearly","message").getString();
     }
 
     /////////////////////////////////////Milestones/////////////////////////////////////////////
 
     public static int[] getEnabledMilestones() {
-        List<String> list = get().mainCfgNode.getNode("config", "milestones", "records-enabled").getChildrenList().stream()
+        List<String> list = mainCfgNode.getNode("config", "milestones", "records-enabled").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
         int[] array = new int[list.size()];
         for (int ix = 0; ix < list.size(); ix++) {
@@ -83,122 +83,126 @@ public class CM {
     }
 
     public static List<String> getMilestoneRandomRewardByNumber(int number) {
-        return get().mainCfgNode.getNode("config", "milestones", "records", "" + number, "random").getChildrenList().stream()
+        return mainCfgNode.getNode("config", "milestones", "records", "" + number, "random").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
     public static List<String> getMilestoneSetRewardByNumber(int number) {
-        return get().mainCfgNode.getNode("config", "milestones", "records", "" + number, "set").getChildrenList().stream()
+        return mainCfgNode.getNode("config", "milestones", "records", "" + number, "set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
 
     public static String getMilestonesMessageByNumber(int number) {
-        return get().mainCfgNode.getNode("config", "milestones", "records", "" + number, "message").getString();
+        return mainCfgNode.getNode("config", "milestones", "records", "" + number, "message").getString();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////DATABASE/////////////////////////////////////////////
     public static String getDatabaseType() {
-        return get().mainCfgNode.getNode("config", "database", "dbType").getString();
+        return mainCfgNode.getNode("config", "database", "dbType").getString();
     }
 
     public static String getDatabaseName() {
-        return get().mainCfgNode.getNode("config", "database", "name").getString();
+        return mainCfgNode.getNode("config", "database", "name").getString();
     }
 
     public static String getDatabaseHostname() {
-        return get().mainCfgNode.getNode("config", "database", "hostname").getString();
+        return mainCfgNode.getNode("config", "database", "hostname").getString();
     }
 
     public static String getDatabasePort() {
-        return get().mainCfgNode.getNode("config", "database", "port").getString();
+        return mainCfgNode.getNode("config", "database", "port").getString();
     }
 
     public static String getDatabasePrefix() {
-        return get().mainCfgNode.getNode("config", "database", "prefix").getString();
+        return mainCfgNode.getNode("config", "database", "prefix").getString();
     }
 
     public static String getDatabaseUsername() {
-        return get().mainCfgNode.getNode("config", "database", "username").getString();
+        return mainCfgNode.getNode("config", "database", "username").getString();
     }
 
     public static String getDatabasePassword() {
-        return get().mainCfgNode.getNode("config", "database", "password").getString();
+        return mainCfgNode.getNode("config", "database", "password").getString();
     }
 
     public static String getMaxActiveConnections() {
-        return get().mainCfgNode.getNode("config", "database", "maximum-active-connections").getString();
+        return mainCfgNode.getNode("config", "database", "maximum-active-connections").getString();
     }
 
     public static String getMinIdleConnections() {
-        return get().mainCfgNode.getNode("config", "database", "minimum-idle-connections").getString();
+        return mainCfgNode.getNode("config", "database", "minimum-idle-connections").getString();
     }
 
     //////////////////////////////////Modules/////////////////////////////////////////////////////////
 
     public static boolean getMilestonesEnabled() {
-        return get().mainCfgNode.getNode("config", "milestones", "enabled").getBoolean();
+        return mainCfgNode.getNode("config", "milestones", "enabled").getBoolean();
     }
 
     public static boolean getDailiesEnabled() {
-        return get().mainCfgNode.getNode("config", "dailies", "enabled").getBoolean();
+        return mainCfgNode.getNode("config", "dailies", "enabled").getBoolean();
     }
 
     public static boolean getMonthlyResetEnabled() {
-        return get().mainCfgNode.getNode("config", "monthly-reset-enabled").getBoolean();
+        return mainCfgNode.getNode("config", "monthly-reset-enabled").getBoolean();
     }
 
     public static int getMonthlyResetDay() {
-        return get().mainCfgNode.getNode("config", "monthly-reset-day").getInt();
+        return mainCfgNode.getNode("config", "monthly-reset-day").getInt();
     }
 
     public static boolean getMonthlyResetWithOffline() {
-        return get().mainCfgNode.getNode("config", "monthly-reset-cache-enabled").getBoolean(true);
+        return mainCfgNode.getNode("config", "monthly-reset-cache-enabled").getBoolean(true);
     }
 
     ////////////////////////////////Main Config///////////////////////////////////////////////////
 
     public static List<String> getSetCommands() {
-        return get().mainCfgNode.getNode("config", "vote-reward", "set").getChildrenList().stream()
+        return mainCfgNode.getNode("config", "vote-reward", "set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
     public static List<String> getRandomCommands() {
-        return get().mainCfgNode.getNode("config", "vote-reward", "random").getChildrenList().stream()
+        return mainCfgNode.getNode("config", "vote-reward", "random").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
     public static int getRandomRewardsNumber() {
-        return get().mainCfgNode.getNode("config", "random-rewards-number").getInt();
+        return mainCfgNode.getNode("config", "random-rewards-number").getInt();
     }
 
     public static int getRandomMax() {
-        return get().mainCfgNode.getNode("config", "rewards-max").getInt() + 1;
+        return mainCfgNode.getNode("config", "rewards-max").getInt() + 1;
     }
 
     public static int getRandomMin() {
-        return get().mainCfgNode.getNode("config", "rewards-min").getInt();
+        return mainCfgNode.getNode("config", "rewards-min").getInt();
     }
 
     public static boolean getRandomDisabled() {
-        return get().mainCfgNode.getNode("config", "random-rewards-number").getInt() == 0 ? true : false;
+        return mainCfgNode.getNode("config", "random-rewards-number").getInt() == 0;
     }
 
     ////////////////////////////////Random////////////////////////////////////////////////////
     public static List<String> getLootSetByName(String lootTableName) {
-        return get().mainCfgNode.getNode("config", "Tables", lootTableName).getChildrenList().stream()
+        return mainCfgNode.getNode("config", "Tables", lootTableName).getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
-    public static List<String> getRandomRewardById(String rewardIdentifier) {
-        return get().mainCfgNode.getNode("config", "Rewards", rewardIdentifier, "rewards").getChildrenList().stream()
+    public static List<String> getRewardsByID(String rewardIdentifier) {
+        return mainCfgNode.getNode("config", "Rewards", rewardIdentifier, "rewards").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
+    }
+
+    public static String getRewardNameById(String rewardIdentifier){
+        return mainCfgNode.getNode("config", "Rewards", rewardIdentifier, "name").getString();
     }
     ///////////////////////////////Vote Sites////////////////////////////////////////////////////
 
     public static List<String> getVoteSites() {
-        return get().mainCfgNode.getNode("config", "vote-sites").getChildrenList().stream()
+        return mainCfgNode.getNode("config", "vote-sites").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
@@ -206,24 +210,24 @@ public class CM {
     ///////////////////////////////Messages//////////////////////////////////////////////////////
     //Returns the string value from the Config for the public message. This must be deserialized
     public static String getPublicMessage() {
-        return get().mainCfgNode.getNode("config", "broadcast-message").getString();
+        return mainCfgNode.getNode("config", "broadcast-message").getString();
     }
 
     public static String getOfflineMessage() {
-        return get().mainCfgNode.getNode("config", "broadcast-message-offline").getString();
+        return mainCfgNode.getNode("config", "broadcast-message-offline").getString();
     }
 
     public static boolean getMessageOffline() {
-        return get().mainCfgNode.getNode("config", "broadcast-offline").getBoolean();
+        return mainCfgNode.getNode("config", "broadcast-offline").getBoolean();
     }
 
     public static String getVoteSiteMessage() {
-        return get().mainCfgNode.getNode("config", "vote-sites-message").getString();
+        return mainCfgNode.getNode("config", "vote-sites-message").getString();
     }
 
     ///////////////////////////////Offline////////////////////////////////////////////////////
     public static boolean getBypassOffline() {
-        return get().mainCfgNode.getNode("config", "bypass-offline").getBoolean();
+        return mainCfgNode.getNode("config", "bypass-offline").getBoolean();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
