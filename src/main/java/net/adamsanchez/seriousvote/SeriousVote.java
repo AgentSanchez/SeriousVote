@@ -335,7 +335,7 @@ public class SeriousVote {
         U.debug(CC.CYAN + "Emptying Queue");
         for (VoteRequest vr : processedVoteQueue) {
             for (String command : vr.getRewards()) {
-                game.getCommandManager().process(game.getServer().getConsole(), command);
+                game.getCommandManager().process(game.getServer().getConsole(), OutputHelper.parseVariables(command, vr.getUsername()));
             }
         }
         processedVoteQueue.clear();
