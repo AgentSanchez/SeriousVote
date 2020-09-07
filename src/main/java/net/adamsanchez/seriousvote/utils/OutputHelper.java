@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote.utils;
 
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
+import net.adamsanchez.seriousvote.vote.VoteRequest;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
@@ -45,6 +46,18 @@ public class OutputHelper {
             return string.replace("{player}", username).replace("{rewards}", "No Random Rewards");
         }
         return string.replace("{player}", username).replace("{rewards}", currentRewards);
+    }
+
+    public static String parseAllVariables(String strToParse, VoteRequest workingRecord){
+        String workingString = strToParse;
+        workingString = workingString.replace("{player}", workingRecord.getUsername());
+        if(!workingRecord.getRewardNames().isEmpty()){
+            workingString = workingString.replace("{rewards}", U.listMaker(workingRecord.getRewardNames()));
+        } else {
+            workingString = workingString.replace("rewards}", "No Random Rewards");
+        }
+        workingString = workingString.replace("{vote-service}", workingRecord.getServiceName());
+        return workingString;
     }
 
     public static Text strToText(String string){
