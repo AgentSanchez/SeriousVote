@@ -240,10 +240,10 @@ public class SeriousVote {
             //Take the state changed request and see whether to broadcast a message or not.
             switch (workingRequest.getVoteStatus()) {
                 case REWARDS_GATHERED:
-                    OutputHelper.broadCastMessage(CM.getPublicMessage(), vr.getUsername(), U.listMaker(workingRequest.getRewardNames()));
+                    OutputHelper.broadCastMessage(CM.getPublicMessage(), vr);
                     break;
                 case OFFLINE_SAVED:
-                    OutputHelper.broadCastMessage(CM.getOfflineMessage(), vr.getUsername());
+                    OutputHelper.broadCastMessage(CM.getOfflineMessage(), vr);
                     break;
                 default:
                     U.error("Error with that vote's state...Uh Oh!");
@@ -335,7 +335,7 @@ public class SeriousVote {
         U.debug(CC.CYAN + "Emptying Queue");
         for (VoteRequest vr : processedVoteQueue) {
             for (String command : vr.getRewards()) {
-                game.getCommandManager().process(game.getServer().getConsole(), OutputHelper.parseVariables(command, vr.getUsername()));
+                game.getCommandManager().process(game.getServer().getConsole(), OutputHelper.parseAllVariables(command, vr));
             }
         }
         processedVoteQueue.clear();
@@ -405,6 +405,7 @@ public class SeriousVote {
     public boolean toggleDebug() {
         return CM.setDebugState(!CM.getDebugMode());
     }
+
     public boolean toggleMetrics() {
         return CM.setMetricsState(!CM.getMetricsEnabled());
     }

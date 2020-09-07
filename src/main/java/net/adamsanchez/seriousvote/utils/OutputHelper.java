@@ -37,6 +37,20 @@ public class OutputHelper {
         return true;
     }
 
+    public static boolean broadCastMessage(String message, VoteRequest workingRequest) {
+        if(!U.isPlayerOnline(workingRequest.getUsername())) return false;
+        if(PlaceHolders.apiLoaded){
+            SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(
+                    PlaceHolders.getPapi().replacePlaceholders(
+                            parseAllVariables(message, workingRequest),
+                            SeriousVote.getPublicGame().getServer().getConsole(),
+                            SeriousVote.getPublicGame().getServer().getConsole()));
+        } else {
+            SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(strToText(parseAllVariables(message, workingRequest)));
+        }
+        return true;
+    }
+
     public static String parseVariables(String string, String username) {
         return string.replace("{player}", username);
     }
@@ -59,6 +73,8 @@ public class OutputHelper {
         workingString = workingString.replace("{vote-service}", workingRecord.getServiceName());
         return workingString;
     }
+
+
 
     public static Text strToText(String string){
         return TextSerializers.FORMATTING_CODE.deserialize(string);
