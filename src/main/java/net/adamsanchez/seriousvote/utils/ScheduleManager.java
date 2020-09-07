@@ -25,7 +25,7 @@ public class ScheduleManager {
                 .submit(sv.getPlugin());
         taskList.add(task);
 
-        if (sv.isMilestonesEnabled() && CM.getMonthlyResetEnabled(sv.getMainCfgNode())) {
+        if (sv.isMilestonesEnabled() && CM.getMonthlyResetEnabled()) {
             U.info("Setting up monthly reset...");
             Task checkForResets = taskBuilder.execute(() -> taskCheckForMonthlyReset())
                     .interval(2, TimeUnit.HOURS)
@@ -43,10 +43,10 @@ public class ScheduleManager {
         if (new java.util.Date().getTime() - OfflineHandler.retrieveLastReset().getTime() >= 86400001) {
             Calendar c = Calendar.getInstance();
 
-            if (c.get(Calendar.DAY_OF_MONTH) == CM.getMonthlyResetDay(sv.getMainCfgNode())) {
-                U.info("It's the #" + CM.getMonthlyResetDay(sv.getMainCfgNode()) + " day of the month. Resetting all vote totals to 0!");
+            if (c.get(Calendar.DAY_OF_MONTH) == CM.getMonthlyResetDay()) {
+                U.info("It's the #" + CM.getMonthlyResetDay() + " day of the month. Resetting all vote totals to 0!");
                 sv.getVoteSpreeSystem().resetPlayerVotes();
-                if (CM.getMonthlyResetWithOffline(sv.getMainCfgNode())) {
+                if (CM.getMonthlyResetWithOffline()) {
                     sv.getOfflineVotes().clear();
                     sv.triggerSave();
                 }

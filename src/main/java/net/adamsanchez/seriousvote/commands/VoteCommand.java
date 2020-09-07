@@ -26,16 +26,16 @@ public class VoteCommand implements CommandExecutor {
             CommandException {
         if (PlaceHolders.apiLoaded) {
             src.sendMessage(PlaceHolders.papiParse(
-                    CM.getVoteSiteMessage(sv.getMainCfgNode()),
+                    CM.getVoteSiteMessage(),
                     src,
                     src
             ));
         } else {
             src.sendMessage(
-                    OutputHelper.strToText(CM.getVoteSiteMessage(sv.getMainCfgNode()))
+                    OutputHelper.strToText(CM.getVoteSiteMessage())
             );
         }
-        CM.getVoteSites(sv.getMainCfgNode()).forEach(site -> {
+        CM.getVoteSites().forEach(site -> {
             src.sendMessage(U.convertStringToLink(site));
         });
 

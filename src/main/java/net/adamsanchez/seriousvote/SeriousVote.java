@@ -9,6 +9,7 @@ import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.loot.LootManager;
+import net.adamsanchez.seriousvote.loot.LootProcessor;
 import net.adamsanchez.seriousvote.loot.LootTable;
 import net.adamsanchez.seriousvote.loot.LootTools;
 import net.adamsanchez.seriousvote.utils.*;
@@ -289,12 +290,12 @@ public class SeriousVote {
                 case BUILD_ONLINE:
                     //if online gather rewards
                     workingRequest.setVoteStatus(Status.GATHER_REWARDS);
-                    workingRequest = processVoteChanceTables(workingRequest);
+                    workingRequest = LootProcessor.processChanceTables(workingRequest);
                     break;
                 case BUILD_OFFLINE:
                     if (processIfOffline) {
                         workingRequest.setVoteStatus(Status.GATHER_REWARDS);
-                        workingRequest = processVoteChanceTables(workingRequest);
+                        workingRequest = LootProcessor.processChanceTables(workingRequest);
                     } else {
                         workingRequest.setVoteStatus(Status.SAVE_OFFLINE);
                         workingRequest = storeOfflineVote(workingRequest);
@@ -368,7 +369,7 @@ public class SeriousVote {
             for (int ix = 0; ix < offlineVotes.get(username).intValue(); ix++) {
                 VoteRequest workingRequest = new VoteRequest();
                 workingRequest.setUsername(username);
-                voteCollection.add(processVoteChanceTables(workingRequest));
+                voteCollection.add(LootProcessor.processChanceTables(workingRequest));
             }
             //Collect all the reward names into one to prevent spam.
             Set<String> rewardNames = new HashSet<String>();
@@ -401,34 +402,6 @@ public class SeriousVote {
         processedVoteQueue.clear();
     }
 
-    public VoteRequest processVoteChanceTables(VoteRequest vr) {
-        //Workflow Level 4
-        VoteRequest workingRequest = vr;
-        U.debug("Adding SetCommands to the process queue");
-        for (String setCommand : setCommands) {
-            workingRequest.addReward(setCommand);
-        }
-        if (!lootTablesAvailable || randomDisabled) {
-            workingRequest.setVoteStatus(Status.REWARDS_GATHERED);
-            return workingRequest;
-        }
-        //Setup Loot Table and gather rewards
-        int maxNumberOfRewards = LootTools.genNumRandRewards(numRandRewards, minRandRewards, maxRandRewards);
-        for (int i = 0; i < maxNumberOfRewards; i++) {
-            LootTable mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables));
-            U.debug("Choosing a random reward.");
-            String chosenReward = mainLoot.chooseReward();
-            U.debug("Chose: " + chosenReward);
-            workingRequest.addRewardName(mainCfgNode.getNode("config", "Rewards", chosenReward, "name").getString());
-            for (String ix : mainCfgNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
-                    .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                workingRequest.addReward(OutputHelper.parseVariables(ix, workingRequest.getUsername()));
-                U.debug(CC.YELLOW + "QUEUED: " + CC.WHITE + ix);
-            }
-        }
-        workingRequest.setVoteStatus(Status.REWARDS_GATHERED);
-        return workingRequest;
-    }
 
     /**
      * This processes loot tables and then moves to the  command execution workflow
@@ -436,7 +409,7 @@ public class SeriousVote {
     public void forceGiveVote(String username) {
         VoteRequest workingRequest = new VoteRequest();
         workingRequest.setUsername(username);
-        workingRequest = processVoteChanceTables(workingRequest);
+        workingRequest = LootProcessor.processChanceTables(workingRequest);
         processedVoteQueue.add(workingRequest);
         executeCommands();
     }

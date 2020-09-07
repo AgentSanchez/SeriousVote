@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class LootProcessor {
 
-    public VoteRequest processVoteChanceTables(VoteRequest vr) {
+    public static VoteRequest processChanceTables(VoteRequest vr) {
         //Workflow Level 4
         VoteRequest workingRequest = vr;
         U.debug("Adding SetCommands to the process queue");
