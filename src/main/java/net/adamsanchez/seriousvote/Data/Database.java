@@ -3,6 +3,7 @@ package net.adamsanchez.seriousvote.Data;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.utils.U;
 
 import java.sql.*;
@@ -35,19 +36,19 @@ public class Database {
     public Database() {
 
         SeriousVote sv = SeriousVote.getInstance();
-        this.host = sv.databaseHostname;
-        this.port = sv.databasePort;
-        this.dbname = sv.databaseName;
-        this.table_prefix = sv.databasePrefix;
-        this.username = sv.databaseUsername;
-        this.password = sv.databasePassword;
-        this.dbType = sv.databaseType == null || sv.databaseType == "" ? this.dbType : sv.databaseType.toLowerCase();
+        this.host = CM.getDatabaseHostname();
+        this.port = CM.getDatabasePort();
+        this.dbname = CM.getDatabaseName();
+        this.table_prefix = CM.getDatabasePrefix();
+        this.username = CM.getDatabaseUsername();
+        this.password = CM.getDatabasePassword();
+        this.dbType = CM.getDatabaseType() == null || CM.getDatabaseType() == "" ? this.dbType : CM.getDatabaseType().toLowerCase();
         if(dbType != "mysql" || dbType != "mariadb"){
             dbType = "mariadb";
         }
         try {
-            this.minIdleConnections = Integer.parseInt(sv.minIdleConnections);
-            this.maxActiveConnections = Integer.parseInt(sv.maxActiveConnections);
+            this.minIdleConnections = Integer.parseInt(CM.getMinIdleConnections());
+            this.maxActiveConnections = Integer.parseInt(CM.getMaxActiveConnections());
         } catch (Exception e) {
             U.info("Incorrect values given for connection pool, reverting to default");
             U.info("Max Active: " + maxActiveConnections);
