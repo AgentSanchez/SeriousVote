@@ -99,7 +99,6 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////
     
     private VoteSpreeSystem voteSpreeSystem;
-    public List<String> monthlySet, yearlySet, weeklySet;
     int[] milestonesUsed;
     ///////////////////////////////////////////////////////
     private LinkedList<VoteRequest> processedVoteQueue = new LinkedList<VoteRequest>();
@@ -206,11 +205,6 @@ public class SeriousVote {
         }
 
         reloadDB();
-
-        /////////Load Up VoteSpreeSystem/////////
-        monthlySet = CM.getMonthlySetCommands();
-        yearlySet = CM.getYearlySetCommands();
-        weeklySet = CM.getWeeklySetCommands();
         milestonesUsed = CM.getEnabledMilestones();
 
 
