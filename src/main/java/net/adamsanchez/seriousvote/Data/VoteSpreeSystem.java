@@ -158,7 +158,7 @@ public class VoteSpreeSystem {
                 for (String command : CM.getRewardsByID(chosenTable.chooseReward())) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
-                for (String command : sv.yearlySet) {
+                for (String command : CM.getYearlySetCommands()) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 LootTools.giveReward(commandList);
@@ -171,7 +171,7 @@ public class VoteSpreeSystem {
                 for (String command : CM.getRewardsByID(chosenTable.chooseReward())) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
-                for (String command : sv.monthlySet) {
+                for (String command : CM.getMonthlySetCommands()) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 LootTools.giveReward(commandList);
@@ -184,7 +184,7 @@ public class VoteSpreeSystem {
                 for (String command : CM.getRewardsByID(chosenTable.chooseReward())) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
-                for (String command : sv.weeklySet) {
+                for (String command : CM.getWeeklySetCommands()) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 LootTools.giveReward(commandList);
