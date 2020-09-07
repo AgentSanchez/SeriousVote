@@ -131,7 +131,7 @@ public class VoteSpreeSystem {
             //Choose The Random Rewards from the chosen table
             if (chosenRewardTable != "") {
                 LootTable chosenTable = new LootTable(chosenRewardTable);
-                for (String command : CM.getRandomRewardById(chosenTable.chooseReward())) {
+                for (String command : CM.getRewardsByID(chosenTable.chooseReward())) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
             }
@@ -155,7 +155,7 @@ public class VoteSpreeSystem {
             if (record.getVoteSpree() >= 365 && record.getVoteSpree() % 365 == 0) {
                 LootTable chosenTable = new LootTable(TableManager.chooseTable(CM.getYearlyRandomCommands()));
                 //Choose The Random Rewards from the chosen table
-                for (String command : CM.getRandomRewardById(chosenTable.chooseReward())) {
+                for (String command : CM.getRewardsByID(chosenTable.chooseReward())) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 for (String command : sv.yearlySet) {
@@ -168,7 +168,7 @@ public class VoteSpreeSystem {
             } else if (record.getVoteSpree() >= 30 && record.getVoteSpree() % 30 == 0) {
                 LootTable chosenTable = new LootTable(TableManager.chooseTable(CM.getMonthlyRandomCommands()));
                 //Choose The Random Rewards from the chosen table
-                for (String command : CM.getRandomRewardById(chosenTable.chooseReward())) {
+                for (String command : CM.getRewardsByID(chosenTable.chooseReward())) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 for (String command : sv.monthlySet) {
@@ -181,7 +181,7 @@ public class VoteSpreeSystem {
                 LootTable chosenTable = new LootTable(TableManager.chooseTable(CM.getWeeklyRandomCommands()));
                 U.info("Chosing from Table: " + chosenTable.getTableName());
                 //Choose The Random Rewards from the chosen table
-                for (String command : CM.getRandomRewardById(chosenTable.chooseReward())) {
+                for (String command : CM.getRewardsByID(chosenTable.chooseReward())) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 for (String command : sv.weeklySet) {
