@@ -20,7 +20,8 @@ public class VersionCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         SeriousVote sv = SeriousVote.getInstance();
-        sv.getLogger().info(CC.RED + "ONLINE MODE? " + Sponge.getGame().getServer().getOnlineMode() + " "
+        sv.getLogger().info(" \n"
+                + CC.RED + "ONLINE MODE? " + Sponge.getGame().getServer().getOnlineMode() + " "
                 + CC.YELLOW_BOLD + "Serious Vote Version: "
                 + CC.PURPLE_BOLD + SeriousVote.getInstance().getPlugin().getVersion().get()
                 + CC.YELLOW_BOLD + " MC-Version: "
