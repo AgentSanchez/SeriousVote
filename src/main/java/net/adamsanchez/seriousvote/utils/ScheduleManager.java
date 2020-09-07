@@ -25,7 +25,7 @@ public class ScheduleManager {
                 .submit(sv.getPlugin());
         taskList.add(task);
 
-        if (sv.isMilestonesEnabled() && CM.getMonthlyResetEnabled()) {
+        if (CM.getMilestonesEnabled() && CM.getMonthlyResetEnabled()) {
             U.info("Setting up monthly reset...");
             Task checkForResets = taskBuilder.execute(() -> taskCheckForMonthlyReset())
                     .interval(2, TimeUnit.HOURS)

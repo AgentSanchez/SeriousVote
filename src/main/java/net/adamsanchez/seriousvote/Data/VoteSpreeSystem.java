@@ -227,12 +227,12 @@ public class VoteSpreeSystem {
                 record.setTotalVotes(record.getTotalVotes() + 1);
                 updateRecord(record);
 
-                if (sv.isDailiesEnabled()) checkForDailies(record, U.getName(playerIdentifier));
-                if (sv.isMilestonesEnabled()) checkForMilestones(record, U.getName(playerIdentifier));
+                if (CM.getDailiesEnabled()) checkForDailies(record, U.getName(playerIdentifier));
+                if (CM.getMilestonesEnabled()) checkForMilestones(record, U.getName(playerIdentifier));
                 return;
             }
             record.setTotalVotes(record.getTotalVotes() + 1);
-            if (sv.isMilestonesEnabled()) checkForMilestones(record, U.getName(playerIdentifier));
+            if (CM.getMilestonesEnabled()) checkForMilestones(record, U.getName(playerIdentifier));
 
             updateRecord(record);
 

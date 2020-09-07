@@ -97,7 +97,7 @@ public class SeriousVote {
     private CommentedConfigurationNode mainCfgNode;
 
     ///////////////////////////////////////////////////////
-    boolean milestonesEnabled = false, dailiesEnabled = false;
+    
     private VoteSpreeSystem voteSpreeSystem;
     public List<String> monthlySet, yearlySet, weeklySet;
     int[] milestonesUsed;
@@ -140,7 +140,7 @@ public class SeriousVote {
         CommandHandler.registerCommands();
         getLogger().info(CC.YELLOW + "Serious Vote Has Loaded");
 
-        if (milestonesEnabled == true | dailiesEnabled == true) {
+        if (CM.getMilestonesEnabled() == true | CM.getDailiesEnabled() == true) {
             voteSpreeSystem = new VoteSpreeSystem();
         } else {
             voteSpreeSystem = null;
@@ -204,8 +204,6 @@ public class SeriousVote {
         } catch (ClassNotFoundException e) {
             U.error(CC.RED + "Well crap that is noooot a hash map! GO slap the dev!");
         }
-        milestonesEnabled = CM.getMilestonesEnabled();
-        dailiesEnabled = CM.getDailiesEnabled();
 
         reloadDB();
 
@@ -307,7 +305,7 @@ public class SeriousVote {
     }
 
     public void reloadDB() {
-        if (dailiesEnabled || milestonesEnabled) {
+        if (CM.getDailiesEnabled() || CM.getMilestonesEnabled()) {
             U.info("Attempting to reload database...");
             if (voteSpreeSystem != null) {
                 voteSpreeSystem.shutdown();
@@ -414,17 +412,9 @@ public class SeriousVote {
         return getInstance().getGame();
     }
 
-    public boolean isDailiesEnabled() {
-        return dailiesEnabled;
-    }
-
     public boolean usingVoteSpreeSystem() {
         if (voteSpreeSystem != null) return true;
         return false;
-    }
-
-    public boolean isMilestonesEnabled() {
-        return milestonesEnabled;
     }
 
     public boolean isDebug() {

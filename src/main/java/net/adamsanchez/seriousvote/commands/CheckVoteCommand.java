@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote.commands;
 
 import net.adamsanchez.seriousvote.Data.PlayerRecord;
 import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -20,13 +21,13 @@ public class CheckVoteCommand implements CommandExecutor {
         SeriousVote sv = SeriousVote.getInstance();
         String username = args.<String>getOne("player").get();
         String playerIdentifier = U.getPlayerIdentifier(username);
-        if (sv.usingVoteSpreeSystem() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
+        if (sv.usingVoteSpreeSystem() && (CM.getDailiesEnabled() || CM.getMilestonesEnabled())) {
             PlayerRecord record = sv.getVoteSpreeSystem().getRecord(playerIdentifier);
             if (record != null) {
                 src.sendMessage(Text.of(username + " has a total of " + record.getTotalVotes()
                         + " votes. They have currently voted " + record.getVoteSpree()
                         + " days in a row.").toBuilder().color(TextColors.GOLD).build());
-                if (sv.isDailiesEnabled()) {
+                if (CM.getDailiesEnabled()) {
                     int vsa = record.getVoteSpree() + 1;
                     int a = 365 * (vsa / 365 + 1) - vsa;
                     int b = 30 * (vsa / 30 + 1) - vsa;

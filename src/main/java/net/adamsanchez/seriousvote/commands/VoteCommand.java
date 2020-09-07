@@ -39,7 +39,7 @@ public class VoteCommand implements CommandExecutor {
             src.sendMessage(U.convertStringToLink(site));
         });
 
-        if (sv.usingVoteSpreeSystem() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
+        if (sv.usingVoteSpreeSystem() && (CM.getDailiesEnabled() || CM.getMilestonesEnabled())) {
             if (sv.getUserStorage().get().get(src.getName()).isPresent()) {
                 String playerIdentifier = U.getPlayerIdentifier(src.getName());
                 PlayerRecord record = sv.getVoteSpreeSystem().getRecord(playerIdentifier);
@@ -47,7 +47,7 @@ public class VoteCommand implements CommandExecutor {
                     src.sendMessage(Text.of("You have a total of " + record.getTotalVotes()
                             + " votes. You have currently voted " + record.getVoteSpree()
                             + " days in a row.").toBuilder().color(TextColors.GOLD).build());
-                    if (sv.isDailiesEnabled()) {
+                    if (CM.getDailiesEnabled()) {
                         int spree = record.getVoteSpree();
                         if (spree != 0) {
                             src.sendMessage(Text.of("You have to vote " + VoteSpreeSystem.getRemainingDays(spree) + " more days until your next dailies reward."));
