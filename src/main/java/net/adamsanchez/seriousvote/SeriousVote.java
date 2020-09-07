@@ -106,7 +106,6 @@ public class SeriousVote {
 
     //Stored Offline Votes
     HashMap<String, Integer> offlineVotes = new HashMap<String, Integer>();
-    List<String> setCommands;
 
     private static Optional<UserStorageService> userStorage;
     //////////////////////////////////////////////////////////////////
@@ -127,11 +126,6 @@ public class SeriousVote {
     }
 
     @Listener
-    public void onPostInitialization(GamePostInitializationEvent event) {
-        instance = this;
-    }
-
-    @Listener
     public void onServerStart(GameInitializationEvent event) {
         CommandHandler.registerCommands();
         getLogger().info(CC.YELLOW + "Serious Vote Has Loaded");
@@ -144,11 +138,6 @@ public class SeriousVote {
 
         //begin any scheduled tasks
         scheduleManager = new ScheduleManager().run();
-    }
-
-    @Listener
-    public void onPostInit(GamePostInitializationEvent event) {
-
     }
 
     @Listener
@@ -172,7 +161,6 @@ public class SeriousVote {
         if(!CM.updateConfigs(loader)) return false;
 
         LootManager.updateLoot();
-        setCommands = CM.getSetCommands();
         U.debug("Here's your commands");
         for (String ix : CM.getRandomCommands()) {
             U.debug(ix);
