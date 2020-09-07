@@ -119,10 +119,6 @@ public class SeriousVote {
     private static Optional<UserStorageService> userStorage;
     //////////////////////////////////////////////////////////////////
 
-    String[][] mainRewardTables;
-    private int chanceTotal, chanceMax, chanceMin = 0;
-    private int[] chanceMap;
-
     @Listener
     public void onInitialization(GamePreInitializationEvent event) {
         instance = this;
@@ -190,7 +186,6 @@ public class SeriousVote {
         }
 
         //update variables and other instantiations
-        debug = CM.getDebugMode();
         publicMessage = CM.getPublicMessage();
         publicOfflineMessage = CM.getOfflineMessage();
         processIfOffline = CM.getBypassOffline();
