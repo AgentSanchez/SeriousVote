@@ -224,7 +224,7 @@ public class CM {
         return mainCfgNode.getNode("config", "broadcast-message-offline").getString();
     }
 
-    public static boolean getMessageOffline() {
+    public static boolean getMessageForOffline() {
         return mainCfgNode.getNode("config", "broadcast-offline").getBoolean();
     }
 
