@@ -16,7 +16,7 @@ public class LootProcessor {
         for (String setCommand : CM.getSetCommands()) {
             workingRequest.addReward(setCommand);
         }
-        if (!lootTablesAvailable || CM.getRandomDisabled()) {
+        if (!CM.getAreLootTablesAvailable() || CM.getRandomDisabled()) {
             workingRequest.setVoteStatus(Status.REWARDS_GATHERED);
             return workingRequest;
         }
