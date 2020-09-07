@@ -103,11 +103,8 @@ public class SeriousVote {
     int[] milestonesUsed;
     ///////////////////////////////////////////////////////
     private LinkedList<VoteRequest> processedVoteQueue = new LinkedList<VoteRequest>();
-    private LinkedList<String> executingQueue = new LinkedList<String>();
     private List<VoteRequest> voteQueue = new LinkedList<VoteRequest>();
     private ScheduleManager scheduleManager;
-
-    LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String, String>>>();
 
     //Stored Offline Votes
     HashMap<String, Integer> offlineVotes = new HashMap<String, Integer>();
@@ -173,16 +170,10 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     public boolean reloadConfigs() {
+
+        //TODO replace this with CM loadConfig
         //try loading from file
-        try {
-            mainCfgNode = loader.load();
-        } catch (IOException e) {
-            U.error(CC.RED + "There was an error while reloading your configs");
-            U.error(CC.RED_UNDERLINED + "PLEASE CHECK YOUR CONFIG FOR MISSING QUOTES, BRACKETS, OR COMMAS BEFORE ASKING FOR HELP!!");
-            U.error(CC.YELLOW + CC.LINE);
-            U.error(CC.RED + e.toString());
-            return false;
-        }
+        if(!CM.updateConfigs(loader)) return false;
 
         //update variables and other instantiations
         publicMessage = CM.getPublicMessage();
