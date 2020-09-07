@@ -99,7 +99,6 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////
     
     private VoteSpreeSystem voteSpreeSystem;
-    int[] milestonesUsed;
     ///////////////////////////////////////////////////////
     private LinkedList<VoteRequest> processedVoteQueue = new LinkedList<VoteRequest>();
     private List<VoteRequest> voteQueue = new LinkedList<VoteRequest>();
@@ -108,9 +107,7 @@ public class SeriousVote {
     //Stored Offline Votes
     HashMap<String, Integer> offlineVotes = new HashMap<String, Integer>();
     List<String> setCommands;
-    String publicMessage;
-    String publicOfflineMessage;
-    boolean processIfOffline = false;
+
     private static Optional<UserStorageService> userStorage;
     //////////////////////////////////////////////////////////////////
 
@@ -174,18 +171,12 @@ public class SeriousVote {
         //try loading from file
         if(!CM.updateConfigs(loader)) return false;
 
-        //update variables and other instantiations
-        publicMessage = CM.getPublicMessage();
-        publicOfflineMessage = CM.getOfflineMessage();
-        processIfOffline = CM.getBypassOffline();
         LootManager.updateLoot();
         setCommands = CM.getSetCommands();
         U.debug("Here's your commands");
         for (String ix : CM.getRandomCommands()) {
             U.debug(ix);
         }
-
-
         //Load Offline votes
         U.info(CC.YELLOW + "Trying to load offline player votes from ... " + offlineVotesPath.toString());
         try {
@@ -203,10 +194,7 @@ public class SeriousVote {
         } catch (ClassNotFoundException e) {
             U.error(CC.RED + "Well crap that is noooot a hash map! GO slap the dev!");
         }
-
         reloadDB();
-        milestonesUsed = CM.getEnabledMilestones();
-
 
         return true;
     }
@@ -245,7 +233,7 @@ public class SeriousVote {
                     workingRequest = LootProcessor.processChanceTables(workingRequest);
                     break;
                 case BUILD_OFFLINE:
-                    if (processIfOffline) {
+                    if (CM.processIfOffline()) {
                         workingRequest.setVoteStatus(Status.GATHER_REWARDS);
                         workingRequest = LootProcessor.processChanceTables(workingRequest);
                     } else {
@@ -264,10 +252,10 @@ public class SeriousVote {
             //Take the state changed request and see whether to broadcast a message or not.
             switch (workingRequest.getVoteStatus()) {
                 case REWARDS_GATHERED:
-                    OutputHelper.broadCastMessage(publicMessage, vr.getUsername(), U.listMaker(workingRequest.getRewardNames()));
+                    OutputHelper.broadCastMessage(CM.getPublicMessage(), vr.getUsername(), U.listMaker(workingRequest.getRewardNames()));
                     break;
                 case OFFLINE_SAVED:
-                    OutputHelper.broadCastMessage(publicOfflineMessage, vr.getUsername());
+                    OutputHelper.broadCastMessage(CM.getOfflineMessage(), vr.getUsername());
                     break;
                 default:
                     U.error("Error with that vote's state...Uh Oh!");
@@ -329,7 +317,7 @@ public class SeriousVote {
                 rewardNames.addAll(vr.getRewardNames());
             }
 
-            OutputHelper.broadCastMessage(publicMessage, username, U.listMaker(rewardNames));
+            OutputHelper.broadCastMessage(CM.getPublicMessage(), username, U.listMaker(rewardNames));
             processedVoteQueue.addAll(voteCollection);
             offlineVotes.remove(username);
             executeCommands();

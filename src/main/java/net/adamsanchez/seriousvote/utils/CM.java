@@ -234,7 +234,7 @@ public class CM {
     }
 
     ///////////////////////////////Offline////////////////////////////////////////////////////
-    public static boolean getBypassOffline() {
+    public static boolean processIfOffline() {
         return mainCfgNode.getNode("config", "bypass-offline").getBoolean();
     }
 
