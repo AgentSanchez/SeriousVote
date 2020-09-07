@@ -2,7 +2,6 @@ package net.adamsanchez.seriousvote.loot;
 
 import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.utils.U;
-import ninja.leaping.configurate.ConfigurationNode;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -11,7 +10,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * Created by adam_ on 4/26/2017.
  */
 public class LootTable {
-    private ConfigurationNode tableSource;
     private boolean activated = false;
     private String tableName = "";
 
