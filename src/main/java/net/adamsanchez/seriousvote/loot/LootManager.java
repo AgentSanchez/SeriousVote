@@ -11,11 +11,14 @@ import java.util.stream.Collectors;
 public class LootManager {
 
     String[][] mainRewardTables;
-    private int chanceTotal, chanceMax, chanceMin = 0;
     private int[] chanceMap;
+    private static LootManager instance;
 
+    public LootManager() {
+        instance = this;
+    }
 
-    public void updateLoot(ConfigurationNode node) {
+    private void update() {
         List<String> rewardStrings = CM.getRandomCommands();
         if (!CM.getAreLootTablesAvailable()) {
             U.warn(CC.LINE);
@@ -40,10 +43,26 @@ public class LootManager {
             }
         }
         mainRewardTables = table;
-        chanceTotal = chanceMap.length - 1;
-        chanceMin = chanceMap[0];
-        chanceMax = chanceMap[chanceTotal];
-
-
     }
+
+    public static void updateLoot() {
+        LootManager lm;
+        if (LootManager.get() == null) {
+            lm = new LootManager();
+        }
+        LootManager.get().update();
+    }
+
+    public String[][] getMainRewardTables() {
+        return mainRewardTables;
+    }
+
+    public int[] getChanceMap() {
+        return chanceMap;
+    }
+
+    public static LootManager get() {
+        return instance;
+    }
+
 }
