@@ -1,6 +1,7 @@
 package net.adamsanchez.seriousvote.utils;
 
 import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.loot.LootManager;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -266,12 +267,20 @@ public class CM {
     }
 
     public static boolean setDebugState(boolean booleanValue){
-            mainCfgNode.getNode("config", "debug-mode").setValue(booleanValue).getBoolean();
+           return mainCfgNode.getNode("config", "debug-mode").setValue(booleanValue).getBoolean();
     }
 
-    public boolean loadConfig() {
+    public static boolean updateConfigs(ConfigurationLoader<CommentedConfigurationNode> loader) {
+        CM cm;
+        if (CM.get() == null) {
+            cm = new CM(loader);
+        }
+        return CM.loadConfig();
+    }
+
+    private static boolean loadConfig() {
         try {
-            mainCfgNode = loader.load();
+            mainCfgNode = get().loader.load();
             U.info(CC.GREEN + "SV Configuration has been loaded.");
         } catch (IOException e) {
             U.error(CC.RED + "There was an error while reloading your configs");
