@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class LootManager {
 
-    String[][] mainRewardTables;
+    private String[][] mainRewardTables;
     private int[] chanceMap;
     private static LootManager instance;
 
