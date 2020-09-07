@@ -23,7 +23,7 @@ public class LootProcessor {
         //Setup Loot Table and gather rewards
         int maxNumberOfRewards = LootTools.genNumRandRewards(CM.getRandomRewardsNumber(), CM.getRandomMin(), CM.getRandomMax());
         for (int i = 0; i < maxNumberOfRewards; i++) {
-            LootTable mainLoot = new LootTable(LootTools.chooseTable(chanceMap, mainRewardTables));
+            LootTable mainLoot = new LootTable(LootTools.chooseTable(LootManager.get().getChanceMap(), LootManager.get().getMainRewardTables()));
             U.debug("Choosing a random reward.");
             String chosenReward = mainLoot.chooseReward();
             U.debug("Chose: " + chosenReward);
