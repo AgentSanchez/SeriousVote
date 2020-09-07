@@ -52,6 +52,7 @@ public class CM {
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////DATABASE/////////////////////////////////////////////
     public static String getDatabaseType() {
         return get().mainCfgNode.getNode("config", "database", "dbType").getString();
     }
@@ -88,6 +89,8 @@ public class CM {
         return get().mainCfgNode.getNode("config", "database", "minimum-idle-connections").getString();
     }
 
+    //////////////////////////////////Modules/////////////////////////////////////////////////////////
+
     public static boolean getMilestonesEnabled() {
         return get().mainCfgNode.getNode("config", "milestones", "enabled").getBoolean();
     }
@@ -108,7 +111,7 @@ public class CM {
         return get().mainCfgNode.getNode("config", "monthly-reset-cache-enabled").getBoolean(true);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////Main Config///////////////////////////////////////////////////
 
     public static List<String> getSetCommands() {
         return get().mainCfgNode.getNode("config", "vote-reward", "set").getChildrenList().stream()
@@ -120,11 +123,15 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
+    ///////////////////////////////Vote Sites////////////////////////////////////////////////////
+
     public static List<String> getVoteSites() {
         return get().mainCfgNode.getNode("config", "vote-sites").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
+
+    ///////////////////////////////Messages//////////////////////////////////////////////////////
     //Returns the string value from the Config for the public message. This must be deserialized
     public static String getPublicMessage() {
         return get().mainCfgNode.getNode("config", "broadcast-message").getString();
@@ -134,18 +141,20 @@ public class CM {
         return get().mainCfgNode.getNode("config", "broadcast-message-offline").getString();
     }
 
-    public static String getVoteSiteMessage() {
-        return get().mainCfgNode.getNode("config", "vote-sites-message").getString();
-    }
-
-    public static boolean getBypassOffline() {
-        return get().mainCfgNode.getNode("config", "bypass-offline").getBoolean();
-    }
-
     public static boolean getMessageOffline() {
         return get().mainCfgNode.getNode("config", "broadcast-offline").getBoolean();
     }
 
+    public static String getVoteSiteMessage() {
+        return get().mainCfgNode.getNode("config", "vote-sites-message").getString();
+    }
+
+
+
+    ///////////////////////////////Offline////////////////////////////////////////////////////
+    public static boolean getBypassOffline() {
+        return get().mainCfgNode.getNode("config", "bypass-offline").getBoolean();
+    }
     //////////////////////////////////////////////////////////////////////////////////////////////////
     public static void initConfig(Path pluginDirectory) {
         Asset configAsset = SeriousVote.getInstance().getPlugin().getAsset("seriousvote.conf").orElse(null);
