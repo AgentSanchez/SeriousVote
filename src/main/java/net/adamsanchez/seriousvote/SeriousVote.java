@@ -10,12 +10,9 @@ import net.adamsanchez.seriousvote.commands.*;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.loot.LootManager;
 import net.adamsanchez.seriousvote.loot.LootProcessor;
-import net.adamsanchez.seriousvote.loot.LootTable;
-import net.adamsanchez.seriousvote.loot.LootTools;
 import net.adamsanchez.seriousvote.utils.*;
 import net.adamsanchez.seriousvote.vote.Status;
 import net.adamsanchez.seriousvote.vote.VoteRequest;
-import ninja.leaping.configurate.ConfigurationNode;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
@@ -48,13 +45,12 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 /**
  * Created by adam_ on 12/08/16.
  */
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 @Plugin(id = "seriousvote",
         name = "SeriousVote",
         version = "4.8.9",
@@ -106,8 +102,6 @@ public class SeriousVote {
     public List<String> monthlySet, yearlySet, weeklySet;
     int[] milestonesUsed;
     ///////////////////////////////////////////////////////
-    public String databaseType, databaseName, databaseHostname, databasePort, databasePrefix, databaseUsername, databasePassword, minIdleConnections, maxActiveConnections;
-    ///////////////////////////////////////////////////////
     private LinkedList<VoteRequest> processedVoteQueue = new LinkedList<VoteRequest>();
     private LinkedList<String> executingQueue = new LinkedList<String>();
     private List<VoteRequest> voteQueue = new LinkedList<VoteRequest>();
@@ -117,17 +111,11 @@ public class SeriousVote {
 
     //Stored Offline Votes
     HashMap<String, Integer> offlineVotes = new HashMap<String, Integer>();
-    int numRandRewards;
-    int minRandRewards;
-    int maxRandRewards;
     List<String> setCommands;
     String publicMessage;
     String publicOfflineMessage;
     boolean debug = false;
-    boolean lootTablesAvailable = false;
-    boolean randomDisabled = false;
     boolean processIfOffline = false;
-    boolean messageOffline = false;
     private static Optional<UserStorageService> userStorage;
     //////////////////////////////////////////////////////////////////
 
@@ -206,7 +194,6 @@ public class SeriousVote {
         publicMessage = CM.getPublicMessage();
         publicOfflineMessage = CM.getOfflineMessage();
         processIfOffline = CM.getBypassOffline();
-        messageOffline = CM.getMessageOffline();
         LootManager.updateLoot();
         setCommands = CM.getSetCommands();
         U.debug("Here's your commands");
@@ -232,18 +219,6 @@ public class SeriousVote {
         } catch (ClassNotFoundException e) {
             U.error(CC.RED + "Well crap that is noooot a hash map! GO slap the dev!");
         }
-
-        //Reload DB configuration
-        databaseType = CM.getDatabaseType();
-        databaseHostname = CM.getDatabaseHostname();
-        databaseName = CM.getDatabaseName();
-        databasePassword = CM.getDatabasePassword();
-        databasePrefix = CM.getDatabasePrefix();
-        databaseUsername = CM.getDatabaseUsername();
-        databasePort = CM.getDatabasePort();
-        minIdleConnections = CM.getMinIdleConnections();
-        maxActiveConnections = CM.getMaxActiveConnections();
-
         milestonesEnabled = CM.getMilestonesEnabled();
         dailiesEnabled = CM.getDailiesEnabled();
 
