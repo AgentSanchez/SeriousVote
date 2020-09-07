@@ -191,6 +191,13 @@ public class CM {
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
     }
 
+    public static boolean getAreLootTablesAvailable(){
+        int size = getRandomCommands().size();
+        if (size < 1) return false;
+        if (size % 2 != 0) return false;
+        return true;
+    }
+
     public static List<String> getRewardsByID(String rewardIdentifier) {
         return mainCfgNode.getNode("config", "Rewards", rewardIdentifier, "rewards").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());
