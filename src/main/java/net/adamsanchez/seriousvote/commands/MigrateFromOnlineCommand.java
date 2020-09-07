@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote.commands;
 
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.CC;
+import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -23,11 +24,11 @@ public class MigrateFromOnlineCommand implements CommandExecutor {
         if(SeriousVote.getInstance().usingVoteSpreeSystem()){
             SeriousVote sv = SeriousVote.getInstance();
             boolean debugPreCommand = sv.isDebug();
-            sv.setDebug(true);
+            CM.setDebugState(true);
             U.debug(CC.RED + "--------------------Begining Migration--------------------");
             sv.getVoteSpreeSystem().updateAllPlayerID();
             U.debug(CC.RED + "--------------------Ending Migration--------------------");
-            sv.setDebug(debugPreCommand);
+            CM.setDebugState(debugPreCommand);
             src.sendMessage(Text.of("MIGRATION COMPLETE!!!!").toBuilder().color(TextColors.GREEN).build());
 
         } else {

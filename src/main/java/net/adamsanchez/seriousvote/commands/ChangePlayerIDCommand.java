@@ -2,6 +2,7 @@ package net.adamsanchez.seriousvote.commands;
 
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.CC;
+import net.adamsanchez.seriousvote.utils.CM;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -28,12 +29,12 @@ public class ChangePlayerIDCommand implements CommandExecutor {
         if(SeriousVote.getInstance().usingVoteSpreeSystem()){
             SeriousVote sv = SeriousVote.getInstance();
             boolean debugPreCommand = sv.isDebug();
-            sv.setDebug(true);
+            CM.setDebugState(true);
             U.debug(CC.YELLOW + "--------------------CHANGING USER ID--------------------");
             U.debug("Attempting to change from: " + oldID + " to " + newID + ".");
             sv.getVoteSpreeSystem().changePlayerID(oldID,newID);
             U.debug(CC.YELLOW + "--------------------Ending Migration--------------------");
-            sv.setDebug(debugPreCommand);
+            CM.setDebugState(debugPreCommand);
             src.sendMessage(Text.of("CHANGE COMPLETE!!!!").toBuilder().color(TextColors.GREEN).build());
 
         } else {
