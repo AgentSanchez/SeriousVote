@@ -1,16 +1,11 @@
 plugins {
     id 'org.spongepowered.plugin' version '0.6'
-    id "com.github.johnrengelman.shadow" version "5.2.0"
+    id "com.github.johnrengelman.shadow" version "1.2.4"
 }
 
 group 'SeriousVote'
 version '4.9.0'
 description 'Seriously We Have TO VOTE'
-
-configurations {
-    provided
-    compile.extendsFrom provided
-}
 
 repositories {
     mavenCentral()
