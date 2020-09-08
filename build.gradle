@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'SeriousVote'
-version '4.8.9'
+version '4.9.0'
 description 'Seriously We Have TO VOTE'
 
 configurations {
@@ -20,13 +20,13 @@ repositories {
         url 'https://jitpack.io'
     }
 
-    flatDir {
-        dirs 'lib'
-    }
-
     maven {
         name = 'CodeMC'
         url = 'https://repo.codemc.org/repository/maven-public'
+    }
+
+    maven {
+        url 'https://dl.bintray.com/ichbinjoe/public/'
     }
 }
 
@@ -34,20 +34,26 @@ dependencies {
     compile 'org.bstats:bstats-sponge:1.7'
     compile 'org.spongepowered:spongeapi:5.0.0'
     compile 'org.spongepowered:spongeapi:6.0.0'
-    compile 'org.spongepowered:spongeapi:7.0.0'
+
+
     compile 'com.zaxxer:HikariCP:3.4.2'
-    compile 'com.github.rojo8399:PlaceholderAPI:master-SNAPSHOT'
+    compileOnly 'com.github.rojo8399:PlaceholderAPI:master-SNAPSHOT'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.8-dmr'
     compile 'org.mariadb.jdbc:mariadb-java-client:2.5.4'
-    implementation name: 'nuvotifier-universal-2.3.3'
+    compile "com.vexsoftware:nuvotifier-universal:2.6.0"
     testCompile 'junit:junit:4.12'
 }
 
 shadowJar {
     dependencies {
-        include(dependency("org.bstats:bstats-sponge:1.7"))
-        include(dependency("com.zaxxer:HikariCP:3.4.2"))
-        include(dependency("mysql::"))
+//       // relocate("org.bstats", "net.adamsanchez.seriousvote.sponge.bstats") {
+//            include(dependency("org.bstats:bstats-sponge:1.7"))
+//         }
+//        relocate("com.zaxxer", "net.adamsanchez.seriousvote.Hikari"){
+//            include(dependency("com.zaxxer:HikariCP:3.4.2"))
+//        }
+
+        //include(dependency("mysql::"))
     }
 
 }

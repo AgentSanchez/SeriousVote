@@ -1,9 +1,9 @@
 package net.adamsanchez.seriousvote;
 
 import com.google.inject.Inject;
+
+
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
-
-
 import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
@@ -40,8 +40,6 @@ import java.nio.file.Path;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import org.spongepowered.api.util.metric.MetricsConfigManager;
-
 
 import java.nio.file.Paths;
 import java.util.*;
@@ -53,7 +51,7 @@ import java.util.*;
 //@SuppressWarnings("unused")
 @Plugin(id = "seriousvote",
         name = "SeriousVote",
-        version = "4.8.9",
+        version = "4.9.0",
         description = "This plugin enables server admins to give players rewards for voting for their server.",
         dependencies = {@Dependency(id = "nuvotifier", optional = false), @Dependency(id = "placeholderapi", optional = true)})
 public class SeriousVote {
@@ -109,11 +107,12 @@ public class SeriousVote {
 
     private static Optional<UserStorageService> userStorage;
     //////////////////////////////////////////////////////////////////
-    @Inject
-    private MetricsConfigManager metricsConfigManager;
+
+
 
     @Listener
-    public void onInitialization(GamePreInitializationEvent event) {
+    public void onPreInit(GamePreInitializationEvent event){
+        instance = this;
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
         offlineVotes = new HashMap<String, Integer>();
@@ -124,7 +123,6 @@ public class SeriousVote {
         reloadConfigs();
         CC.printSVLogo();
         CC.printSVInfo();
-
     }
 
     @Listener
