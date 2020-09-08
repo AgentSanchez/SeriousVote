@@ -94,8 +94,8 @@ public class CC {
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getMinecraftVersion().getName()
                 + CC.YELLOW_BOLD + " Sponge-Version: "
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getName() + "-"
-                + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown")
-                + CC.YELLOW_BOLD + " Votifier-Version: " + CC.CYAN + Sponge.getPluginManager().getPlugin("nuvotifier").get().getName()
+                + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown") + "\n"
+                + CC.YELLOW+ " Votifier-Version: " + CC.CYAN + Sponge.getPluginManager().getPlugin("nuvotifier").get().getName()
                 + " " + CC.PURPLE + Sponge.getPluginManager().getPlugin("nuvotifier").get().getSource().get().toString() + "\n"
                 + CC.YELLOW_BOLD + "ONLINE MODE:" + (Sponge.getGame().getServer().getOnlineMode() ? CC.GREEN + "ON" : CC.RED + "OFF")
                 + "    " + CC.YELLOW + "DEBUG MODE:" + (CM.getDebugMode() ? CC.GREEN + "ON" : CC.RED + "OFF") + " \n"
