@@ -238,12 +238,15 @@ public class SeriousVote {
             }
 
             //Take the state changed request and see whether to broadcast a message or not.
+            U.debug("Current vote workflow state: " + workingRequest.getVoteStatus());
             switch (workingRequest.getVoteStatus()) {
                 case REWARDS_GATHERED:
                     OutputHelper.broadCastMessage(CM.getPublicMessage(), vr);
                     break;
                 case OFFLINE_SAVED:
-                    OutputHelper.broadCastMessage(CM.getOfflineMessage(), vr);
+                    if (CM.getOfflineVoteMessageEnabled()) {
+                        OutputHelper.broadCastMessage(CM.getOfflineMessage(), vr);
+                    }
                     break;
                 default:
                     U.error("Error with that vote's state...Uh Oh!");
@@ -308,6 +311,7 @@ public class SeriousVote {
             for (int ix = 0; ix < offlineVotes.get(username).intValue(); ix++) {
                 VoteRequest workingRequest = new VoteRequest();
                 workingRequest.setUsername(username);
+                workingRequest.setServiceName("offline");
                 voteCollection.add(LootProcessor.processChanceTables(workingRequest));
             }
             //Collect all the reward names into one to prevent spam.
