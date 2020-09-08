@@ -17,7 +17,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 public class MetricToggleCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        U.debug(CC.YELLOW + "Metrics Toggled: "
+        U.debug(CC.YELLOW + "Metrics Toggled and is now: "
                 + (SeriousVote.getInstance().toggleMetrics()
                 ? CC.GREEN + "ON" : CC.RED + "OFF"));
         src.sendMessage(OutputHelper.strToText("&e" + "Metrics Are Now: "
