@@ -50,7 +50,7 @@ public class CommandHandler {
         CommandSpec metricToggle = CommandSpec.builder()
                 .description(Text.of("Toggles Metric Collection On / Off"))
                 .permission("seriousvote.commands.admin.metrics")
-                .executor(new DebugCommand())
+                .executor(new MetricToggleCommand())
                 .build();
         CommandSpec resetVotes = CommandSpec.builder()
                 .description(Text.of("Resets all player votes to 0"))
