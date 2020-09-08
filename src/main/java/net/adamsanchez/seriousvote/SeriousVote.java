@@ -51,7 +51,7 @@ import java.util.*;
 //@SuppressWarnings("unused")
 @Plugin(id = "seriousvote",
         name = "SeriousVote",
-        version = "4.9.0",
+        version = "4.9.1",
         description = "This plugin enables server admins to give players rewards for voting for their server.",
         dependencies = {@Dependency(id = "nuvotifier", optional = false), @Dependency(id = "placeholderapi", optional = true)})
 public class SeriousVote {
