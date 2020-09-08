@@ -432,12 +432,15 @@ public class SeriousVote {
     }
 
     public boolean toggleMetrics() {
-        game.getCommandManager().process(U.getConsole().getCommandSource().get(), "sponge metrics seriousvote " + areMetricsEnabled());
-        return areMetricsEnabled();
+        boolean state = areMetricsEnabled();
+        U.debug("Metrics are currently " + state);
+        U.debug("Metrics inverse is " + !state + " We should be returning" + !state);
+        game.getCommandManager().process(U.getConsole().getCommandSource().get(), "sponge metrics seriousvote " + !state);
+        return !state;
     }
 
     public boolean areMetricsEnabled() {
-        return metricsConfigManager.areMetricsEnabled(this);
+        return metricsConfigManager.getCollectionState(plugin).asBoolean();
     }
 
 
