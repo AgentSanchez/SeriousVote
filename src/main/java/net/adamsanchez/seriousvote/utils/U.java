@@ -172,31 +172,5 @@ public class U {
         return SeriousVote.getPublicGame().getServer().getConsole();
     }
 
-    /**
-     * Returns a comma separated grammatically correct list of items.
-     *
-     * @return
-     */
-    public static String listMaker(Set<String> setOfWords) {
-        if (setOfWords.size() < 1) return "";
-        StringBuilder list = new StringBuilder();
-        String sepA = ", ";
-        String sepB = " and ";
-        int counter = 0;
-        Iterator<String> it = setOfWords.iterator();
-        while (it.hasNext()) {
-            if (counter > 0) {
-                if (counter == setOfWords.size() - 1) {
-                    list.append(sepB);
-                } else {
-                    list.append(sepA);
-                }
-            }
-            list.append(it.next());
-            counter++;
-        }
-        return list.toString().trim();
-    }
-
 
 }
