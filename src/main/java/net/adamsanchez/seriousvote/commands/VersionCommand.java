@@ -21,7 +21,7 @@ public class VersionCommand implements CommandExecutor {
     //TODO Add metrics collection on/off to this information in red
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        src.sendMessage(OutputHelper.strToText(CC.getVersion()));
+        CC.printSVInfo();
         return CommandResult.success();
     }
 }

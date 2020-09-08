@@ -86,9 +86,9 @@ public class CC {
 
     public static String getVersion() {
         return " \n"
-                + CC.PURPLE + CC.LINE + "\n"
+                + CC.PURPLE + CC.LINE
                 + CC.PURPLE + "\n" + CC.LINE + "\n"
-                + CC.YELLOW_BOLD + "Serious Vote Version: "
+                + CC.YELLOW + "Serious Vote Version: "
                 + CC.PURPLE_BOLD + SeriousVote.getInstance().getPlugin().getVersion().get()
                 + CC.YELLOW_BOLD + " MC-Version: "
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getMinecraftVersion().getName()
@@ -96,12 +96,13 @@ public class CC {
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getName() + "-"
                 + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown")
                 + CC.YELLOW_BOLD + " Votifier-Version: " + CC.CYAN + Sponge.getPluginManager().getPlugin("nuvotifier").get().getName()
-                + " " + CC.PURPLE + Sponge.getPluginManager().getPlugin("nuvotifier").get().getSource().get().toString()
-                + CC.YELLOW_BOLD + "ONLINE MODE:" + (Sponge.getGame().getServer().getOnlineMode() ? CC.GREEN + "ON" : CC.RED + "OFF") + " \n"
+                + " " + CC.PURPLE + Sponge.getPluginManager().getPlugin("nuvotifier").get().getSource().get().toString() + "\n"
+                + CC.YELLOW_BOLD + "ONLINE MODE:" + (Sponge.getGame().getServer().getOnlineMode() ? CC.GREEN + "ON" : CC.RED + "OFF")
+                + "    " + CC.YELLOW + "DEBUG MODE:" + (CM.getDebugMode() ? CC.GREEN + "ON" : CC.RED + "OFF") + " \n"
                 + CC.YELLOW_BOLD + "Metrics Are:" + (SeriousVote.getInstance().areMetricsEnabled()
-                ? CC.GREEN + "ON &6- Thank you! You can use /svmetrics again to turn it off."
+                ? CC.GREEN + "ON " + CC.YELLOW + "- Thank you! You can use /svmetrics again to turn it off."
                 : CC.RED + "OFF - This information is very useful for us. You can do /svmetrics to turn it on.") + CC.RESET
-                + CC.PURPLE + "\n" + CC.LINE + "\n"
+                + CC.PURPLE + "\n" + CC.LINE
                 + CC.PURPLE + "\n" + CC.LINE + "\n" + CC.RESET;
     }
 
