@@ -38,7 +38,6 @@ public class OutputHelper {
     }
 
     public static boolean broadCastMessage(String message, VoteRequest workingRequest) {
-        if(!U.isPlayerOnline(workingRequest.getUsername())) return false;
         if(PlaceHolders.apiLoaded){
             SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(
                     PlaceHolders.getPapi().replacePlaceholders(
@@ -68,9 +67,12 @@ public class OutputHelper {
         if(!workingRecord.getRewardNames().isEmpty()){
             workingString = workingString.replace("{rewards}", U.listMaker(workingRecord.getRewardNames()));
         } else {
-            workingString = workingString.replace("rewards}", "No Random Rewards");
+            workingString = workingString.replace("{rewards}", "No Random Rewards");
         }
-        workingString = workingString.replace("{vote-service}", workingRecord.getServiceName());
+        if (workingRecord.getServiceName() != null && workingRecord.getServiceName() != "") {
+            workingString = workingString.replace("{vote-service}", workingRecord.getServiceName());
+        }
+
         return workingString;
     }
 
