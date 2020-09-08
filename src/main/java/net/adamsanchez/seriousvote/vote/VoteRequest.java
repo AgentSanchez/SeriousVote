@@ -15,6 +15,8 @@ public class VoteRequest {
 
     private List<String> rewardStore = new LinkedList<String>();
     private Status voteStatus = Status.WAITING;
+
+
     private Set<String> rewardNames = new HashSet<String>();
 
     public VoteRequest(){}
@@ -56,6 +58,9 @@ public class VoteRequest {
         this.rewardNames.add(name);
     }
 
+    public void replaceRewardNames(Set<String> rewardNames) {
+        this.rewardNames = rewardNames;
+    }
 
     public void addReward(String command) {
         rewardStore.add(command);
