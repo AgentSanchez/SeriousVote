@@ -25,9 +25,6 @@ public class CM {
     public static boolean getDebugMode() {
         return mainCfgNode.getNode("config", "debug-mode").getBoolean();
     }
-    public static boolean getMetricsEnabled() {
-        return mainCfgNode.getNode("config", "metrics-enabled").getBoolean();
-    }
     /////////////////////////////////////Dailies/////////////////////////////////////////////
     public static List<String> getWeeklySetCommands() {
         return mainCfgNode.getNode("config", "dailies", "weekly", "set").getChildrenList().stream()
@@ -272,12 +269,6 @@ public class CM {
         mainCfgNode.getNode("config", "debug-mode").setValue(booleanValue);
         saveConfig();
         return mainCfgNode.getNode("config", "debug-mode").getBoolean();
-    }
-
-    public static boolean setMetricsState(boolean booleanValue) {
-        mainCfgNode.getNode("config", "metrics-enabled").setValue(booleanValue);
-        saveConfig();
-        return mainCfgNode.getNode("config", "metrics-enabled").getBoolean();
     }
 
     public static boolean updateConfigs(ConfigurationLoader<CommentedConfigurationNode> loader) {

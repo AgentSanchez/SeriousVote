@@ -34,7 +34,7 @@ public class VersionCommand implements CommandExecutor {
                 + CC.YELLOW_BOLD + " Votifier-Version: " + CC.CYAN + Sponge.getPluginManager().getPlugin("nuvotifier").get().getName()
                 + " " + CC.PURPLE + Sponge.getPluginManager().getPlugin("nuvotifier").get().getSource().get().toString()
                 + "\n" + CC.LINE + "\n"
-                + (CM.getMetricsEnabled() ? CC.GREEN : CC.RED) + "METRICS ARE " + (SeriousVote.getInstance().toggleMetrics() ? CC.GREEN + "ON" : CC.RED + "OFF")
+                + (SeriousVote.getInstance().areMetricsEnabled() ? CC.GREEN : CC.RED) + "METRICS ARE " + (SeriousVote.getInstance().toggleMetrics() ? CC.GREEN + "ON" : CC.RED + "OFF")
         );
         return CommandResult.success();
     }

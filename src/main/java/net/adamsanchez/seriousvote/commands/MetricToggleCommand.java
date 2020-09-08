@@ -17,12 +17,13 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 public class MetricToggleCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+        SeriousVote.getInstance().toggleMetrics();
         U.debug(CC.YELLOW + "Metrics Toggled and is now: "
-                + (SeriousVote.getInstance().toggleMetrics()
+                + (SeriousVote.getInstance().areMetricsEnabled()
                 ? CC.GREEN + "ON" : CC.RED + "OFF"));
         src.sendMessage(OutputHelper.strToText("&e" + "Metrics Are Now: "
-                + (CM.getMetricsEnabled()
-                ? "&2" + "ON &6- Thank you!" : "&4" + "OFF - Sorry to see you go :(")));
+                + (SeriousVote.getInstance().areMetricsEnabled()
+                ? "&2" + "ON &6- Thank you! If this was an error do /svmetrics again to turn it off." : "&4" + "OFF - Sorry to see you go :( + If this was an error do /svmetrics again to turn it on.")));
         return CommandResult.success();
     }
 }

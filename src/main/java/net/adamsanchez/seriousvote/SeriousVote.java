@@ -14,10 +14,12 @@ import net.adamsanchez.seriousvote.utils.*;
 import net.adamsanchez.seriousvote.vote.Status;
 import net.adamsanchez.seriousvote.vote.VoteRequest;
 
+import org.bstats.sponge.Metrics2;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 
+import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
@@ -41,6 +43,7 @@ import java.nio.file.Path;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.spongepowered.api.util.metric.MetricsConfigManager;
 
 
 import java.nio.file.Paths;
@@ -96,6 +99,7 @@ public class SeriousVote {
     private Path privateConfigDir;
     private CommentedConfigurationNode mainCfgNode;
 
+    private Metrics2 metrics;
     ///////////////////////////////////////////////////////
 
     private VoteSpreeSystem voteSpreeSystem;
@@ -109,10 +113,18 @@ public class SeriousVote {
 
     private static Optional<UserStorageService> userStorage;
     //////////////////////////////////////////////////////////////////
+    @Inject
+    private MetricsConfigManager metricsConfigManager;
+
+    @Inject
+    SeriousVote(Metrics2.Factory metricsFactory) {
+        instance = this;
+        metrics = metricsFactory.make(147);
+    }
+
 
     @Listener
     public void onInitialization(GamePreInitializationEvent event) {
-        instance = this;
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
         CC.printSVInfo();
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
@@ -138,6 +150,8 @@ public class SeriousVote {
 
         //begin any scheduled tasks
         scheduleManager = new ScheduleManager().run();
+
+        //Enable Metrics
     }
 
     @Listener
@@ -296,7 +310,7 @@ public class SeriousVote {
 
         //TODO send message to user if theyre an "admin" to enbale metrics if they arent enabled
         if (event.getTargetEntity().hasPermission("seriousvote.commands.admin.metrics")) {
-            if (!CM.getMetricsEnabled()) {
+            if (!areMetricsEnabled()) {
                 event.getTargetEntity().sendMessage(OutputHelper.strToText(
                         "&6SeriousVote does not have metrics enabled!! " +
                                 "Metrics help me gauge how much usage there is for the plugin, and encourages me to produce better content." +
@@ -417,7 +431,12 @@ public class SeriousVote {
     }
 
     public boolean toggleMetrics() {
-        return CM.setMetricsState(!CM.getMetricsEnabled());
+        game.getCommandManager().process(U.getConsole().getCommandSource().get(), "sponge metrics seriousvote " + areMetricsEnabled());
+        return areMetricsEnabled();
+    }
+
+    public boolean areMetricsEnabled() {
+        return metricsConfigManager.areMetricsEnabled(this);
     }
 
 
