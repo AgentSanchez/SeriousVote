@@ -320,7 +320,13 @@ public class SeriousVote {
                 rewardNames.addAll(vr.getRewardNames());
             }
 
-            OutputHelper.broadCastMessage(CM.getPublicMessage(), username, U.listMaker(rewardNames));
+            VoteRequest collectedVoteRequest = new VoteRequest();
+            collectedVoteRequest.setUsername(username);
+            collectedVoteRequest.setServiceName("offline");
+            collectedVoteRequest.replaceRewardNames(rewardNames);
+
+
+            OutputHelper.broadCastMessage(CM.getPublicMessage(), collectedVoteRequest);
             processedVoteQueue.addAll(voteCollection);
             offlineVotes.remove(username);
             executeCommands();
