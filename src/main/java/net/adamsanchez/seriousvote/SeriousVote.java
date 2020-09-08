@@ -14,15 +14,12 @@ import net.adamsanchez.seriousvote.utils.*;
 import net.adamsanchez.seriousvote.vote.Status;
 import net.adamsanchez.seriousvote.vote.VoteRequest;
 
-import org.bstats.sponge.Metrics2;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 
-import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
-import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
@@ -99,7 +96,6 @@ public class SeriousVote {
     private Path privateConfigDir;
     private CommentedConfigurationNode mainCfgNode;
 
-    private Metrics2 metrics;
     ///////////////////////////////////////////////////////
 
     private VoteSpreeSystem voteSpreeSystem;
@@ -115,13 +111,6 @@ public class SeriousVote {
     //////////////////////////////////////////////////////////////////
     @Inject
     private MetricsConfigManager metricsConfigManager;
-
-    @Inject
-    SeriousVote(Metrics2.Factory metricsFactory) {
-        instance = this;
-        metrics = metricsFactory.make(147);
-    }
-
 
     @Listener
     public void onInitialization(GamePreInitializationEvent event) {
@@ -309,7 +298,7 @@ public class SeriousVote {
         String playerID = event.getTargetEntity().getUniqueId().toString();
         String username = event.getTargetEntity().getName();
 
-        //TODO send message to user if theyre an "admin" to enbale metrics if they arent enabled
+        /*
         if (event.getTargetEntity().hasPermission("seriousvote.commands.admin.metrics")) {
             if (!areMetricsEnabled()) {
                 event.getTargetEntity().sendMessage(OutputHelper.strToText(
@@ -319,6 +308,7 @@ public class SeriousVote {
                 ));
             }
         }
+        */
 
         if (offlineVotes.containsKey(username)) {
             U.debug("Offline votes found for player with ID " + playerID);
@@ -431,6 +421,7 @@ public class SeriousVote {
         return CM.setDebugState(!CM.getDebugMode());
     }
 
+    /*
     public boolean toggleMetrics() {
         boolean state = areMetricsEnabled();
         U.debug("Metrics are currently " + state);
@@ -438,10 +429,14 @@ public class SeriousVote {
         game.getCommandManager().process(U.getConsole().getCommandSource().get(), "sponge metrics seriousvote " + !state);
         return !state;
     }
+    */
+
 
     public boolean areMetricsEnabled() {
-        return metricsConfigManager.getCollectionState(plugin).asBoolean();
+        //return metricsConfigManager.getCollectionState(plugin).asBoolean();
+        return false;
     }
+
 
 
     public VoteSpreeSystem getVoteSpreeSystem() {
