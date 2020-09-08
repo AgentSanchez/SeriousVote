@@ -64,7 +64,7 @@ public class OutputHelper {
     public static String parseAllVariables(String strToParse, VoteRequest workingRecord){
         String workingString = strToParse;
         workingString = workingString.replace("{player}", workingRecord.getUsername());
-        if(!workingRecord.getRewardNames().isEmpty()){
+        if(!workingRecord.getRewardNames().isEmpty() || !workingString.contains("{rewards}")){
             workingString = workingString.replace("{rewards}", U.listMaker(workingRecord.getRewardNames()));
         } else {
             workingString = workingString.replace("{rewards}", "No Random Rewards");
