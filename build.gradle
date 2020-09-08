@@ -1,12 +1,16 @@
 plugins {
     id 'org.spongepowered.plugin' version '0.6'
-    id "com.github.johnrengelman.shadow" version "2.0.1"
+    id "com.github.johnrengelman.shadow" version "5.2.0"
 }
 
 group 'SeriousVote'
 version '4.8.9'
 description 'Seriously We Have TO VOTE'
 
+configurations {
+    provided
+    compile.extendsFrom provided
+}
 
 repositories {
     mavenCentral()
@@ -34,19 +38,19 @@ dependencies {
     compile 'com.github.rojo8399:PlaceholderAPI:master-SNAPSHOT'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.8-dmr'
     compile 'org.mariadb.jdbc:mariadb-java-client:2.5.4'
-    compile fileTree(dir: 'lib', include: '*.jar')
+    implementation name: 'nuvotifier-universal-2.3.3'
     testCompile 'junit:junit:4.12'
 }
 
 shadowJar {
-
     dependencies {
-        //Connection Pooling
         include(dependency("org.bstats:bstats-sponge:1.7"))
         include(dependency("com.zaxxer:HikariCP:3.4.2"))
         include(dependency("mysql::"))
     }
+
 }
 
+build.dependsOn(shadowJar)
 
 
