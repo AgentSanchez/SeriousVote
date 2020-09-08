@@ -84,9 +84,10 @@ public class CC {
     public static final String LINE = "-------------------------------------------------------------";
     public static final String LINE_RED = RED + LINE;
 
-    public static void printSVInfo() {
-        SeriousVote.getInstance().getLogger().info(" /n"
-                + CC.RED + "ONLINE MODE? " + Sponge.getGame().getServer().getOnlineMode() + " "
+    public static String getVersion() {
+        return " \n"
+                + CC.PURPLE + CC.LINE + "\n"
+                + CC.PURPLE + "\n" + CC.LINE + "\n"
                 + CC.YELLOW_BOLD + "Serious Vote Version: "
                 + CC.PURPLE_BOLD + SeriousVote.getInstance().getPlugin().getVersion().get()
                 + CC.YELLOW_BOLD + " MC-Version: "
@@ -94,13 +95,18 @@ public class CC {
                 + CC.YELLOW_BOLD + " Sponge-Version: "
                 + CC.PURPLE_BOLD + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getName() + "-"
                 + Sponge.getPlatform().getContainer(Platform.Component.IMPLEMENTATION).getVersion().orElse("unknown")
-                + "\n" + CC.LINE + "\n"
                 + CC.YELLOW_BOLD + " Votifier-Version: " + CC.CYAN + Sponge.getPluginManager().getPlugin("nuvotifier").get().getName()
                 + " " + CC.PURPLE + Sponge.getPluginManager().getPlugin("nuvotifier").get().getSource().get().toString()
-                + "\n" + CC.LINE + "\n"
-                + (SeriousVote.getInstance().areMetricsEnabled() ? CC.GREEN : CC.RED)
-                + "\n" + CC.LINE + "\n" + CC.RESET
-        );
+                + CC.YELLOW_BOLD + "ONLINE MODE:" + (Sponge.getGame().getServer().getOnlineMode() ? CC.GREEN + "ON" : CC.RED + "OFF") + " \n"
+                + CC.YELLOW_BOLD + "Metrics Are:" + (SeriousVote.getInstance().areMetricsEnabled()
+                ? CC.GREEN + "ON &6- Thank you! You can use /svmetrics again to turn it off."
+                : CC.RED + "OFF - This information is very useful for us. You can do /svmetrics to turn it on.") + CC.RESET
+                + CC.PURPLE + "\n" + CC.LINE + "\n"
+                + CC.PURPLE + "\n" + CC.LINE + "\n" + CC.RESET;
+    }
+
+    public static void printSVInfo() {
+        SeriousVote.getInstance().getLogger().info(getVersion());
     }
 
     public static void printSVLogo() {
@@ -142,7 +148,7 @@ public class CC {
                 "                                           " + GREEN + "NoooN" + CYAN + "     NNNNNNNNNNNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
                 "                                            " + GREEN + "ooo" + CYAN + "                                                     \n" +
                 "                                            " + GREEN + "NoN" + CYAN + "                                                     \n" +
-                "                                             " + GREEN + "o" + CYAN + "     \n";
+                "                                             " + GREEN + "o" + CYAN + "     \n" + CC.RESET;
 
     }
 

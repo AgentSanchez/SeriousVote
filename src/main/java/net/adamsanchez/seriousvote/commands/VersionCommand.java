@@ -3,6 +3,7 @@ package net.adamsanchez.seriousvote.commands;
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.CC;
 import net.adamsanchez.seriousvote.utils.CM;
+import net.adamsanchez.seriousvote.utils.OutputHelper;
 import org.spongepowered.api.Platform;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
@@ -20,7 +21,7 @@ public class VersionCommand implements CommandExecutor {
     //TODO Add metrics collection on/off to this information in red
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        CC.printSVInfo();
+        src.sendMessage(OutputHelper.strToText(CC.getVersion()));
         return CommandResult.success();
     }
 }
