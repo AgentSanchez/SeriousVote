@@ -126,6 +126,7 @@ public class SeriousVote {
     @Listener
     public void onInitialization(GamePreInitializationEvent event) {
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
+        CC.printSVLogo();
         CC.printSVInfo();
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
         offlineVotes = new HashMap<String, Integer>();

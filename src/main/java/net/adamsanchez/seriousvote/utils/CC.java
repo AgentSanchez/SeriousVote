@@ -84,9 +84,9 @@ public class CC {
     public static final String LINE = "-------------------------------------------------------------";
     public static final String LINE_RED = RED + LINE;
 
-    public static void printSVInfo(){
-        SeriousVote.getInstance().getLogger().info(CC.logo());
-        SeriousVote.getInstance().getLogger().info(CC.RED + "ONLINE MODE? " + Sponge.getGame().getServer().getOnlineMode() + " "
+    public static void printSVInfo() {
+        SeriousVote.getInstance().getLogger().info(" /n"
+                + CC.RED + "ONLINE MODE? " + Sponge.getGame().getServer().getOnlineMode() + " "
                 + CC.YELLOW_BOLD + "Serious Vote Version: "
                 + CC.PURPLE_BOLD + SeriousVote.getInstance().getPlugin().getVersion().get()
                 + CC.YELLOW_BOLD + " MC-Version: "
@@ -97,45 +97,52 @@ public class CC {
                 + "\n" + CC.LINE + "\n"
                 + CC.YELLOW_BOLD + " Votifier-Version: " + CC.CYAN + Sponge.getPluginManager().getPlugin("nuvotifier").get().getName()
                 + " " + CC.PURPLE + Sponge.getPluginManager().getPlugin("nuvotifier").get().getSource().get().toString()
+                + "\n" + CC.LINE + "\n"
+                + (SeriousVote.getInstance().areMetricsEnabled() ? CC.GREEN : CC.RED)
+                + "\n" + CC.LINE + "\n" + CC.RESET
         );
     }
 
-    public static String logo(){
-        return  "                                                                                                    \n" +
-                "                                                                       " + GREEN + "NN" + CYAN +"                          \n" +
-                "                                                                      "+GREEN+"ooo"+CYAN+"                           \n" +
-                "                                                                    "+GREEN+"NoooN"+CYAN+"                           \n" +
-                "                                                                   "+GREEN+"NoooN"+CYAN+"                            \n" +
-                "                                                                  "+GREEN+"ooooN"+CYAN+"                             \n" +
-                "     NNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNNN NNNNN  NNNNNNNNNNNNN"+GREEN+"ooo"+CYAN+"NNNN   NNNNN  NNNNNNNNNNNN     \n" +
-                "    NNNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNNN NNNNN  NNNNNNNNNNNNN"+GREEN+"oo"+CYAN+"NNNNN   NNNNN  NNNNNNNNNNNNN    \n" +
+    public static void printSVLogo() {
+        SeriousVote.getInstance().getLogger().info(CC.logo());
+    }
+
+    public static String logo() {
+        return "                                                                                                    \n" +
+                "                                                                       " + GREEN + "NN" + CYAN + "                          \n" +
+                "                                                                      " + GREEN + "ooo" + CYAN + "                           \n" +
+                "                                                                    " + GREEN + "NoooN" + CYAN + "                           \n" +
+                "                                                                   " + GREEN + "NoooN" + CYAN + "                            \n" +
+                "                                                                  " + GREEN + "ooooN" + CYAN + "                             \n" +
+                "     NNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNNN NNNNN  NNNNNNNNNNNNN" + GREEN + "ooo" + CYAN + "NNNN   NNNNN  NNNNNNNNNNNN     \n" +
+                "    NNNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNNN NNNNN  NNNNNNNNNNNNN" + GREEN + "oo" + CYAN + "NNNNN   NNNNN  NNNNNNNNNNNNN    \n" +
                 "    NNNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNNN NNNNN  NNNNNNNNNNNNNN NNNNN   NNNNN  NNNNNNNNNNNNN    \n" +
-                "    NNNNNN         NNNNN        NNNNNN NNNNNN NNNNN  NNNNN  "+GREEN+"No"+CYAN+"NNNNN NNNNN   NNNNN  NNNNN            \n" +
-                "    NNNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNNN NNNNN  NNNNN "+GREEN+"NooN"+CYAN+"NNNN NNNNN   NNNNN  NNNNNNNNNNNN     \n" +
-                "    NNNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNNN NNNNN  NNNNN"+GREEN+"NoooN"+CYAN+"NNNN NNNNN   NNNNN  NNNNNNNNNNNNN    \n" +
-                "    NNNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNNN NNNNN  NNNN"+GREEN+"oooooN"+CYAN+"NNNN NNNNN   NNNNN  NNNNNNNNNNNNN    \n" +
-                "     NNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNN  NNNNN  NNNN"+GREEN+"oooooN"+CYAN+"NNNN NNNNN   NNNNN  NNNNNNNNNNNNN    \n" +
-                "            NNNNN  NNNNN        NNNNNN NNNNNN NNNNN  NNNN"+GREEN+"oooN"+CYAN+"NNNNNN NNNNNN  NNNNN         NNNNNN    \n" +
-                "     NNNNNNNNNNNN  NNNNNNNNNNNN NNNNNN NNNNNN NNNNN  NNNNN"+GREEN+"ooN"+CYAN+"NNNNNN NNNNNNNNNNNNN  NNNNNNNNNNNNN    \n" +
+                "    NNNNNN         NNNNN        NNNNNN NNNNNN NNNNN  NNNNN  " + GREEN + "No" + CYAN + "NNNNN NNNNN   NNNNN  NNNNN            \n" +
+                "    NNNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNNN NNNNN  NNNNN " + GREEN + "NooN" + CYAN + "NNNN NNNNN   NNNNN  NNNNNNNNNNNN     \n" +
+                "    NNNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNNN NNNNN  NNNNN" + GREEN + "NoooN" + CYAN + "NNNN NNNNN   NNNNN  NNNNNNNNNNNNN    \n" +
+                "    NNNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNNN NNNNN  NNNN" + GREEN + "oooooN" + CYAN + "NNNN NNNNN   NNNNN  NNNNNNNNNNNNN    \n" +
+                "     NNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNN  NNNNN  NNNN" + GREEN + "oooooN" + CYAN + "NNNN NNNNN   NNNNN  NNNNNNNNNNNNN    \n" +
+                "            NNNNN  NNNNN        NNNNNN NNNNNN NNNNN  NNNN" + GREEN + "oooN" + CYAN + "NNNNNN NNNNNN  NNNNN         NNNNNN    \n" +
+                "     NNNNNNNNNNNN  NNNNNNNNNNNN NNNNNN NNNNNN NNNNN  NNNNN" + GREEN + "ooN" + CYAN + "NNNNNN NNNNNNNNNNNNN  NNNNNNNNNNNNN    \n" +
                 "    NNNNNNNNNNNNN  NNNNNNNNNNNN NNNNNN NNNNNN NNNNN  NNNNNNNNNNNNNN NNNNNNNNNNNNN  NNNNNNNNNNNNN    \n" +
-                "    NNNNNNNNNNNNN  NNNNNNNNNNNN NN"+GREEN+"NN"+CYAN+"NN NNNNNN NNNNN NNNNNNNNNNNNNNN NNNNNNNNNNNNN  NNNNNNNNNNNNN    \n" +
-                "     NNNNNNNNNNNN  NNNNNNNNNNNN N"+GREEN+"NooN"+CYAN+"  NNNNN  NNNNN"+GREEN+"NooooN"+CYAN+"NNNNNNNNN  NNNNNNNNNNNNN  NNNNNNNNNNNN     \n" +
-                "                                 "+GREEN+"NoooN            NoooooN"+CYAN+"                                           \n" +
-                "                                  "+GREEN+"oooooN          ooooN"+CYAN+"                                             \n" +
-                "                                  "+GREEN+"NooooooN       oooooN"+CYAN+"NNNNNNNNNNNN NNNNNNNNNNNNN NNNNNNNNNNNN      \n" +
-                "                                    "+GREEN+"NoooooN     NoooooN"+CYAN+"NNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNN      \n" +
-                "                                     "+GREEN+"Noooooo    ooooo"+CYAN+"NNNNNN   NNNNN     NNNNNN    NNNNNN            \n" +
-                "                                      "+GREEN+"Noooooo  ooooo"+CYAN+" NNNNNN   NNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
-                "                                       "+GREEN+"NoooooNNooooN"+CYAN+" NNNNNN   NNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
-                "                                        "+GREEN+"ooooooooooN"+CYAN+"  NNNNNN   NNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
-                "                                         "+GREEN+"ooooooooo"+CYAN+"   NNNNNN   NNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
-                "                                         "+GREEN+"NoooooooN"+CYAN+"   NNNNNN   NNNNN     NNNNNN    NNNNNN            \n" +
-                "                                          "+GREEN+"NoooooN"+CYAN+"    NNNNNNNNNNNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
-                "                                           "+GREEN+"ooooo"+CYAN+"     NNNNNNNNNNNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
-                "                                           "+GREEN+"NoooN"+CYAN+"     NNNNNNNNNNNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
-                "                                            "+GREEN+"ooo"+CYAN+"                                                     \n" +
-                "                                            "+GREEN+"NoN"+CYAN+"                                                     \n" +
-                "                                             "+GREEN+"o"+CYAN+"     \n";
+                "    NNNNNNNNNNNNN  NNNNNNNNNNNN NN" + GREEN + "NN" + CYAN + "NN NNNNNN NNNNN NNNNNNNNNNNNNNN NNNNNNNNNNNNN  NNNNNNNNNNNNN    \n" +
+                "     NNNNNNNNNNNN  NNNNNNNNNNNN N" + GREEN + "NooN" + CYAN + "  NNNNN  NNNNN" + GREEN + "NooooN" + CYAN + "NNNNNNNNN  NNNNNNNNNNNNN  NNNNNNNNNNNN     \n" +
+                "                                 " + GREEN + "NoooN            NoooooN" + CYAN + "                                           \n" +
+                "                                  " + GREEN + "oooooN          ooooN" + CYAN + "                                             \n" +
+                "                                  " + GREEN + "NooooooN       oooooN" + CYAN + "NNNNNNNNNNNN NNNNNNNNNNNNN NNNNNNNNNNNN      \n" +
+                "                                    " + GREEN + "NoooooN     NoooooN" + CYAN + "NNNNNNNNNNNN  NNNNNNNNNNNN NNNNNNNNNNNN      \n" +
+                "                                     " + GREEN + "Noooooo    ooooo" + CYAN + "NNNNNN   NNNNN     NNNNNN    NNNNNN            \n" +
+                "                                      " + GREEN + "Noooooo  ooooo" + CYAN + " NNNNNN   NNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
+                "                                       " + GREEN + "NoooooNNooooN" + CYAN + " NNNNNN   NNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
+                "                                        " + GREEN + "ooooooooooN" + CYAN + "  NNNNNN   NNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
+                "                                         " + GREEN + "ooooooooo" + CYAN + "   NNNNNN   NNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
+                "                                         " + GREEN + "NoooooooN" + CYAN + "   NNNNNN   NNNNN     NNNNNN    NNNNNN            \n" +
+                "                                          " + GREEN + "NoooooN" + CYAN + "    NNNNNNNNNNNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
+                "                                           " + GREEN + "ooooo" + CYAN + "     NNNNNNNNNNNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
+                "                                           " + GREEN + "NoooN" + CYAN + "     NNNNNNNNNNNNNN     NNNNNN    NNNNNNNNNNNN      \n" +
+                "                                            " + GREEN + "ooo" + CYAN + "                                                     \n" +
+                "                                            " + GREEN + "NoN" + CYAN + "                                                     \n" +
+                "                                             " + GREEN + "o" + CYAN + "     \n";
 
     }
 
