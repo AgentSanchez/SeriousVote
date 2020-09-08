@@ -184,8 +184,6 @@ public class U {
         String sepB = " and ";
         int counter = 0;
         Iterator<String> it = setOfWords.iterator();
-        U.debug(CC.RED + "Making List   " + setOfWords.size());
-        U.debug(setOfWords);
         while (it.hasNext()) {
             if (counter > 0) {
                 if (counter == setOfWords.size() - 1) {
