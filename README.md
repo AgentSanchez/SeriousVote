@@ -20,11 +20,6 @@ Oh....So you still need help? Check out the discord, I'll help you figure it out
 [SpongeForge/Vanilla](https://www.spongepowered.org/downloads)
 [NuVotifier - Official!](https://github.com/NuVotifier/NuVotifier/releases) <-- If this is not set up right...SV will not work :frowning: You can also use one of the custom versions below.
 
-[Serious-Nuvotifer (Unofficial)](https://drive.google.com/file/d/0B2LjecPmLjo0ZmtDUm4xRm9KUEU/view?usp=sharing) 
-Allows for the use of /nvreload, You no longer need to restart your server Server to make changes. 
-[Serious-Nuvotifer API-7 (Unofficial)](https://drive.google.com/file/d/0B2LjecPmLjo0aTlMak5lWnJ2MVE/view?usp=sharing)
-Same as the previous except works on API-7
-
 Check us out on Ore! [To Ore](https://ore.spongepowered.org/curscascis/SeriousVote)
 
 I often get asked the same questions with the same exact answers and I wanted to make a quick guide so we can save some time in the process. I don’t always have time to answer questions, and I don’t want anyone to feel like they’re being ignored. So here we go.   
@@ -38,7 +33,7 @@ This one is pretty easy, run a test vote to your server. First you will need to 
 To enable debug mode: 
 1. Go to your NuVotifier config folder. Edit the **Config.yml**. 
 2. You are going to set the line with debug to `debug: true`. 
-3. Save the file and restart your server. _(If you decided to use Serious-NuVotifier you can just do `/nvreload`)_    
+3. Save the file and run `/nvreload`
 
 
 Debug mode should now be enabled and you should see more output on your console. After you have that set up we will be firing a test vote to the server.
