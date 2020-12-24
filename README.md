@@ -43,7 +43,7 @@ I like using https://mctools.org/votifier-tester just for its simplicity but I h
 If you get output like the below, it means your public key is incorrect. The easiest way to fix this is to delete your **/rsa** folder and restart the server, it will generate new keys. Make sure to copy them exactly with no space before or after!   
 ![Example of server with broken rsa keys](https://i.imgur.com/97RtDUZ.png)
 
-If you get no output at all, it means your network configuration is incorrect! This part is ***EXTREMELY*** Important. Here's a list of things you should look out for.
+If you get ***no output*** at all, it means your network configuration is incorrect! This part is ***EXTREMELY*** Important. Here's a list of things you should look out for.
 1. `host` Should either be 0.0.0.0 or 127.0.0.1 under almost all circumstances, unless you have a specific networking infrastructure and you know what you are doing, in which case it's unlikely you are looking for help here. 
 2. `port` This one is usually the biggest problem because most people don't use the correct port.
     1. If you are hosting from home, you can use any port available on your computer, but you must _Port forward_ that port to your computer, otherwise you won't get any votes.
