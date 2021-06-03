@@ -46,7 +46,6 @@ dependencies {
 shadowJar {
 
     dependencies {
-        //Connection Pooling
         include(dependency("org.bstats:bstats-sponge:1.7"))
         include(dependency("com.zaxxer:HikariCP:3.4.2"))
         include(dependency("mysql::"))
