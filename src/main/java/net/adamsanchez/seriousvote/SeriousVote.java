@@ -1,9 +1,8 @@
 package net.adamsanchez.seriousvote;
 
 import com.google.inject.Inject;
-import com.vexsoftware.votifier.model.Vote;
-import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
+import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
 import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;

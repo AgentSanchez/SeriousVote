@@ -1,20 +1,16 @@
 plugins {
-    id 'org.spongepowered.plugin' version '0.6'
+    id 'org.spongepowered.plugin' version '0.9.0'
     id "com.github.johnrengelman.shadow" version "2.0.1"
 }
 
 group 'SeriousVote'
-version '4.8.9'
-description 'Seriously We Have TO VOTE'
+version '5.0'
+description 'More than Just a Vote'
 
 
 repositories {
     mavenCentral()
-    maven {
-        name = 'sponge'
-        url = 'http://repo.spongepowered.org/maven'
-        url 'https://jitpack.io'
-    }
+    jcenter()
 
     flatDir {
         dirs 'lib'
@@ -24,17 +20,26 @@ repositories {
         name = 'CodeMC'
         url = 'https://repo.codemc.org/repository/maven-public'
     }
+
+    maven {
+        url 'https://jitpack.io'
+    }
 }
 
 dependencies {
-    compile 'org.bstats:bstats-sponge:1.7'
+
     compile 'org.spongepowered:spongeapi:5.0.0'
     compile 'org.spongepowered:spongeapi:6.0.0'
-    compile 'com.zaxxer:HikariCP:3.4.2'
+    compile 'org.spongepowered:spongeapi:7.0.0'
+
     compile 'com.github.rojo8399:PlaceholderAPI:master-SNAPSHOT'
+    compileOnly 'com.github.nuvotifier.nuvotifier:nuvotifier-sponge:2.6.0'
+    compile 'org.bstats:bstats-sponge:1.7'
+
+    compile 'com.zaxxer:HikariCP:3.4.2'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.8-dmr'
     compile 'org.mariadb.jdbc:mariadb-java-client:2.5.4'
-    compile fileTree(dir: 'lib', include: '*.jar')
+
     testCompile 'junit:junit:4.12'
 }
 
