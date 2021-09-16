@@ -24,6 +24,8 @@ public class VoteSpreeSystem {
     String msgYear = "{player} Has voted for a year straight!!! He's earned a prize!";
     String msgMonth = "{player} Has voted for a month straight!!! He's earned a prize!";
     String msgWeek = "{player} Has voted for a week straight!!! He's earned a prize!";
+    List<Integer> milestoneValues = new LinkedList<>();
+    List<Integer> recurringMilestoneValues = new LinkedList<>();
     SeriousVote sv;
     ConfigurationNode rootNode;
 
@@ -39,6 +41,19 @@ public class VoteSpreeSystem {
         db = new Database();
         db.createPlayerTable();
         rootNode = node;
+
+        //Loads the milestones values so that later they can be easily searched without sorting
+        for (String milestoneValue : rootNode.getNode("config", "milestones", "records").getChildrenList().stream()
+                .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+            if (rootNode.getNode("config", "milestones", "records", milestoneValue, "recurring").getBoolean()) {
+                recurringMilestoneValues.add(Integer.parseInt(milestoneValue));
+            } else {
+                milestoneValues.add(Integer.parseInt(milestoneValue));
+            }
+        }
+
+        Collections.sort(milestoneValues);
+        Collections.sort(recurringMilestoneValues);
     }
 
     public boolean updateRecord(String playerIdentifier, int totalVotes, int voteSpree, Date lastVote) {
@@ -279,6 +294,22 @@ public class VoteSpreeSystem {
         }
         //System.out.println("     -RESULT: " + CC.GREEN + leastDays + CC.RESET);
         return leastDays;
+    }
+
+    public int getRemainingMilestoneVotes(int currentVotes) {
+        List<Integer> mathList = new LinkedList<>();
+        for (Integer ix : recurringMilestoneValues) {
+            // Quotient plus 1 times the divisor to get the next least multiple
+            mathList.add(((int) Math.floor((currentVotes / ix)) + 1) * ix);
+        }
+        mathList.addAll(milestoneValues);
+        Collections.sort(mathList);
+        for (Integer ix : mathList) {
+            if (currentVotes < ix) {
+                return ix - currentVotes;
+            }
+        }
+        return -1;
     }
 
     /**
