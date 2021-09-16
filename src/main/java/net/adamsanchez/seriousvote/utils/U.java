@@ -171,7 +171,7 @@ public class U {
 
     //Helper to extract a permission var from a command and see if a user has access to it
     //returns false if there is a permission var present and the player does not have permission.
-    public String parsePerms(String string, String username) {
+    public static String parsePerms(String string, String username) {
         String pre = "{{perm:";
         String post = ":}}";
         String cleanString = string;
