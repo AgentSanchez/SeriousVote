@@ -100,7 +100,6 @@ public class SeriousVote {
     ///////////////////////////////////////////////////////
     boolean milestonesEnabled = false, dailiesEnabled = false;
     private VoteSpreeSystem voteSpreeSystem;
-    public List<String> monthlySet, yearlySet, weeklySet;
     int[] milestonesUsed;
     ///////////////////////////////////////////////////////
     public String databaseType, databaseName, databaseHostname, databasePort, databasePrefix, databaseUsername, databasePassword, minIdleConnections, maxActiveConnections;
@@ -248,11 +247,7 @@ public class SeriousVote {
         reloadDB();
 
         /////////Load Up VoteSpreeSystem/////////
-        monthlySet = CM.getMonthlySetCommands(mainCfgNode);
-        yearlySet = CM.getYearlySetCommands(mainCfgNode);
-        weeklySet = CM.getWeeklySetCommands(mainCfgNode);
         milestonesUsed = CM.getEnabledMilestones(mainCfgNode);
-
 
         return true;
     }

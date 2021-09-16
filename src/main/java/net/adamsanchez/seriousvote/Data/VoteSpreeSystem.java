@@ -12,8 +12,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -135,11 +134,14 @@ public class VoteSpreeSystem {
                         || (totalVotes % x == 0 && getMilestoneNode(totalVotes).getNode("recurring").getBoolean())
         )) {
             String chosenRewardTable = TableManager.chooseTable(rootNode.getNode("config", "milestones", "records", "" + totalVotes, "random"));
-            
+
             //Choose The Random Rewards from the chosen table
+            List<String> rewardNames = new LinkedList<>();
             if (!chosenRewardTable.equals("")) {
                 LootTable chosenTable = new LootTable(chosenRewardTable, rootNode);
-                for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
+                String chosenReward = chosenTable.chooseReward();
+                rewardNames.add(chosenReward);
+                for (String command : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
@@ -152,7 +154,7 @@ public class VoteSpreeSystem {
             //Send the Commands to Be Run
             LootTools.giveReward(commandList);
             //Now Send a Public Message
-            U.bcast(rootNode.getNode("config", "milestones", "records", "" + totalVotes, "message").getString(), playerName);
+            OutputHelper.broadCastMessage(getMilestoneNode(totalVotes).getNode("message").getString(), playerName, U.listMaker(rewardNames));
 
         }
 
@@ -164,48 +166,39 @@ public class VoteSpreeSystem {
 
     public void checkForDailies(PlayerRecord record, String playerName) {
         List<String> commandList = new ArrayList<String>();
-        //yearly
         if (U.isPlayerOnline(playerName)) {
+            String chosenReward = "";
+            boolean spreeHit = false;
+            String spreeName = "";
+            List<String> rewardNames = new LinkedList<>();
             if (record.getVoteSpree() >= 365 && record.getVoteSpree() % 365 == 0) {
-                LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", "yearly", "random")), rootNode);
-                //Choose The Random Rewards from the chosen table
-                for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
-                        .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                    commandList.add(OutputHelper.parseVariables(command, playerName));
-                }
-                for (String command : sv.yearlySet) {
-                    commandList.add(OutputHelper.parseVariables(command, playerName));
-                }
-                LootTools.giveReward(commandList);
-                U.bcast(rootNode.getNode("config", "dailies", "yearly", "message").getString(), playerName);
-
-
+                spreeHit = true;
+                spreeName = "yearly";
             } else if (record.getVoteSpree() >= 30 && record.getVoteSpree() % 30 == 0) {
-                LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", "monthly", "random")), rootNode);
-                //Choose The Random Rewards from the chosen table
-                for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
-                        .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                    commandList.add(OutputHelper.parseVariables(command, playerName));
-                }
-                for (String command : sv.monthlySet) {
-                    commandList.add(OutputHelper.parseVariables(command, playerName));
-                }
-                LootTools.giveReward(commandList);
-                U.bcast(rootNode.getNode("config", "dailies", "monthly", "message").getString(), playerName);
-
+                spreeHit = true;
+                spreeName = "monthly";
             } else if (record.getVoteSpree() >= 7 && record.getVoteSpree() % 7 == 0) {
-                LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", "weekly", "random")), rootNode);
+                spreeHit = true;
+                spreeName = "weekly";
+            }
+
+            if (spreeHit) {
+                LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", spreeName, "random")), rootNode);
+                chosenReward = chosenTable.chooseReward();
                 U.info("Chosing from Table: " + chosenTable.getTableName());
                 //Choose The Random Rewards from the chosen table
-                for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
+                for (String command : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
-                for (String command : sv.weeklySet) {
+                //Add in the set commands
+                for (String command : CM.getDailiesSetCommands(rootNode, spreeName)) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
                 LootTools.giveReward(commandList);
-                U.bcast(rootNode.getNode("config", "dailies", "weekly", "message").getString(), playerName);
+                rewardNames.add(chosenReward);
+                U.bcast(rootNode.getNode("config", "dailies", spreeName, "message").getString(), playerName);
+                OutputHelper.broadCastMessage(rootNode.getNode("config", "dailies", spreeName, "message").getString(), playerName, U.listMaker(rewardNames));
             }
 
             int leastDays = getRemainingDays(record.getVoteSpree());

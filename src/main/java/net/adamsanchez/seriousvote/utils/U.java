@@ -33,8 +33,9 @@ public class U {
             U.debug(prefix + " " + key);
         }
     }
-    public static void debug(Set<String> setOfWords) {
-        for (String s: setOfWords) {
+
+    public static void debug(Collection<String> stringCollection) {
+        for (String s : stringCollection) {
             U.debug(s);
         }
     }
@@ -177,18 +178,18 @@ public class U {
      *
      * @return
      */
-    public static String listMaker(Set<String> setOfWords) {
-        if (setOfWords.size() < 1) return "";
+    public static String listMaker(Collection<String> wordCollection) {
+        if (wordCollection.size() < 1) return "";
         StringBuilder list = new StringBuilder();
         String sepA = ", ";
         String sepB = " and ";
         int counter = 0;
-        Iterator<String> it = setOfWords.iterator();
-        U.debug(CC.RED + "Making List   " + setOfWords.size());
-        U.debug(setOfWords);
+        Iterator<String> it = wordCollection.iterator();
+        U.debug(CC.RED + "Making List   " + wordCollection.size());
+        U.debug(wordCollection);
         while (it.hasNext()) {
             if (counter > 0) {
-                if (counter == setOfWords.size() - 1) {
+                if (counter == wordCollection.size() - 1) {
                     list.append(sepB);
                 } else {
                     list.append(sepA);
