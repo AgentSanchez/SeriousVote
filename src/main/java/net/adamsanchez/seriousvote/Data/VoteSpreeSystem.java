@@ -6,6 +6,7 @@ import net.adamsanchez.seriousvote.utils.*;
 import ninja.leaping.configurate.ConfigurationNode;
 
 
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -62,21 +63,21 @@ public class VoteSpreeSystem {
         return record;
     }
 
-    public void updateAllPlayerID(){
+    public void updateAllPlayerID() {
         ArrayList<PlayerRecord> recordList = db.getAllRecords();
         U.debug("Retrieved " + recordList.size() + " records from storage....");
         U.debug(CC.LINE);
         int numRecordsUpdated = 0, numAlreadyUpdated = 0;
-        for(PlayerRecord record : recordList) {
+        for (PlayerRecord record : recordList) {
             //If already name...
-            if(!U.isUUID(record.getPlayerIdentifier())){
+            if (!U.isUUID(record.getPlayerIdentifier())) {
                 U.debug(CC.YELLOW + "Skipping record for player: " + record.getPlayerIdentifier() + ". Already Converted.");
                 numAlreadyUpdated += 1;
                 continue;
             }
             U.debug("Converting player with ID: " + record.getPlayerIdentifier());
             String newID = U.convertIDToName(record.getPlayerIdentifier());
-            if(newID != null && newID != ""){
+            if (newID != null && newID != "") {
                 PlayerRecord newRecord = new PlayerRecord(newID, record.getTotalVotes(), record.getVoteSpree(), record.getLastVote());
                 db.updatePlayer(newRecord);
                 U.debug("New player with new ID " + newID + " added...");
@@ -88,20 +89,20 @@ public class VoteSpreeSystem {
             }
         }
         U.debug(CC.LINE);
-        U.debug(CC.CYAN + "Updated " + numRecordsUpdated  + "/" + recordList.size() + " records. " + numAlreadyUpdated + " already updated.");
+        U.debug(CC.CYAN + "Updated " + numRecordsUpdated + "/" + recordList.size() + " records. " + numAlreadyUpdated + " already updated.");
     }
 
-    public void changePlayerID(PlayerRecord oldRecord, PlayerRecord newRecord){
+    public void changePlayerID(PlayerRecord oldRecord, PlayerRecord newRecord) {
         updateRecord(newRecord);
         U.debug(CC.GREEN + "Record with ID " + newRecord.getPlayerIdentifier() + " added...");
         deleteRecord(oldRecord);
         U.debug(CC.RED + "Old record with ID " + oldRecord.getPlayerIdentifier() + " deleted.");
     }
 
-    public void changePlayerID(String oldPlayerIdentifier, String newPlayerIdentifier){
+    public void changePlayerID(String oldPlayerIdentifier, String newPlayerIdentifier) {
         PlayerRecord oldRecord, newRecord;
         oldRecord = db.getPlayer(oldPlayerIdentifier);
-        if(oldRecord != null){
+        if (oldRecord != null) {
             newRecord = new PlayerRecord(newPlayerIdentifier, oldRecord.getTotalVotes(), oldRecord.getVoteSpree(), oldRecord.getLastVote());
             changePlayerID(oldRecord, newRecord);
         } else {
@@ -110,13 +111,14 @@ public class VoteSpreeSystem {
 
     }
 
-    public void deleteRecord(PlayerRecord record){
+    public void deleteRecord(PlayerRecord record) {
         db.deletePlayer(record.getPlayerIdentifier());
     }
-    public PlayerRecord getRecordByRank(int rank){
+
+    public PlayerRecord getRecordByRank(int rank) {
         PlayerRecord record = db.getRecordByRank(rank);
         U.debug("Request record for player in rank " + rank + ". Identifier: " + record.getPlayerIdentifier() + " Votes: " + record.getTotalVotes());
-        return record == null ? null : record;
+        return record;
     }
 
 
@@ -126,13 +128,16 @@ public class VoteSpreeSystem {
         List<String> commandList = new ArrayList<String>();
         if (CM.getEnabledMilestones(rootNode).length < 1)
             U.error("You have no enabled custom milestones or your config is broken :(");
-
-        if (IntStream.of(CM.getEnabledMilestones(rootNode)).anyMatch(x -> x == record.getTotalVotes())) {
-            String chosenRewardTable = TableManager.chooseTable(rootNode.getNode("config", "milestones", "records", "" + record.getTotalVotes(), "random"));
-            //TODO Check to see if that specific number provides any random rewards before trying to give them out.
-
+        int totalVotes = record.getTotalVotes();
+        // Check for both a vote number and a multiple of a recurring vote number
+        if (IntStream.of(CM.getEnabledMilestones(rootNode)).anyMatch(
+                x -> (x == totalVotes)
+                        || (totalVotes % x == 0 && getMilestoneNode(totalVotes).getNode("recurring").getBoolean())
+        )) {
+            String chosenRewardTable = TableManager.chooseTable(rootNode.getNode("config", "milestones", "records", "" + totalVotes, "random"));
+            
             //Choose The Random Rewards from the chosen table
-            if (chosenRewardTable != "") {
+            if (!chosenRewardTable.equals("")) {
                 LootTable chosenTable = new LootTable(chosenRewardTable, rootNode);
                 for (String command : rootNode.getNode("config", "Rewards", chosenTable.chooseReward(), "rewards").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
@@ -140,17 +145,21 @@ public class VoteSpreeSystem {
                 }
             }
             //Add The Set Commands
-            for (String command : rootNode.getNode("config", "milestones", "records", "" + record.getTotalVotes(), "set").getChildrenList().stream()
+            for (String command : rootNode.getNode("config", "milestones", "records", "" + totalVotes, "set").getChildrenList().stream()
                     .map(ConfigurationNode::getString).collect(Collectors.toList())) {
                 commandList.add(OutputHelper.parseVariables(command, playerName));
             }
             //Send the Commands to Be Run
             LootTools.giveReward(commandList);
             //Now Send a Public Message
-            U.bcast(rootNode.getNode("config", "milestones", "records", "" + record.getTotalVotes(), "message").getString(), playerName);
+            U.bcast(rootNode.getNode("config", "milestones", "records", "" + totalVotes, "message").getString(), playerName);
 
         }
 
+    }
+
+    public ConfigurationNode getMilestoneNode(int totalVotes) {
+        return rootNode.getNode("config", "milestones", "records", "" + totalVotes);
     }
 
     public void checkForDailies(PlayerRecord record, String playerName) {
@@ -282,16 +291,18 @@ public class VoteSpreeSystem {
     /**
      * Resets all player votes to 0;
      */
-    public void resetPlayerVotes(){
+    public void resetPlayerVotes() {
         db.resetPlayers();
     }
-    public ArrayList<PlayerRecord> getAllRecords(){
+
+    public ArrayList<PlayerRecord> getAllRecords() {
         return db.getAllRecords();
     }
 
-    public int getNumberOfVoters(){
+    public int getNumberOfVoters() {
         return db.getCount();
     }
+
     public void reloadDB() {
         this.db = new Database();
     }
