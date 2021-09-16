@@ -1,5 +1,6 @@
 package net.adamsanchez.seriousvote.integration;
 
+import me.rojo8399.placeholderapi.Observer;
 import me.rojo8399.placeholderapi.Placeholder;
 import me.rojo8399.placeholderapi.PlaceholderService;
 import me.rojo8399.placeholderapi.Token;
@@ -9,8 +10,11 @@ import net.adamsanchez.seriousvote.utils.CC;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
+
+import javax.annotation.Nullable;
 
 public class PlaceHolders {
 
@@ -48,15 +52,18 @@ public class PlaceHolders {
     }
 
     @Placeholder(id = "sv-player-votes")
-    public String playerTotalVotes(@Token String playerName) {
-        U.debug("Attempting to retrieve player " + playerName + "'s record...");
+    public String playerTotalVotes(@Token String playerNameToken, @Observer @Nullable Player playerObserver) {
+        U.debug("Attempting to retrieve player " + playerNameToken + "'s record...");
         if (!SeriousVote.getInstance().usingVoteSpreeSystem()) {
             U.debug("MILESTONES NOT ENABLED - CANNOT RETRIEVE DATA");
             return "MILESTONES NOT ENABLED";
         }
-        if (playerName != null) {
-            return String.valueOf(SeriousVoteAPI.getPlayerTotalVotes(playerName));
+        if (playerNameToken != null && !playerNameToken.isEmpty() && playerNameToken != "") {
+            return String.valueOf(SeriousVoteAPI.getPlayerTotalVotes(playerNameToken));
+        } else if (playerObserver != null){
+            return String.valueOf(SeriousVoteAPI.getPlayerTotalVotes(playerObserver.getName()));
         }
+
         return String.valueOf(0);
     }
 
