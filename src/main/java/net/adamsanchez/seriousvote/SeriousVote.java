@@ -116,7 +116,6 @@ public class SeriousVote {
     int numRandRewards;
     int minRandRewards;
     int maxRandRewards;
-    List<String> setCommands;
     String publicMessage;
     String publicOfflineMessage;
     boolean debug = false;
@@ -205,7 +204,6 @@ public class SeriousVote {
         messageOffline = CM.getMessageOffline(mainCfgNode);
         numRandRewards = updateRewardsNumbers(mainCfgNode);
         updateLoot(mainCfgNode);
-        setCommands = CM.getSetCommands(mainCfgNode);
         U.debug("Here's your commands");
         for (String ix : CM.getRandomCommands(mainCfgNode)) {
             U.debug(ix);
@@ -455,8 +453,8 @@ public class SeriousVote {
         //Workflow Level 4
         VoteRequest workingRequest = vr;
         U.debug("Adding SetCommands to the process queue");
-        for (String setCommand : setCommands) {
-            workingRequest.addReward(setCommand);
+        for (String setCommand : CM.getSetCommands(mainCfgNode)) {
+            workingRequest.addReward(OutputHelper.parseVariables(setCommand, workingRequest.getUsername()));
         }
         if (!lootTablesAvailable || randomDisabled) {
             workingRequest.setVoteStatus(Status.REWARDS_GATHERED);
