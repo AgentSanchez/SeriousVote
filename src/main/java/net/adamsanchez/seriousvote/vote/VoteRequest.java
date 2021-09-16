@@ -17,12 +17,15 @@ public class VoteRequest {
     private Status voteStatus = Status.WAITING;
     private List<String> rewardNames = new LinkedList<String>();
 
-    public VoteRequest(){}
-    public VoteRequest(Vote v){
+    public VoteRequest() {
+    }
+
+    public VoteRequest(Vote v) {
         username = v.getUsername();
         serviceName = v.getServiceName();
         timeStamp = v.getTimeStamp();
     }
+
     public String getServiceName() {
         return serviceName;
     }
@@ -58,7 +61,8 @@ public class VoteRequest {
 
 
     public void addReward(String command) {
-        rewardStore.add(command);
+        if (!command.trim().isEmpty())
+            rewardStore.add(command);
     }
 
     public List<String> getRewards() {
