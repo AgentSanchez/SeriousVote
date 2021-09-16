@@ -178,7 +178,7 @@ public class U {
         if (string.startsWith(pre) && string.contains(post)) {
             String perm = string.substring(7, string.indexOf(post));
             U.info("substring = " + perm);
-            cleanString = pre + perm + post;
+            cleanString = string.replace(pre + perm + post, "");
             return SeriousVote.getUserStorage().get().get(username).get().hasPermission("seriousvote.user." + cleanString) ?
                     cleanString : "";
         }
