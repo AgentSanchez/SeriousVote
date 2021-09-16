@@ -9,13 +9,13 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 public class OutputHelper {
 
     public static boolean broadCastMessage(String message, String username) {
-        if (message == null || message.isEmpty() || message.trim() == "" ) return false;
-        if(PlaceHolders.apiLoaded){
-        SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(
-        PlaceHolders.getPapi().replacePlaceholders(
-                parseVariables(message, username),
-                SeriousVote.getPublicGame().getServer().getConsole(),
-                SeriousVote.getPublicGame().getServer().getConsole()));
+        if (message == null || message.isEmpty() || message.trim() == "") return false;
+        if (PlaceHolders.apiLoaded) {
+            SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(
+                    PlaceHolders.getPapi().replacePlaceholders(
+                            parseVariables(message, username),
+                            SeriousVote.getPublicGame().getServer().getConsole(),
+                            SeriousVote.getPublicGame().getServer().getConsole()));
         } else {
             SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(strToText(parseVariables(message, username)));
         }
@@ -23,9 +23,9 @@ public class OutputHelper {
     }
 
     public static boolean broadCastMessage(String message, String username, String currentRewards) {
-        if(!U.isPlayerOnline(username)) return false;
-        if (message == null || message.isEmpty() || message.trim() == "" ) return false;
-        if(PlaceHolders.apiLoaded){
+        if (!U.isPlayerOnline(username)) return false;
+        if (message == null || message.isEmpty() || message.trim() == "") return false;
+        if (PlaceHolders.apiLoaded) {
             SeriousVote.getPublicGame().getServer().getBroadcastChannel().send(
                     PlaceHolders.getPapi().replacePlaceholders(
                             parseVariables(message, username, currentRewards),
@@ -38,7 +38,7 @@ public class OutputHelper {
     }
 
     public static String parseVariables(String string, String username) {
-        return string.replace("{player}", username);
+        return U.parsePerms(string, username).replace("{player}", username);
     }
 
     public static String parseVariables(String string, String username, String currentRewards) {
@@ -48,7 +48,7 @@ public class OutputHelper {
         return string.replace("{player}", username).replace("{rewards}", currentRewards);
     }
 
-    public static Text strToText(String string){
+    public static Text strToText(String string) {
         return TextSerializers.FORMATTING_CODE.deserialize(string);
     }
 }
