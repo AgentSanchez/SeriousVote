@@ -172,7 +172,7 @@ public class VoteSpreeSystem {
             OutputHelper.broadCastMessage(getMilestoneNode(totalVotes).getNode("message").getString(), playerName, U.listMaker(rewardNames));
             if (U.isPlayerOnline(playerName)) {
                 Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
-                player.sendMessage(Text.of("You have " + getRemainingDays(totalVotes) + " left until your next milestone!!").toBuilder().color(TextColors.GOLD).build());
+                player.sendMessage(Text.of("You have " + getRemainingMilestoneVotes(totalVotes) + " left until your next milestone!!").toBuilder().color(TextColors.GOLD).build());
             }
 
         }
