@@ -29,6 +29,10 @@ public class CM {
         return node.getNode("config", "debug-mode").getBoolean();
     }
 
+    public static boolean getStackRewards(ConfigurationNode node){
+        return node.getNode("config", "stack-reward-names").getBoolean();
+    }
+
     public static List<String> getDailiesSetCommands(ConfigurationNode node, String dailyName) {
         return node.getNode("config", "dailies", dailyName, "set").getChildrenList().stream()
                 .map(ConfigurationNode::getString).collect(Collectors.toList());

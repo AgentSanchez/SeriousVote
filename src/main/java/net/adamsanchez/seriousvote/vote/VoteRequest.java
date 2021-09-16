@@ -1,6 +1,8 @@
 package net.adamsanchez.seriousvote.vote;
 
 import com.vexsoftware.votifier.model.Vote;
+import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.utils.CM;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -56,7 +58,14 @@ public class VoteRequest {
     }
 
     public void addRewardName(String name) {
-        this.rewardNames.add(name);
+        if (!CM.getStackRewards(SeriousVote.getInstance().getMainCfgNode())) {
+            this.rewardNames.add(name);
+        } else {
+            if (!this.rewardNames.contains(name)) {
+                this.rewardNames.add(name);
+            }
+        }
+
     }
 
 
