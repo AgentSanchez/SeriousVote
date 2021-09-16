@@ -170,6 +170,10 @@ public class VoteSpreeSystem {
             LootTools.giveReward(commandList);
             //Now Send a Public Message
             OutputHelper.broadCastMessage(getMilestoneNode(totalVotes).getNode("message").getString(), playerName, U.listMaker(rewardNames));
+            if (U.isPlayerOnline(playerName)) {
+                Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
+                player.sendMessage(Text.of("You have " + getRemainingDays(totalVotes) + " left until your next milestone!!").toBuilder().color(TextColors.GOLD).build());
+            }
 
         }
 
