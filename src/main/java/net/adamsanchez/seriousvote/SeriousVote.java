@@ -7,6 +7,7 @@ import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
+import net.adamsanchez.seriousvote.events.VoteProcessedEvent;
 import net.adamsanchez.seriousvote.integration.PlaceHolders;
 import net.adamsanchez.seriousvote.loot.LootTable;
 import net.adamsanchez.seriousvote.utils.*;
@@ -18,6 +19,9 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.EventContext;
+import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
@@ -129,6 +133,7 @@ public class SeriousVote {
     String[][] mainRewardTables;
     private int chanceTotal, chanceMax, chanceMin = 0;
     private int[] chanceMap;
+    EventContext svEventContext;
 
     @Listener
     public void onInitialization(GamePreInitializationEvent event) {
@@ -142,7 +147,7 @@ public class SeriousVote {
         OfflineHandler.initOfflineStorage();
         CM.initConfig(defaultConfig);
         reloadConfigs();
-
+        svEventContext = EventContext.builder().add(EventContextKeys.PLUGIN, plugin).build();
     }
 
     @Listener
@@ -328,7 +333,7 @@ public class SeriousVote {
         for (VoteRequest vr : localQueue) {
             VoteRequest workingRequest = vr;
             workingRequest.setVoteStatus(Status.IN_PROCESS);
-            ///NEW CODE ////
+
             //Get Online Status
             workingRequest = workflowOnlineState(workingRequest);
 
@@ -379,6 +384,8 @@ public class SeriousVote {
                 }
             }
             workingRequest.setVoteStatus(Status.COMPLETED);
+            VoteProcessedEvent vpe = new VoteProcessedEvent(workingRequest, Cause.of(svEventContext, plugin));
+            Sponge.getEventManager().post(vpe);
             processedVoteQueue.add(workingRequest);
         }
         executeCommands();
@@ -420,7 +427,7 @@ public class SeriousVote {
             }
             //Collect all the reward names into one to prevent spam.
             Set<String> rewardNames = new HashSet<String>();
-            for(VoteRequest vr: voteCollection){
+            for (VoteRequest vr : voteCollection) {
                 rewardNames.addAll(vr.getRewardNames());
             }
 
