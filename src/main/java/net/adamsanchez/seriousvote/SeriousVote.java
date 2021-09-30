@@ -325,11 +325,7 @@ public class SeriousVote {
             localQueue.addAll(voteQueue);
             voteQueue.clear();
         }
-
-        //TODO Determine validity of vote -> if offline / online - if found in system
-        //  Separate out the loot gathering code (command making)
-        //  Separate out Online checking and add state
-
+        
         for (VoteRequest vr : localQueue) {
             VoteRequest workingRequest = vr;
             workingRequest.setVoteStatus(Status.IN_PROCESS);
