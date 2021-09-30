@@ -43,12 +43,11 @@ public class VoteSpreeSystem {
         rootNode = node;
 
         //Loads the milestones values so that later they can be easily searched without sorting
-        for (String milestoneValue : rootNode.getNode("config", "milestones", "records").getChildrenList().stream()
-                .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-            if (rootNode.getNode("config", "milestones", "records", milestoneValue, "recurring").getBoolean()) {
-                recurringMilestoneValues.add(Integer.parseInt(milestoneValue));
+        for (Integer i : CM.getEnabledMilestones(rootNode)) {
+            if (getMilestoneNode(i).getNode("recurring").getBoolean()) {
+                recurringMilestoneValues.add(i);
             } else {
-                milestoneValues.add(Integer.parseInt(milestoneValue));
+                milestoneValues.add(i);
             }
         }
 
@@ -143,43 +142,44 @@ public class VoteSpreeSystem {
         if (CM.getEnabledMilestones(rootNode).length < 1)
             U.error("You have no enabled custom milestones or your config is broken :(");
         int totalVotes = record.getTotalVotes();
-        // Check for both a vote number and a multiple of a recurring vote number
-        if (IntStream.of(CM.getEnabledMilestones(rootNode)).anyMatch(
-                x -> (x == totalVotes)
-                        || (totalVotes % x == 0 && getMilestoneNode(totalVotes).getNode("recurring").getBoolean())
-        )) {
-            String chosenRewardTable = TableManager.chooseTable(rootNode.getNode("config", "milestones", "records", "" + totalVotes, "random"));
+        // Check for both a vote number and a multiple of a recurring vote number from the ENABLED list
+        for (Integer ix : CM.getEnabledMilestones(rootNode)) {
+            if (ix == totalVotes
+                    | (totalVotes % ix == 0 && getMilestoneNode(ix).getNode("recurring").getBoolean())) {
 
-            //Choose The Random Rewards from the chosen table
-            List<String> rewardNames = new LinkedList<>();
-            if (!chosenRewardTable.equals("")) {
-                LootTable chosenTable = new LootTable(chosenRewardTable, rootNode);
-                String chosenReward = chosenTable.chooseReward();
-                rewardNames.add(chosenReward);
-                for (String command : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
+                U.debug(CC.YELLOW + "Milestone found");
+                String chosenRewardTable = TableManager.chooseTable(rootNode.getNode("config", "milestones", "records", "" + ix, "random"));
+
+                //Choose The Random Rewards from the chosen table
+                List<String> rewardNames = new LinkedList<>();
+                if (!chosenRewardTable.equals("")) {
+                    LootTable chosenTable = new LootTable(chosenRewardTable, rootNode);
+                    String chosenReward = chosenTable.chooseReward();
+                    rewardNames.add(chosenReward);
+                    for (String command : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
+                            .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+                        commandList.add(OutputHelper.parseVariables(command, playerName));
+                    }
+                }
+                //Add The Set Commands
+                for (String command : rootNode.getNode("config", "milestones", "records", "" + ix, "set").getChildrenList().stream()
                         .map(ConfigurationNode::getString).collect(Collectors.toList())) {
                     commandList.add(OutputHelper.parseVariables(command, playerName));
                 }
+                //Send the Commands to Be Run
+                LootTools.giveReward(commandList);
+                //Now Send a Public Message
+                OutputHelper.broadCastMessage(getMilestoneNode(ix).getNode("message").getString(), playerName, U.listMaker(rewardNames));
             }
-            //Add The Set Commands
-            for (String command : rootNode.getNode("config", "milestones", "records", "" + totalVotes, "set").getChildrenList().stream()
-                    .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                commandList.add(OutputHelper.parseVariables(command, playerName));
-            }
-            //Send the Commands to Be Run
-            LootTools.giveReward(commandList);
-            //Now Send a Public Message
-            OutputHelper.broadCastMessage(getMilestoneNode(totalVotes).getNode("message").getString(), playerName, U.listMaker(rewardNames));
-            if (U.isPlayerOnline(playerName)) {
-                Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
-                player.sendMessage(Text.of("You have " + getRemainingMilestoneVotes(totalVotes) + " left until your next milestone!!").toBuilder().color(TextColors.GOLD).build());
-            }
-
         }
-
+        if (U.isPlayerOnline(playerName)) {
+            Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
+            player.sendMessage(Text.of("You have " + getRemainingMilestoneVotes(totalVotes) + " left until your next milestone!!").toBuilder().color(TextColors.GOLD).build());
+        }
     }
 
     public ConfigurationNode getMilestoneNode(int totalVotes) {
+        U.debug("Retrieving Milestone: " + totalVotes);
         return rootNode.getNode("config", "milestones", "records", "" + totalVotes);
     }
 
@@ -306,9 +306,12 @@ public class VoteSpreeSystem {
             // Quotient plus 1 times the divisor to get the next least multiple
             mathList.add(((int) Math.floor((currentVotes / ix)) + 1) * ix);
         }
+        U.debug("Candidate Sizes" + mathList.size());
         mathList.addAll(milestoneValues);
         Collections.sort(mathList);
+
         for (Integer ix : mathList) {
+            U.debug("candidate vote # " + ix);
             if (currentVotes < ix) {
                 return ix - currentVotes;
             }
