@@ -1,12 +1,14 @@
 package net.adamsanchez.seriousvote.Data;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class OfflineRecord {
+public class OfflineRecord implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String username;
     private int offlineVotes;
-    private HashMap<Integer, Integer> offlineMilestones;
-    private HashMap<String, Integer> offlineDailies;
+    private HashMap<Integer, Integer> offlineMilestones = new HashMap<>();
+    private HashMap<String, Integer> offlineDailies = new HashMap<>();
 
     public OfflineRecord(String username) {
         this.username = username;

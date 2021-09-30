@@ -180,6 +180,7 @@ public class VoteSpreeSystem {
             //Now Send a Public Message
             OutputHelper.broadCastMessage(getMilestoneNode(milestoneValue).getNode("message").getString(), playerName, U.listMaker(rewardNames));
         } else {
+            U.debug(CC.YELLOW + "Storing Offline Milestone Reward");
             if(SeriousVote.getInstance().getOfflineVotes().containsKey(playerName)){
                 SeriousVote.getInstance().getOfflineVotes().get(playerName).addOfflineMilestone(milestoneValue);
             } else {
@@ -242,6 +243,7 @@ public class VoteSpreeSystem {
             U.bcast(rootNode.getNode("config", "dailies", spreeName, "message").getString(), playerName);
             OutputHelper.broadCastMessage(rootNode.getNode("config", "dailies", spreeName, "message").getString(), playerName, U.listMaker(rewardNames));
         } else {
+            U.debug(CC.YELLOW + "Storing Offline Dailies Reward");
             if(SeriousVote.getInstance().getOfflineVotes().containsKey(playerName)){
                 SeriousVote.getInstance().getOfflineVotes().get(playerName).addOfflineDaily(spreeName);
             } else {
