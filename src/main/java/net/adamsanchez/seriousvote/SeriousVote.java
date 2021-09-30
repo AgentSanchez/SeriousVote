@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 
 import com.vexsoftware.votifier.sponge.event.VotifierEvent;
 
+import net.adamsanchez.seriousvote.Data.OfflineRecord;
 import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
 import net.adamsanchez.seriousvote.commands.*;
@@ -116,7 +117,7 @@ public class SeriousVote {
     LinkedHashMap<Integer, List<Map<String, String>>> lootMap = new LinkedHashMap<Integer, List<Map<String, String>>>();
 
     //Stored Offline Votes
-    HashMap<String, Integer> offlineVotes = new HashMap<String, Integer>();
+    HashMap<String, OfflineRecord> offlineVotes = new HashMap<String, OfflineRecord>();
     int numRandRewards;
     int minRandRewards;
     int maxRandRewards;
@@ -141,7 +142,7 @@ public class SeriousVote {
         userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
         CC.printSVInfo();
         getLogger().info(CC.YELLOW + "Trying To setup Config Loader");
-        offlineVotes = new HashMap<String, Integer>();
+        offlineVotes = new HashMap<String, OfflineRecord>();
         offlineVotesPath = Paths.get(privateConfigDir.toString(), "", "offlinevotes.dat");
         resetDatePath = Paths.get(privateConfigDir.toString(), "", "lastReset");
         OfflineHandler.initOfflineStorage();
@@ -418,7 +419,7 @@ public class SeriousVote {
         if (offlineVotes.containsKey(username)) {
             U.debug("Offline votes found for player with ID " + playerID);
             List<VoteRequest> voteCollection = new LinkedList<VoteRequest>();
-            for (int ix = 0; ix < offlineVotes.get(username).intValue(); ix++) {
+            for (int ix = 0; ix < offlineVotes.get(username).getOfflineVotes(); ix++) {
                 VoteRequest workingRequest = new VoteRequest();
                 workingRequest.setUsername(username);
                 voteCollection.add(processVoteChanceTables(workingRequest));
@@ -428,11 +429,42 @@ public class SeriousVote {
             for (VoteRequest vr : voteCollection) {
                 rewardNames.addAll(vr.getRewardNames());
             }
-
             OutputHelper.broadCastMessage(publicMessage, username, U.listMaker(rewardNames));
             processedVoteQueue.addAll(voteCollection);
+
+            //Run all offline milestones and dailies
+
+            for(String daily: offlineVotes.get(username).getOfflineDailies().keySet()){
+                for(int ix = 0; ix < offlineVotes.get(username).getOfflineDailies().get(daily); ix ++){
+                    voteSpreeSystem.processDailiesRewards(username,daily);
+                }
+                offlineVotes.get(username).getOfflineDailies().clear();
+            }
+
+            for(Integer milestoneValue: offlineVotes.get(username).getOfflineMilestones().keySet()){
+                for(int ix = 0; ix < offlineVotes.get(username).getOfflineMilestones().get(milestoneValue); ix ++){
+                    voteSpreeSystem.processMilestoneRewards(username,milestoneValue);
+                }
+                offlineVotes.get(username).getOfflineMilestones().clear();
+            }            for(String daily: offlineVotes.get(username).getOfflineDailies().keySet()){
+                for(int ix = 0; ix < offlineVotes.get(username).getOfflineDailies().get(daily); ix ++){
+                    voteSpreeSystem.processDailiesRewards(username,daily);
+                }
+                offlineVotes.get(username).getOfflineDailies().clear();
+            }
+
+            for(Integer milestoneValue: offlineVotes.get(username).getOfflineMilestones().keySet()){
+                for(int ix = 0; ix < offlineVotes.get(username).getOfflineMilestones().get(milestoneValue); ix ++){
+                    voteSpreeSystem.processMilestoneRewards(username,milestoneValue);
+                }
+                offlineVotes.get(username).getOfflineMilestones().clear();
+            }
+
+
+
             offlineVotes.remove(username);
             executeCommands();
+
             try {
                 OfflineHandler.saveOffline();
             } catch (IOException e) {
@@ -499,9 +531,11 @@ public class SeriousVote {
         if (workingRequest.getUsername() != null) {
             //Write to File
             if (offlineVotes.containsKey(workingRequest.getUsername())) {
-                offlineVotes.put(workingRequest.getUsername(), offlineVotes.get(workingRequest.getUsername()).intValue() + 1);
+                offlineVotes.get(workingRequest.getUsername()).addOfflineVotes(1);
             } else {
-                offlineVotes.put(workingRequest.getUsername(), new Integer(1));
+                OfflineRecord record = new OfflineRecord(workingRequest.getUsername());
+                record.addOfflineVotes(1);
+                offlineVotes.put(workingRequest.getUsername(), record);
             }
             try {
                 OfflineHandler.saveOffline();
@@ -564,7 +598,7 @@ public class SeriousVote {
         return voteSpreeSystem;
     }
 
-    public HashMap<String, Integer> getOfflineVotes() {
+    public HashMap<String, OfflineRecord> getOfflineVotes() {
         return offlineVotes;
     }
 
