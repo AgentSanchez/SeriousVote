@@ -367,7 +367,9 @@ public class SeriousVote {
                     OutputHelper.broadCastMessage(publicMessage, vr.getUsername(), U.listMaker(workingRequest.getRewardNames()));
                     break;
                 case OFFLINE_SAVED:
-                    OutputHelper.broadCastMessage(publicOfflineMessage, vr.getUsername());
+                    if (CM.getMessageOffline(mainCfgNode)) {
+                        OutputHelper.broadCastMessage(publicOfflineMessage, vr.getUsername());
+                    }
                     break;
                 default:
                     U.error("Error with that vote's state...Uh Oh!");
