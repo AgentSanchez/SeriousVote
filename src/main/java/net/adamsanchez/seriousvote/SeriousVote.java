@@ -325,7 +325,7 @@ public class SeriousVote {
             localQueue.addAll(voteQueue);
             voteQueue.clear();
         }
-        
+
         for (VoteRequest vr : localQueue) {
             VoteRequest workingRequest = vr;
             workingRequest.setVoteStatus(Status.IN_PROCESS);

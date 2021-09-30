@@ -306,12 +306,10 @@ public class VoteSpreeSystem {
             // Quotient plus 1 times the divisor to get the next least multiple
             mathList.add(((int) Math.floor((currentVotes / ix)) + 1) * ix);
         }
-        U.debug("Candidate Sizes" + mathList.size());
         mathList.addAll(milestoneValues);
         Collections.sort(mathList);
 
         for (Integer ix : mathList) {
-            U.debug("candidate vote # " + ix);
             if (currentVotes < ix) {
                 return ix - currentVotes;
             }
