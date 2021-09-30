@@ -9,6 +9,7 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -20,9 +21,14 @@ public class CheckVoteCommand implements CommandExecutor {
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         SeriousVote sv = SeriousVote.getInstance();
+        if (src instanceof ConsoleSource && !args.getOne("player").isPresent()) {
+            src.sendMessage(Text.of("Console must specify a player in checkvote command!!").toBuilder().color(TextColors.RED).build());
+            return CommandResult.success();
+        }
+        U.debug("Vote lookup requested by: " + src.getIdentifier() + " or " + src.getName());
         String playerIdentifier = U.getPlayerIdentifier(args.getOne("player").isPresent() ?
                 (String) args.getOne("player").get() :
-                src.getIdentifier());
+                src.getName());
         if (sv.usingVoteSpreeSystem() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
             PlayerRecord record = sv.getVoteSpreeSystem().getRecord(playerIdentifier);
             if (record != null) {
@@ -33,7 +39,10 @@ public class CheckVoteCommand implements CommandExecutor {
 
                 if (sv.isMilestonesEnabled()) {
                     src.sendMessage(Text.of("Next Milestone: " +
-                            SeriousVote.getInstance().getVoteSpreeSystem().getRemainingMilestoneVotes(record.getTotalVotes())));
+                            SeriousVote.getInstance()
+                                    .getVoteSpreeSystem()
+                                    .getRemainingMilestoneVotes(record.getTotalVotes()))
+                            .toBuilder().color(TextColors.GOLD).build());
                 }
                 if (sv.isDailiesEnabled()) {
                     src.sendMessage(Text.of("Current Streak: " +
