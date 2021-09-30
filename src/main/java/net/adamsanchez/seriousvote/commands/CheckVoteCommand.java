@@ -1,7 +1,9 @@
 package net.adamsanchez.seriousvote.commands;
 
 import net.adamsanchez.seriousvote.Data.PlayerRecord;
+import net.adamsanchez.seriousvote.Data.VoteSpreeSystem;
 import net.adamsanchez.seriousvote.SeriousVote;
+import net.adamsanchez.seriousvote.utils.CC;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -18,28 +20,28 @@ public class CheckVoteCommand implements CommandExecutor {
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         SeriousVote sv = SeriousVote.getInstance();
-        String username = args.<String>getOne("player").get();
-        String playerIdentifier = U.getPlayerIdentifier(username);
+        String playerIdentifier = U.getPlayerIdentifier(args.getOne("player").isPresent() ?
+                (String) args.getOne("player").get() :
+                src.getIdentifier());
         if (sv.usingVoteSpreeSystem() && (sv.isDailiesEnabled() || sv.isMilestonesEnabled())) {
             PlayerRecord record = sv.getVoteSpreeSystem().getRecord(playerIdentifier);
             if (record != null) {
-                src.sendMessage(Text.of(username + " has a total of " + record.getTotalVotes()
-                        + " votes. They have currently voted " + record.getVoteSpree()
-                        + " days in a row.").toBuilder().color(TextColors.GOLD).build());
+                src.sendMessage(Text.of(U.getName(playerIdentifier) +
+                        " vote record: ").toBuilder().color(TextColors.AQUA).build());
+                src.sendMessage(Text.of("Total Votes: "
+                        + record.getTotalVotes()).toBuilder().color(TextColors.GOLD).build());
+
+                if (sv.isMilestonesEnabled()) {
+                    src.sendMessage(Text.of("Next Milestone: " +
+                            SeriousVote.getInstance().getVoteSpreeSystem().getRemainingMilestoneVotes(record.getTotalVotes())));
+                }
                 if (sv.isDailiesEnabled()) {
-                    int vsa = record.getVoteSpree() + 1;
-                    int a = 365 * (vsa / 365 + 1) - vsa;
-                    int b = 30 * (vsa / 30 + 1) - vsa;
-                    int c = 7 * (vsa / 7 + 1) - vsa;
-                    int leastDays = 0;
-                    if (a < b && a < c) {
-                        leastDays = a;
-                    } else if (b < c && b < a) {
-                        leastDays = b;
-                    } else if (c < b && c < a) {
-                        leastDays = c;
-                    }
-                    src.sendMessage(Text.of("They have to vote " + leastDays + " More days until their next dailies reward."));
+                    src.sendMessage(Text.of("Current Streak: " +
+                            record.getVoteSpree() +
+                            " Days").toBuilder().color(TextColors.GOLD).build());
+                    src.sendMessage(Text.of("Next Daily: " +
+                            VoteSpreeSystem.getRemainingDays(record.getVoteSpree()) +
+                            " Days.").toBuilder().color(TextColors.GOLD).build());
                 }
             }
 
@@ -49,4 +51,4 @@ public class CheckVoteCommand implements CommandExecutor {
 
         return CommandResult.success();
     }
-    }
+}
