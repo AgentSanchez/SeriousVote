@@ -177,10 +177,12 @@ public class U {
         String cleanString = string;
         if (string.startsWith(pre) && string.contains(post)) {
             String perm = string.substring(7, string.indexOf(post));
-            U.info("substring = " + perm);
+            U.debug("Fond permission requirement: seriousvote.user." + perm);
             cleanString = string.replace(pre + perm + post, "");
-            return SeriousVote.getUserStorage().get().get(username).get().hasPermission("seriousvote.user." + cleanString) ?
+            return SeriousVote.getUserStorage().get().get(username).get().hasPermission("seriousvote.user." + perm) ?
                     cleanString : "";
+        } else {
+            U.debug(string + CC.YELLOW + " is perm free +");
         }
         return string;
     }
