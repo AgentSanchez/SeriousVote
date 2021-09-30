@@ -136,7 +136,7 @@ public class CM {
         return node.getNode("config", "vote-sites-message").getString();
     }
 
-    public static boolean getBypassOffline(CommentedConfigurationNode node) {
+    public static boolean getBypassOffline(ConfigurationNode node) {
         return node.getNode("config", "bypass-offline").getBoolean();
     }
 

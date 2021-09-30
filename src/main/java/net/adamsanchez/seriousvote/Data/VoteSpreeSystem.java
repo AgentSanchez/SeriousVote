@@ -6,7 +6,6 @@ import net.adamsanchez.seriousvote.utils.*;
 import ninja.leaping.configurate.ConfigurationNode;
 
 
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -14,7 +13,6 @@ import org.spongepowered.api.text.format.TextColors;
 import java.sql.Date;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Created by adam_ on 01/22/17.
@@ -138,7 +136,7 @@ public class VoteSpreeSystem {
     public void checkForMilestones(PlayerRecord record, String playerName) {
         //Check based on amount of votes given.
         U.info("Player has " + record.getTotalVotes() + " votes currently.");
-        List<String> commandList = new ArrayList<String>();
+
         if (CM.getEnabledMilestones(rootNode).length < 1)
             U.error("You have no enabled custom milestones or your config is broken :(");
         int totalVotes = record.getTotalVotes();
@@ -146,35 +144,49 @@ public class VoteSpreeSystem {
         for (Integer ix : CM.getEnabledMilestones(rootNode)) {
             if (ix == totalVotes
                     | (totalVotes % ix == 0 && getMilestoneNode(ix).getNode("recurring").getBoolean())) {
-
-                U.debug(CC.YELLOW + "Milestone found");
-                String chosenRewardTable = TableManager.chooseTable(rootNode.getNode("config", "milestones", "records", "" + ix, "random"));
-
-                //Choose The Random Rewards from the chosen table
-                List<String> rewardNames = new LinkedList<>();
-                if (!chosenRewardTable.equals("")) {
-                    LootTable chosenTable = new LootTable(chosenRewardTable, rootNode);
-                    String chosenReward = chosenTable.chooseReward();
-                    rewardNames.add(chosenReward);
-                    for (String command : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
-                            .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                        commandList.add(OutputHelper.parseVariables(command, playerName));
-                    }
-                }
-                //Add The Set Commands
-                for (String command : rootNode.getNode("config", "milestones", "records", "" + ix, "set").getChildrenList().stream()
-                        .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                    commandList.add(OutputHelper.parseVariables(command, playerName));
-                }
-                //Send the Commands to Be Run
-                LootTools.giveReward(commandList);
-                //Now Send a Public Message
-                OutputHelper.broadCastMessage(getMilestoneNode(ix).getNode("message").getString(), playerName, U.listMaker(rewardNames));
+                processMilestoneRewards(playerName, ix);
             }
         }
         if (U.isPlayerOnline(playerName)) {
             Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
             player.sendMessage(Text.of("You have " + getRemainingMilestoneVotes(totalVotes) + " left until your next milestone!!").toBuilder().color(TextColors.GOLD).build());
+        }
+    }
+
+    public void processMilestoneRewards(String playerName, int milestoneValue) {
+        if (U.isPlayerOnline(playerName) || CM.getBypassOffline(rootNode)) {
+            List<String> commandList = new ArrayList<String>();
+            U.debug(CC.YELLOW + "Milestone match found");
+            String chosenRewardTable = TableManager.chooseTable(rootNode.getNode("config", "milestones", "records", "" + milestoneValue, "random"));
+
+            //Choose The Random Rewards from the chosen table
+            List<String> rewardNames = new LinkedList<>();
+            if (!chosenRewardTable.equals("")) {
+                LootTable chosenTable = new LootTable(chosenRewardTable, rootNode);
+                String chosenReward = chosenTable.chooseReward();
+                rewardNames.add(chosenReward);
+                for (String command : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
+                        .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+                    commandList.add(OutputHelper.parseVariables(command, playerName));
+                }
+            }
+            //Add The Set Commands
+            for (String command : rootNode.getNode("config", "milestones", "records", "" + milestoneValue, "set").getChildrenList().stream()
+                    .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+                commandList.add(OutputHelper.parseVariables(command, playerName));
+            }
+            //Send the Commands to Be Run
+            LootTools.giveReward(commandList);
+            //Now Send a Public Message
+            OutputHelper.broadCastMessage(getMilestoneNode(milestoneValue).getNode("message").getString(), playerName, U.listMaker(rewardNames));
+        } else {
+            if(SeriousVote.getInstance().getOfflineVotes().containsKey(playerName)){
+                SeriousVote.getInstance().getOfflineVotes().get(playerName).addOfflineMilestone(milestoneValue);
+            } else {
+                OfflineRecord record = new OfflineRecord(playerName);
+                record.addOfflineMilestone(milestoneValue);
+                SeriousVote.getInstance().getOfflineVotes().put(playerName, record);
+            }
         }
     }
 
@@ -184,12 +196,9 @@ public class VoteSpreeSystem {
     }
 
     public void checkForDailies(PlayerRecord record, String playerName) {
-        List<String> commandList = new ArrayList<String>();
         if (U.isPlayerOnline(playerName)) {
-            String chosenReward = "";
             boolean spreeHit = false;
             String spreeName = "";
-            List<String> rewardNames = new LinkedList<>();
             if (record.getVoteSpree() >= 365 && record.getVoteSpree() % 365 == 0) {
                 spreeHit = true;
                 spreeName = "yearly";
@@ -202,30 +211,45 @@ public class VoteSpreeSystem {
             }
 
             if (spreeHit) {
-                LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", spreeName, "random")), rootNode);
-                chosenReward = chosenTable.chooseReward();
-                U.info("Chosing from Table: " + chosenTable.getTableName());
-                //Choose The Random Rewards from the chosen table
-                for (String command : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
-                        .map(ConfigurationNode::getString).collect(Collectors.toList())) {
-                    commandList.add(OutputHelper.parseVariables(command, playerName));
-                }
-                //Add in the set commands
-                for (String command : CM.getDailiesSetCommands(rootNode, spreeName)) {
-                    commandList.add(OutputHelper.parseVariables(command, playerName));
-                }
-                LootTools.giveReward(commandList);
-                rewardNames.add(chosenReward);
-                U.bcast(rootNode.getNode("config", "dailies", spreeName, "message").getString(), playerName);
-                OutputHelper.broadCastMessage(rootNode.getNode("config", "dailies", spreeName, "message").getString(), playerName, U.listMaker(rewardNames));
+                processDailiesRewards(playerName, spreeName);
             }
-
             int leastDays = getRemainingDays(record.getVoteSpree());
             Player player = sv.getPublicGame().getServer().getPlayer(playerName).get();
             player.sendMessage(Text.of("You have " + leastDays + " left until your next dailies reward!").toBuilder().color(TextColors.GOLD).build());
         }
 
 
+    }
+
+    public void processDailiesRewards(String playerName, String spreeName) {
+        if (U.isPlayerOnline(playerName) || CM.getBypassOffline(rootNode)) {
+            List<String> commandList = new ArrayList<String>();
+            List<String> rewardNames = new LinkedList<>();
+            LootTable chosenTable = new LootTable(TableManager.chooseTable(rootNode.getNode("config", "dailies", spreeName, "random")), rootNode);
+            String chosenReward = chosenTable.chooseReward();
+            U.info("Chosing from Table: " + chosenTable.getTableName());
+            //Choose The Random Rewards from the chosen table
+            for (String command : rootNode.getNode("config", "Rewards", chosenReward, "rewards").getChildrenList().stream()
+                    .map(ConfigurationNode::getString).collect(Collectors.toList())) {
+                commandList.add(OutputHelper.parseVariables(command, playerName));
+            }
+            //Add in the set commands
+            for (String command : CM.getDailiesSetCommands(rootNode, spreeName)) {
+                commandList.add(OutputHelper.parseVariables(command, playerName));
+            }
+            LootTools.giveReward(commandList);
+            rewardNames.add(chosenReward);
+            U.bcast(rootNode.getNode("config", "dailies", spreeName, "message").getString(), playerName);
+            OutputHelper.broadCastMessage(rootNode.getNode("config", "dailies", spreeName, "message").getString(), playerName, U.listMaker(rewardNames));
+        } else {
+            if(SeriousVote.getInstance().getOfflineVotes().containsKey(playerName)){
+                SeriousVote.getInstance().getOfflineVotes().get(playerName).addOfflineDaily(spreeName);
+            } else {
+                OfflineRecord record = new OfflineRecord(playerName);
+                record.addOfflineDaily(spreeName);
+                SeriousVote.getInstance().getOfflineVotes().put(playerName, record);
+            }
+        }
     }
 
     public void addVote(String playerIdentifier) {

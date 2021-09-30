@@ -36,11 +36,11 @@ public class OfflineHandler {
 
     }
 
-    public static HashMap<String,Integer> loadOffline() throws IOException, ClassNotFoundException {
+    public static HashMap<String,OfflineRecord> loadOffline() throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream = new FileInputStream(SeriousVote.getInstance().getOfflineVotesPath().toFile());
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-        HashMap<String,Integer> storedVotes = (HashMap<String, Integer>) objectInputStream.readObject();
+        HashMap<String,OfflineRecord> storedVotes = (HashMap<String, OfflineRecord>) objectInputStream.readObject();
         objectInputStream.close();
         return  storedVotes;
     }

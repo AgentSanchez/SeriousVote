@@ -1,6 +1,7 @@
 package net.adamsanchez.seriousvote.commands;
 
 import net.adamsanchez.seriousvote.Data.OfflineHandler;
+import net.adamsanchez.seriousvote.Data.OfflineRecord;
 import net.adamsanchez.seriousvote.SeriousVote;
 import net.adamsanchez.seriousvote.utils.U;
 import org.spongepowered.api.command.CommandException;
@@ -33,9 +34,11 @@ public class GiveVoteCommand implements CommandExecutor {
             if (playerIdentifier != null) {
                 //Write to File
                 if (sv.getOfflineVotes().containsKey(playerIdentifier)) {
-                    sv.getOfflineVotes().put(playerIdentifier, sv.getOfflineVotes().get(playerIdentifier).intValue() + 1);
+                    sv.getOfflineVotes().get(playerIdentifier).addOfflineVotes(1);
                 } else {
-                    sv.getOfflineVotes().put(playerIdentifier, new Integer(1));
+                    OfflineRecord record = new OfflineRecord(username);
+                    record.addOfflineVotes(1);
+                    sv.getOfflineVotes().put(username, record);
                 }
                 try {
                     OfflineHandler.saveOffline();

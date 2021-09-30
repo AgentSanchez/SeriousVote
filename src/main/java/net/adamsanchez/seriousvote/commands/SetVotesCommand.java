@@ -34,7 +34,7 @@ public class SetVotesCommand implements CommandExecutor {
         PlayerRecord pr = sv.getVoteSpreeSystem().getRecord(U.getPlayerIdentifier(username));
         if(offline){
             if(sv.getOfflineVotes().containsKey(username)){
-                sv.getOfflineVotes().put(username, newNumVotes);
+                sv.getOfflineVotes().get(username).addOfflineVotes(1);
                 sv.triggerSave();
             }
             return CommandResult.success();
